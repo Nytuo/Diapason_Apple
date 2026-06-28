@@ -1,0 +1,30 @@
+name: Diapason
+options:
+  bundleIdPrefix: com.diapason
+targets:
+  Diapason:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - Sources
+      - path: Diapacon.icon
+        buildPhase: resources
+        type: file
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: Diapacon
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: "NO"
+        INFOPLIST_KEY_CFBundleDisplayName: Diapason
+    info:
+      path: Info.plist
+      properties:
+        UILaunchScreen: {}
+        UIBackgroundModes: [audio]
+        NSLocalNetworkUsageDescription: "Diapason needs to find your Subsonic and Plex servers on your local network."
+        NSBonjourServices:
+          - "_subsonic._tcp"
+          - "_plexmediasvr._tcp"
+          - "_diapason._tcp"
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
