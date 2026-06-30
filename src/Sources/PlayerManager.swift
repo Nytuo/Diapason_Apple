@@ -62,6 +62,11 @@ class PlayerManager: ObservableObject {
     private var endObserver: Any?
     private var statusSubscription: AnyCancellable?
 
+    // Scrobbling state for the currently playing item.
+    private var scrobbleSongId: String?
+    private var scrobbleStartedAt: TimeInterval = 0
+    private var scrobbled = false
+
     init() {
         setupAudioSession()
         setupRemoteCommands()
@@ -284,6 +289,14 @@ class PlayerManager: ObservableObject {
         player?.play()
         isPlaying = true
 
+        // Announce "now playing" and reset scrobble tracking for the new track.
+        if scrobbleSongId != song.id {
+            scrobbleSongId = song.id
+            scrobbleStartedAt = Date().timeIntervalSince1970
+            scrobbled = false
+            Scrobbler.shared.nowPlaying(song)
+        }
+
         // Periodic time observer (register once)
         if timeObserver == nil {
             timeObserver = player?.addPeriodicTimeObserver(
@@ -299,6 +312,14 @@ class PlayerManager: ObservableObject {
                         let currentInt = Int(secs)
                         if currentInt > 0 && currentInt % 5 == 0 {
                             self.syncPlaybackProgress(time: secs, duration: d)
+                        }
+                        // Scrobble once past the halfway point (capped at 4 min).
+                        if !self.scrobbled, let cur = self.currentSong,
+                           self.scrobbleSongId == cur.id, d > 30 {
+                            if secs >= min(d / 2, 240) {
+                                self.scrobbled = true
+                                Scrobbler.shared.scrobble(cur, startedAt: self.scrobbleStartedAt)
+                            }
                         }
                     }
                 }

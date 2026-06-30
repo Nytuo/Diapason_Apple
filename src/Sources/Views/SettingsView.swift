@@ -1,5 +1,20 @@
 import SwiftUI
 
+private let accentPresets: [(name: String, color: Color, key: String)] = [
+    ("Red",    .red,    "red"),
+    ("Orange", .orange, "orange"),
+    ("Yellow", .yellow, "yellow"),
+    ("Green",  .green,  "green"),
+    ("Teal",   .teal,   "teal"),
+    ("Blue",   .blue,   "blue"),
+    ("Purple", .purple, "purple"),
+    ("Pink",   .pink,   "pink"),
+]
+
+func colorForKey(_ key: String) -> Color {
+    accentPresets.first(where: { $0.key == key })?.color ?? .red
+}
+
 struct SettingsView: View {
     @EnvironmentObject var backendManager: BackendManager
     @EnvironmentObject var subsonic: SubsonicClient
@@ -7,20 +22,30 @@ struct SettingsView: View {
 
     @StateObject private var discoveryManager = DiscoveryManager()
     @StateObject private var desktopBrowser = DesktopDiapasonBrowser()
+    @ObservedObject private var languageManager = LanguageManager.shared
 
     @State private var isTesting = false
     @State private var testResult: String? = nil
-    
+
     @State private var isImporting = false
     @State private var importProgress: String? = nil
+
+    @AppStorage("accentColorKey") private var accentColorKey: String = "red"
 
     @ObservedObject private var cacheManager = PlaybackCacheManager.shared
     @State private var selectedCacheLimit: Int = PlaybackCacheManager.shared.maxTracks
 
+    @ObservedObject private var discoveryFeed = DiscoveryFeedManager.shared
+    @Environment(\.openURL) private var openURL
+    @State private var dLbUser = DiscoveryFeedManager.shared.listenBrainzUser
+    @State private var dLbToken = DiscoveryFeedManager.shared.listenBrainzToken
+    @State private var dLfmKey = DiscoveryFeedManager.shared.lastFmApiKey
+    @State private var dLfmSecret = DiscoveryFeedManager.shared.lastFmApiSecret
+
     var body: some View {
         Form {
-            Section(header: Text("Active Backend")) {
-                Picker("Source", selection: $backendManager.activeType) {
+            Section(header: Text("settings.activeBackend")) {
+                Picker("settings.source", selection: $backendManager.activeType) {
                     ForEach(BackendType.allCases) { type in
                         Text(type.rawValue).tag(type)
                     }
@@ -32,18 +57,18 @@ struct SettingsView: View {
             }
 
             // Bonjour Discovery Section
-            Section(header: Text("Local Network Discovery")) {
+            Section(header: Text("settings.localNetworkDiscovery")) {
                 if discoveryManager.isScanning {
                     HStack {
                         ProgressView().padding(.trailing, 8)
-                        Text("Searching for local servers...")
+                        Text("settings.searchingLocalServers")
                             .foregroundColor(.secondary)
                     }
                 } else {
                     Button(action: {
                         discoveryManager.startDiscovery()
                     }) {
-                        Label("Scan Local Network", systemImage: "magnifyingglass")
+                        Label("settings.scanLocalNetwork", systemImage: "magnifyingglass")
                             .foregroundColor(.red)
                     }
                 }
@@ -67,7 +92,7 @@ struct SettingsView: View {
             }
             
             // mDNS Desktop File Sharing Section
-            Section(header: Text("mDNS File Sharing (Desktop Diapason)")) {
+            Section(header: Text("settings.desktopFileSharing")) {
                 if isImporting {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
@@ -119,6 +144,8 @@ struct SettingsView: View {
                 plexSection
             }
 
+            discoverySection
+
             // Playback Cache Settings
             Section(header: Text("Playback Cache")) {
                 HStack {
@@ -147,6 +174,49 @@ struct SettingsView: View {
                 }
             }
 
+            Section(header: Text("settings.language")) {
+                Picker("settings.language", selection: Binding(
+                    get: { languageManager.currentLanguage },
+                    set: { lang in
+                        languageManager.setLanguage(lang)
+                        UserDefaults.standard.set([lang], forKey: "AppleLanguages")
+                    }
+                )) {
+                    Text("settings.english").tag("en")
+                    Text("settings.french").tag("fr")
+                }
+                .pickerStyle(.segmented)
+                Text("Changes apply after restarting the app.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            Section(header: Text("settings.accentColor")) {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 12) {
+                        ForEach(accentPresets, id: \.key) { preset in
+                            ZStack {
+                                Circle()
+                                    .fill(preset.color)
+                                    .frame(width: 34, height: 34)
+                                if accentColorKey == preset.key {
+                                    Image(systemName: "checkmark")
+                                        .font(.system(size: 14, weight: .bold))
+                                        .foregroundColor(.white)
+                                }
+                            }
+                            .overlay(
+                                Circle()
+                                    .stroke(accentColorKey == preset.key ? Color.primary : Color.clear, lineWidth: 2.5)
+                                    .padding(-3)
+                            )
+                            .onTapGesture { accentColorKey = preset.key }
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+
             if let result = testResult {
                 Section {
                     HStack {
@@ -161,8 +231,8 @@ struct SettingsView: View {
                 }
             }
         }
-        .navigationTitle("Settings")
-        .tint(.red)
+        .navigationTitle(Text("settings.title"))
+        .tint(colorForKey(accentColorKey))
         .onAppear {
             discoveryManager.startDiscovery()
             desktopBrowser.start()
@@ -170,6 +240,52 @@ struct SettingsView: View {
         .onDisappear {
             discoveryManager.stopDiscovery()
             desktopBrowser.stop()
+        }
+    }
+
+    var discoverySection: some View {
+        Section(header: Text("Music Discovery")) {
+            Text("ListenBrainz").font(.subheadline).bold()
+            TextField("Username", text: $dLbUser)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+            SecureField("User token", text: $dLbToken)
+            Button("Save ListenBrainz") {
+                discoveryFeed.saveListenBrainz(user: dLbUser, token: dLbToken)
+                Task { await discoveryFeed.refresh() }
+            }
+
+            Text("Last.fm").font(.subheadline).bold()
+            SecureField("API key", text: $dLfmKey)
+            SecureField("API secret", text: $dLfmSecret)
+            Button("Save Last.fm") {
+                discoveryFeed.saveLastFmCredentials(apiKey: dLfmKey, apiSecret: dLfmSecret)
+            }
+            if discoveryFeed.lastFmSessionKey.isEmpty {
+                Button("Connect Last.fm") {
+                    discoveryFeed.saveLastFmCredentials(apiKey: dLfmKey, apiSecret: dLfmSecret)
+                    Task { await discoveryFeed.beginLastFmAuth() }
+                }
+                Button("I've authorized") {
+                    Task { await discoveryFeed.completeLastFmAuth(); await discoveryFeed.refresh() }
+                }
+            } else {
+                HStack {
+                    Text("Connected as \(discoveryFeed.lastFmUser)")
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    Button("Disconnect") { discoveryFeed.disconnectLastFm() }
+                }
+            }
+            if let msg = discoveryFeed.lastFmAuthMessage {
+                Text(msg).font(.caption).foregroundColor(.secondary)
+            }
+        }
+        .onChange(of: discoveryFeed.lastFmAuthURL) { _, url in
+            if let url {
+                openURL(url)
+                discoveryFeed.lastFmAuthURL = nil
+            }
         }
     }
 

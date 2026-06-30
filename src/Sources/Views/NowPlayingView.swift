@@ -29,6 +29,20 @@ struct NowPlayingView: View {
     // Track song identity for transitions
     @State private var songId: String = ""
 
+    @State private var showConnect = false
+    @StateObject private var connectManager = ConnectManager()
+
+    private var isRemote: Bool { connectManager.connectedDevice != nil }
+    private var displayTitle: String { isRemote ? (connectManager.remoteStatus?.song?.title ?? "Remote") : (player.currentSong?.title ?? "Nothing Playing") }
+    private var displayArtist: String { isRemote ? (connectManager.remoteStatus?.song?.artist ?? "") : (player.currentSong?.artist ?? "") }
+    private var displayIsPlaying: Bool { isRemote ? (connectManager.remoteStatus?.state == "playing") : player.isPlaying }
+    private var remotePosition: Double { connectManager.remoteStatus?.position ?? 0 }
+    private var remoteDuration: Double { connectManager.remoteStatus?.song?.duration ?? 1 }
+    private func formatTime(_ secs: Double) -> String {
+        let s = Int(secs)
+        return "\(s / 60):\(String(format: "%02d", s % 60))"
+    }
+
     var body: some View {
         GeometryReader { geometry in
             let isSmall = geometry.size.height < 700
@@ -77,17 +91,26 @@ struct NowPlayingView: View {
                                     .background(Circle().fill(Color.white.opacity(0.12)))
                             }
                             .buttonStyle(SpringPressStyle())
+
+                            Button(action: { showConnect = true }) {
+                                Image(systemName: connectManager.connectedDevice != nil ? "dot.radiowaves.left.and.right" : "dot.radiowaves.right")
+                                    .font(.body.weight(.bold))
+                                    .foregroundColor(connectManager.connectedDevice != nil ? .red : .white.opacity(0.8))
+                                    .frame(width: 36, height: 36)
+                                    .background(Circle().fill(Color.white.opacity(0.12)))
+                            }
+                            .buttonStyle(SpringPressStyle())
                         }
 
                         VStack(spacing: 2) {
-                            Text("PLAYING FROM")
+                            Text(isRemote ? "PLAYING ON" : "PLAYING FROM")
                                 .font(.system(size: 9, weight: .bold))
                                 .foregroundColor(.white.opacity(0.5))
                                 .tracking(1)
-                            Text(player.currentSong?.album ?? "Library")
+                            Text(isRemote ? (connectManager.connectedDevice?.name ?? "Remote") : (player.currentSong?.album ?? "Library"))
                                 .font(.caption)
                                 .fontWeight(.semibold)
-                                .foregroundColor(.white)
+                                .foregroundColor(isRemote ? .red : .white)
                                 .lineLimit(1)
                                 .frame(maxWidth: availableWidth - 80)
                         }
@@ -99,7 +122,7 @@ struct NowPlayingView: View {
                     VStack(spacing: 0) {
                         Spacer(minLength: 8)
 
-                        if showLyrics {
+                        if showLyrics && !isRemote {
                             // Mini artwork + song info header
                             HStack(spacing: 12) {
                                 DiapasonArtworkView(
@@ -150,7 +173,7 @@ struct NowPlayingView: View {
                         } else {
                             // Artwork — animates on song change
                             DiapasonArtworkView(
-                                url: player.currentSong.map { backend.client.getCoverArtURL(id: $0.albumId) } ?? nil
+                                url: isRemote ? nil : player.currentSong.map { backend.client.getCoverArtURL(id: $0.albumId) } ?? nil
                             ) { uiImage in
                                 extractColors(from: uiImage)
                             }
@@ -158,13 +181,13 @@ struct NowPlayingView: View {
                             .frame(width: artworkSize, height: artworkSize)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .shadow(
-                                color: .black.opacity(player.isPlaying ? 0.4 : 0.18),
-                                radius: player.isPlaying ? 28 : 12,
+                                color: .black.opacity(displayIsPlaying ? 0.4 : 0.18),
+                                radius: displayIsPlaying ? 28 : 12,
                                 x: 0,
-                                y: player.isPlaying ? 14 : 6
+                                y: displayIsPlaying ? 14 : 6
                             )
-                            .scaleEffect(player.isPlaying ? 1.0 : 0.92)
-                            .animation(.spring(response: 0.45, dampingFraction: 0.75), value: player.isPlaying)
+                            .scaleEffect(displayIsPlaying ? 1.0 : 0.92)
+                            .animation(.spring(response: 0.45, dampingFraction: 0.75), value: displayIsPlaying)
                             .id(songId)
                             .transition(.asymmetric(
                                 insertion: .scale(scale: 0.92).combined(with: .opacity),
@@ -175,21 +198,21 @@ struct NowPlayingView: View {
                         Spacer(minLength: 8)
 
                         // ── Track Info ────────────────────────────────────────
-                        if !showLyrics {
+                        if !showLyrics || isRemote {
                             HStack(alignment: .center, spacing: 12) {
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text(player.currentSong?.title ?? "Nothing Playing")
+                                    Text(displayTitle)
                                         .font(.title2.weight(.bold))
                                         .foregroundColor(.white)
                                         .lineLimit(1)
 
                                     HStack(spacing: 8) {
-                                        Text(player.currentSong?.artist ?? "")
+                                        Text(displayArtist)
                                             .font(.subheadline)
                                             .foregroundColor(.white.opacity(0.7))
                                             .lineLimit(1)
 
-                                        if let label = player.currentSong?.qualityLabel {
+                                        if !isRemote, let label = player.currentSong?.qualityLabel {
                                             qualityBadge(label)
                                         }
                                     }
@@ -201,66 +224,68 @@ struct NowPlayingView: View {
                                     removal:   .move(edge: .top).combined(with: .opacity)
                                 ))
 
-                                HStack(spacing: 8) {
-                                    // Heart / Favorite
-                                    Button(action: {
-                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.5)) {
-                                            isFavorite.toggle()
-                                        }
-                                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                                        if let song = player.currentSong {
-                                            let newValue = isFavorite
-                                            Task { await backend.client.setStarred(id: song.id, starred: newValue) }
-                                        }
-                                    }) {
-                                        Image(systemName: isFavorite ? "heart.fill" : "heart")
-                                            .font(.body)
-                                            .foregroundColor(isFavorite ? .red : .white)
-                                            .frame(width: 40, height: 40)
-                                            .background(Circle().fill(Color.white.opacity(0.12)))
-                                            .scaleEffect(isFavorite ? 1.15 : 1.0)
-                                    }
-                                    .buttonStyle(.plain)
-
-                                    // Ellipsis menu
-                                    if let song = player.currentSong {
-                                        Menu {
-                                            Button {
-                                                let insertIdx = player.currentIndex + 1
-                                                var q = player.queue
-                                                if insertIdx < q.count {
-                                                    q.insert(song, at: insertIdx)
-                                                } else {
-                                                    q.append(song)
-                                                }
-                                                player.queue = q
-                                            } label: {
-                                                Label("Play Next", systemImage: "text.line.first.and.arrowtriangle.forward")
+                                if !isRemote {
+                                    HStack(spacing: 8) {
+                                        // Heart / Favorite
+                                        Button(action: {
+                                            withAnimation(.spring(response: 0.3, dampingFraction: 0.5)) {
+                                                isFavorite.toggle()
                                             }
-
-                                            if !song.id.hasPrefix("local_song_") {
-                                                Button {
-                                                    addToPlaylistSong = song
-                                                } label: {
-                                                    Label("Add to Playlist…", systemImage: "music.note.list")
-                                                }
+                                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                                            if let song = player.currentSong {
+                                                let newValue = isFavorite
+                                                Task { await backend.client.setStarred(id: song.id, starred: newValue) }
                                             }
-
-                                            Divider()
-
-                                            Button("Go to Album", systemImage: "square.stack") { }
-                                            Button("Go to Artist", systemImage: "music.mic") { }
-                                        } label: {
-                                            Image(systemName: "ellipsis")
+                                        }) {
+                                            Image(systemName: isFavorite ? "heart.fill" : "heart")
                                                 .font(.body)
-                                                .foregroundColor(.white)
+                                                .foregroundColor(isFavorite ? .red : .white)
                                                 .frame(width: 40, height: 40)
                                                 .background(Circle().fill(Color.white.opacity(0.12)))
+                                                .scaleEffect(isFavorite ? 1.15 : 1.0)
                                         }
                                         .buttonStyle(.plain)
+
+                                        // Ellipsis menu
+                                        if let song = player.currentSong {
+                                            Menu {
+                                                Button {
+                                                    let insertIdx = player.currentIndex + 1
+                                                    var q = player.queue
+                                                    if insertIdx < q.count {
+                                                        q.insert(song, at: insertIdx)
+                                                    } else {
+                                                        q.append(song)
+                                                    }
+                                                    player.queue = q
+                                                } label: {
+                                                    Label("Play Next", systemImage: "text.line.first.and.arrowtriangle.forward")
+                                                }
+
+                                                if !song.id.hasPrefix("local_song_") {
+                                                    Button {
+                                                        addToPlaylistSong = song
+                                                    } label: {
+                                                        Label("Add to Playlist…", systemImage: "music.note.list")
+                                                    }
+                                                }
+
+                                                Divider()
+
+                                                Button("Go to Album", systemImage: "square.stack") { }
+                                                Button("Go to Artist", systemImage: "music.mic") { }
+                                            } label: {
+                                                Image(systemName: "ellipsis")
+                                                    .font(.body)
+                                                    .foregroundColor(.white)
+                                                    .frame(width: 40, height: 40)
+                                                    .background(Circle().fill(Color.white.opacity(0.12)))
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
                                     }
+                                    .fixedSize()
                                 }
-                                .fixedSize()
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.horizontal, hPad)
@@ -269,9 +294,29 @@ struct NowPlayingView: View {
                         }
 
                         // ── Scrubber ──────────────────────────────────────────
-                        iOSProgressBar(timeTracker: player.timeTracker, onSeek: player.seek)
+                        if isRemote {
+                            VStack(spacing: 4) {
+                                Slider(
+                                    value: .constant(remotePosition),
+                                    in: 0...max(remoteDuration, 1)
+                                )
+                                .disabled(true)
+                                .tint(.white)
+                                HStack {
+                                    Text(formatTime(remotePosition))
+                                    Spacer()
+                                    Text(formatTime(remoteDuration))
+                                }
+                                .font(.caption2)
+                                .foregroundColor(.white.opacity(0.6))
+                            }
                             .frame(maxWidth: .infinity)
                             .padding(.horizontal, hPad)
+                        } else {
+                            iOSProgressBar(timeTracker: player.timeTracker, onSeek: player.seek)
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, hPad)
+                        }
 
                         Spacer(minLength: 4)
 
@@ -297,7 +342,9 @@ struct NowPlayingView: View {
                             Spacer(minLength: 0)
 
                             // Previous
-                            Button(action: { player.previous() }) {
+                            Button(action: {
+                                if isRemote { connectManager.sendCommand("previous") } else { player.previous() }
+                            }) {
                                 Image(systemName: "backward.fill")
                                     .font(.system(size: iconSkip, weight: .medium))
                                     .foregroundColor(.white)
@@ -308,8 +355,10 @@ struct NowPlayingView: View {
                             Spacer(minLength: 0)
 
                             // Play / Pause
-                            Button(action: { player.togglePlayPause() }) {
-                                Image(systemName: player.isPlaying ? "pause.fill" : "play.fill")
+                            Button(action: {
+                                if isRemote { connectManager.sendCommand(displayIsPlaying ? "pause" : "play") } else { player.togglePlayPause() }
+                            }) {
+                                Image(systemName: displayIsPlaying ? "pause.fill" : "play.fill")
                                     .font(.system(size: iconPlay, weight: .medium))
                                     .foregroundColor(.white)
                                     .frame(width: playSize, height: playSize)
@@ -320,7 +369,9 @@ struct NowPlayingView: View {
                             Spacer(minLength: 0)
 
                             // Next
-                            Button(action: { player.next() }) {
+                            Button(action: {
+                                if isRemote { connectManager.sendCommand("next") } else { player.next() }
+                            }) {
                                 Image(systemName: "forward.fill")
                                     .font(.system(size: iconSkip, weight: .medium))
                                     .foregroundColor(.white)
@@ -414,12 +465,37 @@ struct NowPlayingView: View {
                 fetchLyrics(for: song)
                 Task { isFavorite = await backend.client.isStarred(id: song.id) }
             }
+            // Wire desktop-push callbacks
+            connectManager.onCommandReceived = { action, position, _ in
+                switch action {
+                case "play":   if !player.isPlaying { player.togglePlayPause() }
+                case "pause":  if player.isPlaying  { player.togglePlayPause() }
+                case "next":   player.next()
+                case "previous": player.previous()
+                case "seek":   if let p = position { player.seek(to: p) }
+                default: break
+                }
+            }
+            connectManager.localStatusProvider = {
+                ConnectStatus(
+                    song: player.currentSong.map {
+                        ConnectStatus.Song(id: $0.id, title: $0.title, artist: $0.artist,
+                                           album: $0.album, duration: Double($0.duration ?? 0), art: nil)
+                    },
+                    state: player.isPlaying ? "playing" : "paused",
+                    position: player.timeTracker.currentTime,
+                    volume: 1.0
+                )
+            }
         }
         .sheet(isPresented: $showQueue) {
             QueueSheetView()
         }
         .sheet(item: $addToPlaylistSong) { song in
             PlaylistPickerView(song: song)
+        }
+        .sheet(isPresented: $showConnect) {
+            ConnectPickerView(connectManager: connectManager)
         }
     }
 

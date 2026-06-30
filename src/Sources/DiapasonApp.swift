@@ -9,6 +9,7 @@ struct DiapasonApp: App {
     @StateObject private var subsonicClient = SubsonicClient.shared
     @StateObject private var plexClient = PlexClient.shared
     @State private var showSplash = true
+    @AppStorage("accentColorKey") private var accentColorKey: String = "red"
 
     init() {
         // Audio session
@@ -34,6 +35,7 @@ struct DiapasonApp: App {
                     .environmentObject(backendManager)
                     .environmentObject(subsonicClient)
                     .environmentObject(plexClient)
+                    .tint(colorForKey(accentColorKey))
                 if showSplash {
                     SplashScreenView()
                         .transition(.opacity)

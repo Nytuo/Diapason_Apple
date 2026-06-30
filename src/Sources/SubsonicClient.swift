@@ -16,10 +16,13 @@ class SubsonicClient: MusicBackend {
         UserDefaults.standard.set(password, forKey: "subsonic_password")
     }
 
+    // Stable per-instance salt so cover-art and other URLs remain identical
+    // across recomputations and don't cause AsyncImage to re-fetch.
+    private let authSalt: String = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+
     private var authParams: String {
-        let salt = UUID().uuidString.replacingOccurrences(of: "-", with: "")
-        let token = MD5(password + salt)
-        return "u=\(username)&t=\(token)&s=\(salt)&v=1.16.1&c=diapason&f=json"
+        let token = MD5(password + authSalt)
+        return "u=\(username)&t=\(token)&s=\(authSalt)&v=1.16.1&c=diapason&f=json"
     }
 
     private func MD5(_ string: String) -> String {

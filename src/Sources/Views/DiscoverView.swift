@@ -3,6 +3,7 @@ import SwiftUI
 struct DiscoverView: View {
     @EnvironmentObject var backend: BackendManager
     @EnvironmentObject var player: PlayerManager
+    @ObservedObject private var feed = DiscoveryFeedManager.shared
 
     @State private var recentlyAdded: [Album] = []
     @State private var mostPlayed: [Album] = []
@@ -17,6 +18,10 @@ struct DiscoverView: View {
             VStack(alignment: .leading, spacing: 28) {
                 // Section: Smart Shuffle
                 smartShuffleCard
+
+                // Discovery playlists from connected accounts, grouped by kind.
+                discoveryGroup("Discover", feed.playlists.filter { $0.kind == .discover })
+                discoveryGroup("Your playlists", feed.playlists.filter { $0.kind == .recovered })
 
                 if isLoading {
                     HStack {
@@ -54,8 +59,34 @@ struct DiscoverView: View {
         .navigationTitle("Discover")
         .background(Color.customSystemGroupedBackground)
         .onAppear { loadData() }
+        .task { await feed.refresh() }
         .onDisappear { loadTask?.cancel() }
         .onChange(of: backend.activeType) { _ in loadData(force: true) }
+    }
+
+    @ViewBuilder
+    private func discoveryGroup(_ title: String, _ playlists: [DiscoveryPlaylist]) -> some View {
+        if !playlists.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(title)
+                    .font(.title3).bold()
+                    .padding(.horizontal)
+                ForEach(playlists) { pl in
+                    NavigationLink(destination: DiscoveryPlaylistView(playlistId: pl.id)) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(pl.source.displayName)
+                                .font(.caption).foregroundColor(.accentColor)
+                            Text(pl.name).font(.body).foregroundColor(.primary)
+                            if let d = pl.description {
+                                Text(d).font(.caption).foregroundColor(.secondary).lineLimit(1)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                    }
+                }
+            }
+        }
     }
 
     private var smartShuffleCard: some View {

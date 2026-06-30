@@ -1,0 +1,55 @@
+/* General */
+"app.name" = "Diapason";
+
+/* Player */
+"player.play" = "Lecture";
+"player.pause" = "Pause";
+"player.next" = "Suivant";
+"player.previous" = "Précédent";
+"player.queue" = "File d'attente";
+"player.shuffle" = "Aléatoire";
+"player.repeat" = "Répéter";
+
+/* Connect */
+"connect.title" = "Diapason Connect";
+"connect.searching" = "Recherche d'appareils...";
+"connect.noDevices" = "Aucun appareil Diapason trouvé sur ce réseau";
+"connect.disconnect" = "Déconnecter";
+"connect.scanNetwork" = "Scanner le réseau";
+"connect.scanning" = "Scan en cours...";
+"connect.availableDevices" = "Appareils disponibles";
+"connect.connected" = "Connecté";
+"connect.connect" = "Connecter";
+"connect.controllingFrom" = "Contrôlé depuis";
+"connect.done" = "Terminé";
+
+/* Settings */
+"settings.title" = "Paramètres";
+"settings.activeBackend" = "Source active";
+"settings.source" = "Source";
+"settings.localNetworkDiscovery" = "Découverte réseau local";
+"settings.searchingLocalServers" = "Recherche des serveurs locaux...";
+"settings.scanLocalNetwork" = "Scanner le réseau local";
+"settings.desktopFileSharing" = "Partage de fichiers mDNS (Desktop Diapason)";
+"settings.testConnection" = "Tester la connexion";
+"settings.testing" = "Test en cours...";
+"settings.accentColor" = "Couleur d'accentuation";
+"settings.language" = "Langue";
+"settings.english" = "Anglais";
+"settings.french" = "Français";
+
+/* Library */
+"library.songs" = "Titres";
+"library.albums" = "Albums";
+"library.artists" = "Artistes";
+"library.playlists" = "Listes de lecture";
+"library.recent" = "Récents";
+"library.search" = "Rechercher";
+"library.noResults" = "Aucun résultat";
+"library.downloaded" = "Téléchargés";
+
+/* Navigation */
+"nav.library" = "Bibliothèque";
+"nav.discover" = "Découvrir";
+"nav.settings" = "Paramètres";
+"nav.nowPlaying" = "En cours";
