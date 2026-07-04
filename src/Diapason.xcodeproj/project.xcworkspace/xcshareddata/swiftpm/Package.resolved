@@ -1,0 +1,51 @@
+{
+  "originHash" : "1854de7c78abe5bc90939cabe60e83f3f745a11be6b497eabacf8cbfefddbd73",
+  "pins" : [
+    {
+      "identity" : "audiostreaming",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dimitris-c/AudioStreaming",
+      "state" : {
+        "branch" : "main",
+        "revision" : "cc972c0a001e401cba266d507f62f0eb7a1740b5"
+      }
+    },
+    {
+      "identity" : "ogg-binary-xcframework",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sbooth/ogg-binary-xcframework",
+      "state" : {
+        "revision" : "c0e822e18738ad913864e98d9614927ac1e9337c",
+        "version" : "0.1.2"
+      }
+    },
+    {
+      "identity" : "swiftsonic",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MathieuDubart/swiftsonic",
+      "state" : {
+        "branch" : "main",
+        "revision" : "57ed3b1fc3608a64a73be5fceff03baef5f082ca"
+      }
+    },
+    {
+      "identity" : "vorbis-binary-xcframework",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sbooth/vorbis-binary-xcframework",
+      "state" : {
+        "revision" : "842020eabcebe410e698c68545d6597b2d232e51",
+        "version" : "0.1.2"
+      }
+    },
+    {
+      "identity" : "youtubekit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/alexeichhorn/YouTubeKit",
+      "state" : {
+        "revision" : "65be95dbb1dbd749499e0638871568c823822276",
+        "version" : "0.4.8"
+      }
+    }
+  ],
+  "version" : 3
+}

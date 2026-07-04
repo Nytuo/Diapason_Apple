@@ -1,6 +1,6 @@
 <h1 align="center">
   <a href="https://github.com/Nytuo/Diapason_iOS">
-    <img src="Diapacon-iOS-Default-1024x1024@1x.png" alt="Diapason" width="auto" height="200">
+    <img src="logo.png" alt="Diapason" width="auto" height="200">
   </a>
 </h1>
 
@@ -33,7 +33,6 @@ Diapason native iOS music player for Subsonic, Plex, and local libraries
   - [Prerequisites](#prerequisites)
   - [Build \& run](#build--run)
   - [First launch](#first-launch)
-- [Architecture](#architecture)
 - [Authors \& contributors](#authors--contributors)
 - [License](#license)
 
@@ -47,11 +46,13 @@ Diapason for iOS is a fully native SwiftUI music client for iPhone and iPad. It 
 
 It is part of the [Diapason](https://github.com/Nytuo/Diapason) ecosystem and speaks the **Diapason Connect** protocol, letting you control the desktop app from your phone or use your phone as a playback receiver.
 
+Diapason for iOS is a fork of [Cassette](https://github.com/mathieudubart/Cassette), a Subsonic/OpenSubsonic music client, originally licensed under the **Mozilla Public License 2.0**. It has been repackaged and substantially modified to add new features, including YouTube-backed discovery & downloads, Last.fm scrobbling, ListenBrainz playlists, multiple backend support (Subsonic, Plex, and local files), an iPodOS-style click-wheel mode, and Diapason Connect for integration with the wider Diapason ecosystem. The native macOS target present in the original project has been removed; this fork targets iOS/iPadOS only.
+
+All original Cassette source files retain their MPL 2.0 header. New and modified files added as part of this fork are licensed under the **GNU General Public License v3.0** — see [License](#license) below.
+
 ## Features
 
 **Playback**
-- AVFoundation-based audio with gapless playback support
-- Background audio
 - Lock-screen controls
 - Playback cache manager for smooth streaming
 
@@ -59,12 +60,11 @@ It is part of the [Diapason](https://github.com/Nytuo/Diapason) ecosystem and sp
 - Subsonic / Navidrome server support
 - Plex Media Server support
 - Local file library via folder picker
-- Album, Artist, Song, Playlist, and Folder views
+- Album, Artist, Song, Playlist views
 - Full-text search
 
 **Now Playing**
-- Glassmorphic full-screen player with dynamic animated background
-- Karaoke-style synced lyrics viewer with tap-to-seek
+- Synced lyrics viewer with tap-to-seek
 - System volume slider
 - Queue management
 
@@ -84,6 +84,7 @@ It is part of the [Diapason](https://github.com/Nytuo/Diapason) ecosystem and sp
 - Playlist management (create, edit, reorder)
 - i18n: English + French
 - iOS 16+ target
+- iPodOS like experience (beta)
 
 ## Technologies
 
@@ -126,29 +127,6 @@ Open the **Settings** tab and enter your server details:
 - **Plex** — server URL + token
 - **Local files** — tap the folder picker to grant access to your music folder
 
-## Architecture
-
-```
-SwiftUI Views  (src/Sources/Views/)
-  ↓  @StateObject / @ObservedObject
-Managers
-  ├── PlayerManager       — AVPlayer queue + transport
-  ├── BackendManager      — selects active backend
-  ├── DiscoveryManager    — Last.fm / ListenBrainz discovery
-  ├── ConnectManager      — Diapason Connect TCP protocol
-  └── DesktopDiapasonBrowser — Bonjour/mDNS LAN discovery
-  ↓
-UnifiedMusicClient  (Subsonic / Plex / Local abstraction)
-  ├── SubsonicClient
-  ├── PlexClient
-  └── LocalMusicManager
-  ↓
-AVPlayer (audio)  +  URLSession (API calls)
-  ↓ optional
-Scrobbler → LastFmClient / ListenBrainzClient
-YouTubeResolver → yt-dlp
-```
-
 ## Authors & contributors
 
 Created by [Arnaud BEUX](https://github.com/Nytuo).
@@ -157,5 +135,6 @@ For a full list of contributors, see the [contributors page](https://github.com/
 
 ## License
 
-Diapason for iOS is licensed under the **GNU General Public License v3**.
-See [LICENSE](LICENSE) for more information.
+Diapason for iOS is a modification of [Cassette](https://github.com/mathieudubart/Cassette), which is licensed under the **Mozilla Public License 2.0** (see [LICENSE-Cassette](src/Sources/LICENSE-Cassette)). Source files carried over from Cassette remain under MPL 2.0 and keep their original header.
+
+All changes, additions, and new files introduced in this fork — including the new backends, Diapason Connect, and the iPod mode — are licensed under the **GNU General Public License v3.0**. See [LICENSE](LICENSE) for the full text.

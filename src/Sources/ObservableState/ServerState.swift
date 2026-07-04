@@ -1,0 +1,43 @@
+// Cassette — Music client for Subsonic/OpenSubsonic servers
+// Copyright (C) 2026 Mathieu Dubart
+// Licensed under the Mozilla Public License 2.0.
+// See LICENSE file in the project root for full license information.
+
+import Foundation
+import Observation
+
+/// Sendable value-type snapshot of a ServerConfig for crossing actor boundaries safely.
+nonisolated struct ServerSnapshot: Sendable, Equatable {
+    let id: UUID
+    let displayName: String
+    let baseURL: String
+    let username: String
+    let serverVersion: String?
+    /// Which backend serves this server: "subsonic", "plex", or "local".
+    let backendKind: String
+
+    init(from config: ServerConfig) {
+        self.id = config.id
+        self.displayName = config.displayName
+        self.baseURL = config.baseURL
+        self.username = config.username
+        self.serverVersion = config.serverVersion
+        self.backendKind = config.backendKind
+    }
+}
+
+/// Observable UI state for server connectivity. Updated by ServerService via MainActor.run.
+@Observable
+@MainActor
+final class ServerState {
+    var servers: [ServerSnapshot] = []
+    var activeServer: ServerSnapshot?
+    var isConnected: Bool = false
+    /// Updated by NetworkMonitor. False when NWPathMonitor reports no connectivity.
+    var isOnline: Bool = true
+    /// Updated by NetworkMonitor. True when the connection is metered (cellular, hotspot).
+    /// Default false — optimistic until the first NWPath update corrects it on launch (~100ms).
+    var isExpensive: Bool = false
+    // Prevents OnboardingView flash before persisted state is restored on launch.
+    var isLoadingPersistedState: Bool = true
+}
