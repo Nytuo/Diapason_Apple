@@ -44,6 +44,9 @@ struct SettingsView: View {
             LocalImportSectionView()
             #endif
             DownloadsSectionView(vm: downloadsVM)
+            #if os(iOS)
+            WatchSyncSectionView()
+            #endif
             CacheSectionView()
             ReplayGainSettingsSection()
             CrossfadeSettingsSection()

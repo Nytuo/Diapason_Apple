@@ -18,6 +18,9 @@ struct CassetteApp: App {
     #if os(tvOS)
     @State private var showTVSplash = true
     #endif
+    #if os(iOS)
+    @StateObject private var watchService = WatchConnectivityService()
+    #endif
 
     // Statics for BGTask handler access — set once after AppContainer init.
     // nonisolated(unsafe) is intentional: the BGTask closure runs off-actor;
@@ -84,6 +87,11 @@ struct CassetteApp: App {
                 }
             }
             .tint(CassetteColors.accent)
+            #if os(iOS)
+            .environmentObject(watchService)
+            .onChange(of: container?.playerState.currentTrack?.id) { _, _ in watchService.pushState() }
+            .onChange(of: container?.playerState.playbackState) { _, _ in watchService.pushState() }
+            #endif
             #if os(tvOS)
             .overlay {
                 if showTVSplash {
@@ -135,6 +143,13 @@ struct CassetteApp: App {
                 CassetteApp._bgTaskService = newContainer.wrappedPlaylistService
                 CassetteApp._bgTaskServerState = newContainer.serverState
                 CassetteApp.scheduleWrappedUpdate()
+                watchService.start(
+                    playerState: newContainer.playerState,
+                    playerService: newContainer.playerService,
+                    artworkCache: newContainer.artworkImageCache,
+                    downloadService: newContainer.downloadService,
+                    modelContainer: newContainer.modelContainer
+                )
                 #endif
             }
             .task(id: container?.serverState.isOnline) {
