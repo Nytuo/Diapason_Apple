@@ -7,7 +7,9 @@ import SwiftUI
 
 extension Color {
     nonisolated static var cassetteSystemBackground: Color {
-        #if os(iOS)
+        #if os(tvOS)
+        Color.black
+        #elseif canImport(UIKit)
         Color(.systemBackground)
         #else
         Color(.windowBackgroundColor)

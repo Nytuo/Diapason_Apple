@@ -127,11 +127,13 @@ struct YouTubeDownloadsView: View {
                             .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
+                        #if !os(tvOS)
                         .swipeActions {
                             Button(role: .destructive) { downloads.delete(s.id) } label: {
                                 Label("Delete", systemImage: "trash")
                             }
                         }
+                        #endif
                     }
                 }
                 .listStyle(.plain)

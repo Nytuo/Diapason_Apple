@@ -145,12 +145,14 @@ struct HomeView: View {
             }
             #endif
         }
+        #if !os(tvOS)
         .sheet(isPresented: $showEditPinned) { EditPinnedView() }
+        #endif
         .navigationDestination(isPresented: $navigateToSettings) { SettingsView() }
         #if os(macOS)
         .navigationDestination(isPresented: $navigateToAllAlbums) { AlbumsListView() }
         #endif
-        #if os(iOS)
+        #if os(iOS) || os(tvOS)
         .navigationDestination(for: HomeDestination.self) { destination in
             switch destination {
             case .libraryAlbums:
@@ -337,9 +339,14 @@ struct HomeView: View {
                 .font(.cassetteSectionTitle)
             LazyVGrid(columns: pinnedColumns, spacing: CassetteSpacing.m) {
                 ForEach(visiblePinnedItems) { item in
-                    HomePinnedCard(item: item, namespace: pinnedZoomNamespace)
+                    let card = HomePinnedCard(item: item, namespace: pinnedZoomNamespace)
                         .scaleEffect(dropTargetId == item.id ? 1.05 : 1.0)
                         .animation(.spring(response: 0.2, dampingFraction: 0.7), value: dropTargetId)
+                    #if os(tvOS)
+                    // Drag-to-reorder is a touch gesture; pins are read-only on tvOS.
+                    card
+                    #else
+                    card
                         .draggable(item.id)
                         .dropDestination(for: String.self) { droppedIds, _ in
                             guard let sourceId = droppedIds.first,
@@ -358,6 +365,7 @@ struct HomeView: View {
                         } isTargeted: { targeted in
                             dropTargetId = targeted ? item.id : nil
                         }
+                    #endif
                 }
             }
         }

@@ -40,7 +40,7 @@ struct RadioListView: View {
                     .buttonStyle(.plain)
                 }
                 .listStyle(.plain)
-                .refreshable { await load(forceRefresh: true) }
+                .refreshableCompat { await load(forceRefresh: true) }
             }
         }
         .cassetteContentWidth()

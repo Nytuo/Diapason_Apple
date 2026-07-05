@@ -15,7 +15,7 @@ enum WrappedCoverRenderer {
         let renderer = ImageRenderer(content: view)
         renderer.scale = 2.0
 
-        #if os(iOS)
+        #if os(iOS) || os(tvOS)
         guard let uiImage = renderer.uiImage else { return nil }
         return uiImage.jpegData(compressionQuality: 0.85)
         #elseif os(macOS)

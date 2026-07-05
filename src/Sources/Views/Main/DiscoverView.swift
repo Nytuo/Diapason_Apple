@@ -37,7 +37,10 @@ struct DiscoverView: View {
                     }
                     smartShuffleSection
                     searchYouTubeSection
+                    #if !os(tvOS)
+                    // Wrapped is a portrait, gesture/share-driven story experience — hidden on tvOS.
                     wrappedSection
+                    #endif
                     internetRadioSection
                 }
             }
@@ -63,7 +66,7 @@ struct DiscoverView: View {
             guard let serverId = container.serverState.activeServer?.id.uuidString else { return }
             yearlyPlaylists = await container.wrappedPlaylistService.fetchYearlyPlaylists(serverId: serverId)
         }
-        .refreshable {
+        .refreshableCompat {
             await vm?.load(forceRefresh: true)
             isListenBrainzConnected = await container?.listenBrainzService.currentSnapshot().isEnabled ?? false
             await vm?.loadFreshReleases()
@@ -261,6 +264,7 @@ struct DiscoverView: View {
         return "Smart Shuffle failed. Please try again."
     }
 
+    #if !os(tvOS)
     private var wrappedSection: some View {
         VStack(alignment: .leading, spacing: CassetteSpacing.s) {
             HStack {
@@ -294,6 +298,7 @@ struct DiscoverView: View {
             }
         }
     }
+    #endif
 
     private var currentYearCardYear: Int? {
         let year = Calendar.current.component(.year, from: Date())

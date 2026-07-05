@@ -105,7 +105,9 @@ struct AlbumDetailView: View {
         colorScheme == .dark ? Color.cassetteAccentSecondary : CassetteColors.accentForeground(on: dominantColor)
     }
     private var systemBackgroundColor: Color {
-        #if canImport(UIKit)
+        #if os(tvOS)
+        Color.black
+        #elseif canImport(UIKit)
         Color(UIColor.systemBackground)
         #else
         Color(NSColor.windowBackgroundColor)
@@ -203,7 +205,7 @@ struct AlbumDetailView: View {
                 }
             }
         }
-        .refreshable { await viewModel?.load() }
+        .refreshableCompat { await viewModel?.load() }
         .miniPlayerBottomMargin()
         .alert("Remove downloaded album?", isPresented: $showDeleteAlert) {
             Button("Remove", role: .destructive) { Task { await viewModel?.deleteDownload() } }
@@ -604,7 +606,7 @@ struct AlbumSongRows: View {
                 .padding(.horizontal, CassetteSpacing.l)
                 .onTapGesture { onTap(index) }
                 .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
+                .listRowSeparatorCompat(.hidden)
             #else
             VStack(spacing: 0) {
                 SongRow(song: liveSong, index: index + 1, isFavorite: favoriteSongIds.contains("song:\(song.id)"), titleColor: titleColor, secondaryColor: secondaryColor, onDownload: downloadAction, onRemoveDownload: removeAction, isDownloading: isDownloading, onAddToPlaylist: onAddToPlaylist)

@@ -199,7 +199,7 @@ struct EditServerView: View {
 
     private var customHeadersSection: some View {
         Section {
-            DisclosureGroup("Custom Headers") {
+            PlatformDisclosureGroup {
                 ForEach($viewModel.customHeaders) { $header in
                     CustomHeaderRowView(
                         key: $header.key,
@@ -210,6 +210,8 @@ struct EditServerView: View {
                 Button(action: viewModel.addCustomHeader) {
                     Label("Add Header", systemImage: "plus")
                 }
+            } label: {
+                Text("Custom Headers")
             }
         } footer: {
             Text("Optional headers sent with every request — useful for Cloudflare Access or other reverse-proxy authentication.")

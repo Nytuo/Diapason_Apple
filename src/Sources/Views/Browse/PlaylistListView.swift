@@ -85,7 +85,7 @@ struct PlaylistListView: View {
                 }
             }
             .listStyle(.plain)
-            .refreshable { await vm.load() }
+            .refreshableCompat { await vm.load() }
         }
     }
 }

@@ -249,7 +249,7 @@ struct SearchView: View {
                 ProgressView()
                 Spacer()
             }
-            .listRowSeparator(.hidden)
+            .listRowSeparatorCompat(.hidden)
             .padding(.vertical, CassetteSpacing.xl)
         } else if let error = vm.searchError {
             EmptyStateView(
@@ -258,7 +258,7 @@ struct SearchView: View {
                 subtitle: error.localizedDescription,
                 action: .init(label: "Retry") { Task { await vm.search(query: searchQuery) } }
             )
-            .listRowSeparator(.hidden)
+            .listRowSeparatorCompat(.hidden)
         } else if let results = vm.searchResults, hasAnyResults(results) {
             artistResultsSection(visibleArtists(from: results))
             albumResultsSection(results.album ?? [])
@@ -421,7 +421,7 @@ struct SearchView: View {
                             }
                         }
                         .listRowInsets(EdgeInsets())
-                        .listRowSeparator(.hidden)
+                        .listRowSeparatorCompat(.hidden)
                         .listRowBackground(Color.clear)
                     } header: {
                         HStack {

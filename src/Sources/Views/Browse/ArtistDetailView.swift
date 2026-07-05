@@ -77,7 +77,7 @@ struct ArtistDetailView: View {
                                     .padding(.bottom, CassetteSpacing.l)
                             }
                         }
-                        .refreshable { await vm.load() }
+                        .refreshableCompat { await vm.load() }
                     }
                 }
             } else {

@@ -45,14 +45,24 @@ struct ReplayGainSettingsSection: View {
                 }
                 .pickerStyle(.menu)
 
+                let preAmpBinding = Binding(
+                    get: { rg?.preAmp ?? 0 },
+                    set: { newVal in
+                        rg?.preAmp = newVal
+                        Task { await container?.playerService.replayGainSettingsDidChange() }
+                    }
+                )
+                #if os(tvOS)
+                Picker(selection: preAmpBinding) {
+                    ForEach(Array(stride(from: ReplayGainSettings.minPreAmp, through: ReplayGainSettings.maxPreAmp, by: 0.5)), id: \.self) { value in
+                        Text(preAmpLabel(value)).tag(value)
+                    }
+                } label: {
+                    Label("Pre-amp", systemImage: "slider.horizontal.3")
+                }
+                #else
                 Stepper(
-                    value: Binding(
-                        get: { rg?.preAmp ?? 0 },
-                        set: { newVal in
-                            rg?.preAmp = newVal
-                            Task { await container?.playerService.replayGainSettingsDidChange() }
-                        }
-                    ),
+                    value: preAmpBinding,
                     in: ReplayGainSettings.minPreAmp...ReplayGainSettings.maxPreAmp,
                     step: 0.5
                 ) {
@@ -69,6 +79,7 @@ struct ReplayGainSettingsSection: View {
                             .font(.body.weight(.medium))
                     }
                 }
+                #endif
 
                 Toggle(isOn: Binding(
                     get: { rg?.preventClipping ?? true },

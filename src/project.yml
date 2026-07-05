@@ -3,6 +3,7 @@ options:
   bundleIdPrefix: fr.nytuo
   deploymentTarget:
     iOS: "26.0"
+    tvOS: "26.0"
 packages:
   SwiftSonic:
     url: https://github.com/MathieuDubart/swiftsonic
@@ -22,6 +23,8 @@ targets:
       - path: Sources
         excludes:
           - "Views/Platform/macOS/**"
+          - "Info.plist"
+          - "Info-tvOS.plist"
     dependencies:
       - package: SwiftSonic
       - package: AudioStreaming
@@ -52,3 +55,54 @@ targets:
           UIColorName: LaunchBackground
           UIImageName: LaunchScreen
           UIImageRespectsSafeAreaInsets: true
+  DiapasonTV:
+    type: application
+    platform: tvOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: Sources
+        excludes:
+          - "Views/Platform/macOS/**"
+          - "Info.plist"
+          - "Info-tvOS.plist"
+          - "DiapasonBackends/iPod/**"
+          - "DiapasonBackends/LocalImportSectionView.swift"
+          - "Views/Wrapped/**"
+          - "Views/Main/MainTabView.swift"
+          - "Views/Main/MiniPlayerAccessoryView.swift"
+          - "Views/Main/FullPlayerView.swift"
+          - "Views/Main/QueueView.swift"
+          - "Views/Main/EditPinnedView.swift"
+      - path: TVSupport
+    dependencies:
+      - package: SwiftSonic
+      - package: AudioStreaming
+      - package: YouTubeKit
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIconTV
+        ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS: "YES"
+        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: "YES"
+        INFOPLIST_KEY_CFBundleDisplayName: Diapason
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "3"
+        ENABLE_PREVIEWS: "YES"
+    info:
+      path: Sources/Info-tvOS.plist
+      properties:
+        UIBackgroundModes: [audio]
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+schemes:
+  Diapason:
+    build:
+      targets:
+        Diapason: all
+    run:
+      config: Debug
+  DiapasonTV:
+    build:
+      targets:
+        DiapasonTV: all
+    run:
+      config: Debug

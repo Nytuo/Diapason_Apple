@@ -36,21 +36,31 @@ struct SettingsView: View {
 
     private func form(downloadsVM: DownloadsViewModel) -> some View {
         Form {
+            #if !os(tvOS)
+            // Blocked on tvOS: iPod click-wheel mode, LAN Connect remote,
+            // on-device local file import.
             InterfaceSettingsSection()
             ConnectSettingsSection()
             LocalImportSectionView()
+            #endif
             DownloadsSectionView(vm: downloadsVM)
             CacheSectionView()
             ReplayGainSettingsSection()
             CrossfadeSettingsSection()
             DiapasonServerSection()
             integrationsSection()
+            #if !os(tvOS)
+            // Blocked on tvOS: Last.fm requires a system browser for auth.
             LastFmSettingsSection()
+            #endif
             aboutSection()
+            #if !os(tvOS)
+            // Blocked on tvOS: external donation/support links open a browser.
             supportSection()
+            #endif
         }
         .formStyle(.grouped)
-        .refreshable {
+        .refreshableCompat {
             await downloadsVM.loadData()
         }
     }
@@ -204,11 +214,19 @@ struct CacheSectionView: View {
             }
 
             if let cacheSettings {
+                let maxTracksBinding = Binding(
+                    get: { cacheSettings.maxTracks },
+                    set: { cacheSettings.maxTracks = max(1, min(10, $0)) }
+                )
+                #if os(tvOS)
+                Picker(selection: maxTracksBinding) {
+                    ForEach(1...10, id: \.self) { Text("\($0)").tag($0) }
+                } label: {
+                    Label("Max tracks", systemImage: "tray.full.fill")
+                }
+                #else
                 Stepper(
-                    value: Binding(
-                        get: { cacheSettings.maxTracks },
-                        set: { cacheSettings.maxTracks = max(1, min(10, $0)) }
-                    ),
+                    value: maxTracksBinding,
                     in: 1...10
                 ) {
                     HStack {
@@ -224,6 +242,7 @@ struct CacheSectionView: View {
                             .font(.body.weight(.medium))
                     }
                 }
+                #endif
             }
 
             if let cacheSettings {
@@ -332,7 +351,7 @@ struct DownloadsSectionView: View {
             }
 
             if !vm.displayAlbums.isEmpty {
-                DisclosureGroup {
+                PlatformDisclosureGroup {
                     ForEach(vm.displayAlbums) { album in
                         HStack(spacing: CassetteSpacing.m) {
                             CoverArtCard(id: album.coverArtId ?? album.albumId, size: 40)
@@ -370,7 +389,7 @@ struct DownloadsSectionView: View {
             }
 
             if !vm.downloadedPlaylists.isEmpty {
-                DisclosureGroup {
+                PlatformDisclosureGroup {
                     ForEach(vm.downloadedPlaylists) { playlist in
                         HStack(spacing: CassetteSpacing.m) {
                             CoverArtCard(id: playlist.playlistId, size: 40)

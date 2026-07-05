@@ -15,6 +15,9 @@ import BackgroundTasks
 struct CassetteApp: App {
     @State private var container: AppContainer?
     @Environment(\.scenePhase) private var scenePhase
+    #if os(tvOS)
+    @State private var showTVSplash = true
+    #endif
 
     // Statics for BGTask handler access — set once after AppContainer init.
     // nonisolated(unsafe) is intentional: the BGTask closure runs off-actor;
@@ -81,6 +84,19 @@ struct CassetteApp: App {
                 }
             }
             .tint(CassetteColors.accent)
+            #if os(tvOS)
+            .overlay {
+                if showTVSplash {
+                    SplashScreenView()
+                        .transition(.opacity)
+                        .zIndex(1)
+                }
+            }
+            .task {
+                try? await Task.sleep(for: .seconds(1.8))
+                withAnimation(.easeOut(duration: 0.5)) { showTVSplash = false }
+            }
+            #endif
             .onAppear {
                 #if os(macOS)
                 NSApplication.shared.windows

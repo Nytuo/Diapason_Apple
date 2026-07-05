@@ -30,7 +30,7 @@ struct AllFreshReleasesView: View {
         return f
     }()
 
-    #if os(macOS)
+    #if !os(iOS)
     private var gridColumns: [GridItem] {
         [GridItem(.adaptive(minimum: 130))]
     }
@@ -103,7 +103,7 @@ struct AllFreshReleasesView: View {
             }
         }
         .listStyle(.plain)
-        .refreshable { await vm.loadReleases() }
+        .refreshableCompat { await vm.loadReleases() }
         #else
         let sv = ScrollView {
             LazyVStack(alignment: .leading, spacing: 0, pinnedViews: .sectionHeaders) {

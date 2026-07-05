@@ -92,7 +92,9 @@ struct PlaylistDetailView: View {
         colorScheme == .dark ? Color.cassetteAccentSecondary : CassetteColors.accentForeground(on: dominantColor)
     }
     private var systemBackgroundColor: Color {
-        #if canImport(UIKit)
+        #if os(tvOS)
+        Color.black
+        #elseif canImport(UIKit)
         Color(UIColor.systemBackground)
         #else
         Color(NSColor.windowBackgroundColor)
@@ -108,7 +110,7 @@ struct PlaylistDetailView: View {
         List {
             playlistHeader(vm: viewModel)
                 .listRowInsets(EdgeInsets())
-                .listRowSeparator(.hidden)
+                .listRowSeparatorCompat(.hidden)
                 .listRowBackground(Color.clear)
 
             if isLoadingSkeleton {
@@ -121,7 +123,7 @@ struct PlaylistDetailView: View {
                         subtitle: error.displayMessage,
                         action: .init(label: "Retry") { Task { await vm.load() } }
                     )
-                    .listRowSeparator(.hidden)
+                    .listRowSeparatorCompat(.hidden)
                     .listRowBackground(Color.clear)
                 } else if vm.songs.isEmpty {
                     EmptyStateView(
@@ -129,7 +131,7 @@ struct PlaylistDetailView: View {
                         title: "Empty Playlist",
                         subtitle: "This playlist doesn't have any tracks yet."
                     )
-                    .listRowSeparator(.hidden)
+                    .listRowSeparatorCompat(.hidden)
                     .listRowBackground(Color.clear)
                 } else {
                     let serverId = container?.serverState.activeServer?.id ?? UUID()
@@ -172,9 +174,9 @@ struct PlaylistDetailView: View {
         #if os(iOS)
         .environment(\.editMode, .constant(isEditing ? .active : .inactive))
         #endif
-        .scrollContentBackground(.hidden)
+        .scrollContentBackgroundCompat(.hidden)
         .miniPlayerBottomMargin()
-        .refreshable { await viewModel?.load() }
+        .refreshableCompat { await viewModel?.load() }
         .alert("Remove downloaded playlist?", isPresented: $showDeleteAlert) {
             Button("Remove", role: .destructive) { Task { await viewModel?.deleteDownload() } }
             Button("Cancel", role: .cancel) { }
@@ -463,7 +465,7 @@ struct PlaylistDetailView: View {
             .padding(.vertical, CassetteSpacing.xs)
             .listRowInsets(EdgeInsets(top: 0, leading: CassetteSpacing.l, bottom: 0, trailing: CassetteSpacing.l))
             .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
+            .listRowSeparatorCompat(.hidden)
         }
     }
 
@@ -861,7 +863,7 @@ struct PlaylistSongRows: View {
             .onTapGesture { onTap(index) }
             .listRowBackground(Color.clear)
         #if os(macOS)
-        .listRowSeparator(.hidden)
+        .listRowSeparatorCompat(.hidden)
         #endif
     }
 }

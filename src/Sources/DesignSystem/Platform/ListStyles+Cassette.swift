@@ -10,6 +10,8 @@ extension View {
     func cassetteSheetListStyle() -> some View {
         #if os(macOS)
         self.listStyle(.inset)
+        #elseif os(tvOS)
+        self.listStyle(.plain)
         #else
         self.listStyle(.insetGrouped)
         #endif

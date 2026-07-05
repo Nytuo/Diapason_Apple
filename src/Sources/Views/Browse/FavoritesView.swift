@@ -56,7 +56,7 @@ struct FavoritesView: View {
                 artistsSection(vm.artists)
             }
             .listStyle(.plain)
-            .refreshable { await vm.load() }
+            .refreshableCompat { await vm.load() }
             .sheet(item: $songToAddToPlaylist) { song in
                 AddToPlaylistSheet(song: song)
             }
@@ -94,7 +94,7 @@ struct FavoritesView: View {
                     .buttonStyle(.bordered)
                     .tint(Color.cassetteAccent)
                 }
-                .listRowSeparator(.hidden)
+                .listRowSeparatorCompat(.hidden)
                 .listRowBackground(Color.clear)
                 .padding(.vertical, 4)
 

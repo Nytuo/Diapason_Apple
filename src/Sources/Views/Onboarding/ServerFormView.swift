@@ -8,11 +8,21 @@ import SwiftUI
 struct ServerFormView: View {
     @Bindable var viewModel: OnboardingViewModel
 
+    /// The Local backend imports on-device audio files via a document picker, which
+    /// tvOS has no equivalent for — so it is not offered there.
+    private var availableBackends: [OnboardingViewModel.Backend] {
+        #if os(tvOS)
+        OnboardingViewModel.Backend.allCases.filter { $0 != .local }
+        #else
+        OnboardingViewModel.Backend.allCases
+        #endif
+    }
+
     var body: some View {
         Form {
             Section("Backend") {
                 Picker("Backend", selection: $viewModel.backend) {
-                    ForEach(OnboardingViewModel.Backend.allCases) { kind in
+                    ForEach(availableBackends) { kind in
                         Text(kind.label).tag(kind)
                     }
                 }
@@ -119,7 +129,7 @@ struct ServerFormView: View {
 
     private var customHeadersSection: some View {
         Section {
-            DisclosureGroup("Custom Headers") {
+            PlatformDisclosureGroup {
                 ForEach($viewModel.customHeaders) { $header in
                     CustomHeaderRowView(
                         key: $header.key,
@@ -130,6 +140,8 @@ struct ServerFormView: View {
                 Button(action: viewModel.addCustomHeader) {
                     Label("Add Header", systemImage: "plus")
                 }
+            } label: {
+                Text("Custom Headers")
             }
         } footer: {
             Text("Optional headers sent with every request — useful for Cloudflare Access or other reverse-proxy authentication.")
@@ -156,7 +168,7 @@ struct CustomHeaderRowView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
             TextField("e.g. CF-Access-Client-Id", text: $key)
-                .textFieldStyle(.roundedBorder)
+                .roundedBorderTextFieldStyleCompat()
                 .autocorrectionDisabled()
                 #if os(iOS)
                 .textInputAutocapitalization(.never)
@@ -168,7 +180,7 @@ struct CustomHeaderRowView: View {
                 .padding(.top, CassetteSpacing.xs)
             HStack(spacing: 0) {
                 valueField
-                    .textFieldStyle(.roundedBorder)
+                    .roundedBorderTextFieldStyleCompat()
                     .autocorrectionDisabled()
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)

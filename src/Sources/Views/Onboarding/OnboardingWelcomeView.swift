@@ -69,16 +69,38 @@ struct OnboardingWelcomeView: View {
         .onChange(of: container?.serverState.activeServer != nil) { _, connected in
             if connected { showingServerForm = false }
         }
-        .sheet(isPresented: $showingServerForm, onDismiss: {
-            if container?.serverState.activeServer != nil {
-                onServerConnected()
-            }
-        }) {
-            if let viewModel {
+        #if os(tvOS)
+        .fullScreenCover(isPresented: $showingServerForm, onDismiss: handleFormDismiss) {
+            serverForm
+        }
+        #else
+        .sheet(isPresented: $showingServerForm, onDismiss: handleFormDismiss) {
+            serverForm
+        }
+        #endif
+    }
+
+    @ViewBuilder
+    private var serverForm: some View {
+        if let viewModel {
+            #if os(tvOS)
+            ZStack {
+                CassetteColors.backgroundPrimary.ignoresSafeArea()
                 NavigationStack {
                     ServerFormView(viewModel: viewModel)
                 }
             }
+            #else
+            NavigationStack {
+                ServerFormView(viewModel: viewModel)
+            }
+            #endif
+        }
+    }
+
+    private func handleFormDismiss() {
+        if container?.serverState.activeServer != nil {
+            onServerConnected()
         }
     }
 

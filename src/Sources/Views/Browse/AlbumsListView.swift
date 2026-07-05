@@ -84,7 +84,7 @@ struct AlbumsListView: View {
                     .id(album.id)
                 }
                 .listStyle(.plain)
-                .refreshable { await vm.load() }
+                .refreshableCompat { await vm.load() }
                 .safeAreaInset(edge: .trailing, spacing: 0) {
                     if vm.albums.count >= 20 {
                         AlphabetJumpBar(
@@ -122,7 +122,7 @@ struct AlbumsListView: View {
                 }
                 .padding(24)
             }
-            .refreshable { await vm.load() }
+            .refreshableCompat { await vm.load() }
         }
     }
 

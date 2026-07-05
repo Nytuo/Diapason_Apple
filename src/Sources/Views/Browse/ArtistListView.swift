@@ -71,7 +71,7 @@ struct ArtistListView: View {
                     }
                 }
                 .listStyle(.plain)
-                .refreshable { await vm.load() }
+                .refreshableCompat { await vm.load() }
                 #if os(iOS)
                 .safeAreaInset(edge: .trailing, spacing: 0) {
                     if vm.indexes.count >= 5 {

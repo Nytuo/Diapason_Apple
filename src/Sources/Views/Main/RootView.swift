@@ -8,7 +8,9 @@ import SwiftUI
 struct RootView: View {
     @Environment(\.appContainer) private var container
     @AppStorage("onboardingComplete") private var onboardingComplete = false
+    #if !os(tvOS)
     @AppStorage("interfaceMode") private var interfaceModeRaw = InterfaceMode.modern.rawValue
+    #endif
 
     var body: some View {
         if let serverState = container?.serverState {
@@ -18,6 +20,9 @@ struct RootView: View {
             } else if serverState.activeServer != nil && onboardingComplete {
                 #if os(macOS)
                 RootViewMacOS()
+                    .accentColor(.cassetteAccent)
+                #elseif os(tvOS)
+                TVMainView()
                     .accentColor(.cassetteAccent)
                 #else
                 if InterfaceMode(rawValue: interfaceModeRaw) == .ipod {
