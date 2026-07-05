@@ -5,8 +5,8 @@
 </h1>
 
 <div align="center">
-<h2>Diapason for iOS</h2>
-Diapason native iOS music player for Subsonic, Plex, and local libraries
+<h2>Diapason for Apple devices</h2>
+Diapason native music player for Subsonic, Plex, and local libraries
 <br />
 <br />
 <a href="https://github.com/Nytuo/Diapason_iOS/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
@@ -42,11 +42,12 @@ Diapason native iOS music player for Subsonic, Plex, and local libraries
 
 ## About
 
-Diapason for iOS is a fully native SwiftUI music client for iPhone and iPad. It connects to your Subsonic / Navidrome or Plex server, or browses your on-device local files, and delivers an Apple Music-style experience with a glassmorphic full-screen player, karaoke-style synced lyrics, and deep OS integration for lock-screen controls and background audio.
+Diapason for Apple devices is a fully native SwiftUI music client for iOS, iPadOS, tvOS and watchOS. It connects to your Subsonic / Navidrome or Plex server, or browses your on-device local files, and delivers an Apple Music-style experience with a glassmorphic full-screen player, karaoke-style synced lyrics, and deep OS integration for lock-screen controls and background audio.
 
 It is part of the [Diapason](https://github.com/Nytuo/Diapason) ecosystem and speaks the **Diapason Connect** protocol, letting you control the desktop app from your phone or use your phone as a playback receiver.
 
-Diapason for iOS is a fork of [Cassette](https://github.com/mathieudubart/Cassette), a Subsonic/OpenSubsonic music client, originally licensed under the **Mozilla Public License 2.0**. It has been repackaged and substantially modified to add new features, including YouTube-backed discovery & downloads, Last.fm scrobbling, ListenBrainz playlists, multiple backend support (Subsonic, Plex, and local files), an iPodOS-style click-wheel mode, and Diapason Connect for integration with the wider Diapason ecosystem. The native macOS target present in the original project has been removed; this fork targets iOS/iPadOS only.
+Diapason for iOS is a fork of [Cassette](https://github.com/mathieudubart/Cassette), a Subsonic/OpenSubsonic music client, originally licensed under the **Mozilla Public License 2.0**. It has been repackaged and substantially modified to add new features, including YouTube-backed discovery & downloads, Last.fm scrobbling, ListenBrainz playlists, multiple backend support (Subsonic, Plex, and local files), an iPodOS-style click-wheel mode, and Diapason Connect for integration with the wider Diapason ecosystem. The native macOS target present in the original project has been removed; this fork targets iOS/iPadOS/tvOS/watchOS only.
+Added tvOS and watchOS support;
 
 All original Cassette source files retain their MPL 2.0 header. New and modified files added as part of this fork are licensed under the **GNU General Public License v3.0** — see [License](#license) below.
 
