@@ -31,7 +31,7 @@ struct ArtistDetailView: View {
     private var isOnline: Bool { container?.serverState.isOnline == true }
 
     private let columns = [
-        GridItem(.adaptive(minimum: 150, maximum: 200), spacing: CassetteSpacing.l)
+        GridItem(.adaptive(minimum: 150, maximum: 200), spacing: DiapasonSpacing.l)
     ]
 
     var body: some View {
@@ -55,7 +55,7 @@ struct ArtistDetailView: View {
                     } else {
                         ScrollView {
                             heroSection(vm: vm)
-                            LazyVGrid(columns: columns, spacing: CassetteSpacing.l) {
+                            LazyVGrid(columns: columns, spacing: DiapasonSpacing.l) {
                                 ForEach(albums) { album in
                                     NavigationLink(value: HomeDestination.album(album)) {
                                         AlbumGridCell(
@@ -70,11 +70,11 @@ struct ArtistDetailView: View {
                                     }
                                 }
                             }
-                            .padding(CassetteSpacing.l)
+                            .padding(DiapasonSpacing.l)
 
                             if vm.isLoadingSimilarArtists || !vm.similarArtists.isEmpty {
                                 similarArtistsSection(vm: vm)
-                                    .padding(.bottom, CassetteSpacing.l)
+                                    .padding(.bottom, DiapasonSpacing.l)
                             }
                         }
                         .refreshableCompat { await vm.load() }
@@ -84,7 +84,7 @@ struct ArtistDetailView: View {
                 skeletonGrid
             }
         }
-        .cassetteContentWidth()
+        .diapasonContentWidth()
         .navigationTitle(artist.name)
         .navigationBarTitleDisplayModeLarge()
         .toolbar {
@@ -100,7 +100,7 @@ struct ArtistDetailView: View {
                     }
                 } label: {
                     Image(systemName: isArtistFavorite ? "heart.fill" : "heart")
-                        .foregroundStyle(isArtistFavorite ? Color.cassetteAccent : Color.primary)
+                        .foregroundStyle(isArtistFavorite ? Color.accent : Color.primary)
                         .scaleEffect(isArtistFavorite ? 1.1 : 1.0)
                         .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isArtistFavorite)
                 }
@@ -134,7 +134,7 @@ struct ArtistDetailView: View {
     private func heroSection(vm: ArtistDetailViewModel) -> some View {
         let albums = vm.artist?.album ?? []
         let count = albums.count
-        return HStack(alignment: .center, spacing: CassetteSpacing.l) {
+        return HStack(alignment: .center, spacing: DiapasonSpacing.l) {
             CoverArtView(
                 id: vm.artist?.coverArt ?? artist.id,
                 size: 240,
@@ -145,12 +145,12 @@ struct ArtistDetailView: View {
             .clipShape(Circle())
             .shadow(color: .black.opacity(0.2), radius: 8, y: 4)
 
-            VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
                 Text("\(count) album\(count == 1 ? "" : "s")")
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(.secondary)
                 Spacer()
-                HStack(spacing: CassetteSpacing.s) {
+                HStack(spacing: DiapasonSpacing.s) {
                     Button {
                         Task { await playAll(shuffled: false) }
                     } label: {
@@ -158,7 +158,7 @@ struct ArtistDetailView: View {
                             .font(.system(size: 14, weight: .semibold))
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(Color.cassetteAccent)
+                    .tint(Color.accentColor)
                     .disabled(vm.isPlayLoading || albums.isEmpty)
 
                     Button {
@@ -173,9 +173,9 @@ struct ArtistDetailView: View {
             }
             .frame(height: 100)
         }
-        .padding(.horizontal, CassetteSpacing.l)
-        .padding(.top, CassetteSpacing.m)
-        .padding(.bottom, CassetteSpacing.s)
+        .padding(.horizontal, DiapasonSpacing.l)
+        .padding(.top, DiapasonSpacing.m)
+        .padding(.bottom, DiapasonSpacing.s)
     }
 
     private func playAll(shuffled: Bool) async {
@@ -186,7 +186,7 @@ struct ArtistDetailView: View {
             let tracks = try await c.libraryService.fetchAllTracks(forArtistID: artist.id)
             let queue = shuffled ? tracks.shuffled() : tracks
             try await c.playerService.play(tracks: queue, startIndex: 0)
-        } catch CassetteError.artistTracksUnavailable {
+        } catch DiapasonError.artistTracksUnavailable {
             c.toastService.showError("Unable to load artist tracks. Please check your connection and try again.")
         } catch {
             c.toastService.showError("Playback failed. Please try again.")
@@ -195,10 +195,10 @@ struct ArtistDetailView: View {
 
     private var skeletonGrid: some View {
         ScrollView {
-            LazyVGrid(columns: columns, spacing: CassetteSpacing.l) {
+            LazyVGrid(columns: columns, spacing: DiapasonSpacing.l) {
                 ForEach(0..<6, id: \.self) { _ in SkeletonAlbumCard() }
             }
-            .padding(CassetteSpacing.l)
+            .padding(DiapasonSpacing.l)
         }
     }
 
@@ -206,28 +206,28 @@ struct ArtistDetailView: View {
 
     @ViewBuilder
     private func similarArtistsSection(vm: ArtistDetailViewModel) -> some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
             Text("Similar Artists")
-                .font(.cassetteSectionTitle)
-                .padding(.horizontal, CassetteSpacing.m)
+                .font(.SectionTitle)
+                .padding(.horizontal, DiapasonSpacing.m)
 
             if vm.isLoadingSimilarArtists {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(spacing: CassetteSpacing.m) {
+                    LazyHStack(spacing: DiapasonSpacing.m) {
                         ForEach(0..<8, id: \.self) { _ in
-                            VStack(spacing: CassetteSpacing.xs) {
+                            VStack(spacing: DiapasonSpacing.xs) {
                                 SkeletonBlock(width: 64, height: 64, cornerRadius: 32)
                                 SkeletonBlock(width: 72, height: 10)
                             }
                             .frame(width: 80)
                         }
                     }
-                    .padding(.horizontal, CassetteSpacing.m)
+                    .padding(.horizontal, DiapasonSpacing.m)
                 }
                 .allowsHitTesting(false)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(spacing: CassetteSpacing.m) {
+                    LazyHStack(spacing: DiapasonSpacing.m) {
                         ForEach(vm.similarArtists) { rec in
                             Group {
                                 if rec.inLibrary {
@@ -250,7 +250,7 @@ struct ArtistDetailView: View {
                             .frame(width: 80)
                         }
                     }
-                    .padding(.horizontal, CassetteSpacing.m)
+                    .padding(.horizontal, DiapasonSpacing.m)
                 }
             }
         }
@@ -269,27 +269,27 @@ struct OutOfLibraryArtistSheet: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: CassetteSpacing.l) {
+                VStack(spacing: DiapasonSpacing.l) {
                     ExternalCoverView(url: imageURL) {
                         ArtistPlaceholderView(name: artist.name, size: 120)
                     }
                     .frame(width: 120, height: 120)
                     .clipShape(Circle())
-                    .padding(.top, CassetteSpacing.l)
+                    .padding(.top, DiapasonSpacing.l)
 
-                    VStack(spacing: CassetteSpacing.xs) {
+                    VStack(spacing: DiapasonSpacing.xs) {
                         Text(artist.name)
                             .font(.title2.bold())
                             .multilineTextAlignment(.center)
 
                         Text("Not in your library")
-                            .font(.cassetteCaption)
+                            .font(.Caption)
                             .foregroundStyle(.secondary)
                     }
 
                     externalLinksSection
                 }
-                .padding(CassetteSpacing.l)
+                .padding(DiapasonSpacing.l)
             }
             .navigationTitle(artist.name)
             #if os(iOS)
@@ -305,7 +305,7 @@ struct OutOfLibraryArtistSheet: View {
 
     @ViewBuilder
     private var externalLinksSection: some View {
-        VStack(spacing: CassetteSpacing.s) {
+        VStack(spacing: DiapasonSpacing.s) {
             if !providers.isEmpty {
                 ForEach(providers) { provider in
                     if let url = provider.buildURL(artistName: artist.name, albumTitle: "") {
@@ -331,7 +331,7 @@ struct OutOfLibraryArtistSheet: View {
                 }
             }
         }
-        .padding(.horizontal, CassetteSpacing.l)
+        .padding(.horizontal, DiapasonSpacing.l)
     }
 
     private func externalLinkButton(title: String, url: URL, secondary: Bool) -> some View {
@@ -343,14 +343,14 @@ struct OutOfLibraryArtistSheet: View {
                 Spacer(minLength: 0)
                 Image(systemName: "arrow.up.right")
             }
-            .font(.cassetteCellTitle)
-            .padding(CassetteSpacing.m)
+            .font(.CellTitle)
+            .padding(DiapasonSpacing.m)
             .frame(maxWidth: .infinity)
             .background(secondary
                 ? Color.secondary.opacity(0.08)
-                : Color.cassetteAccent.opacity(0.1))
-            .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.standard, style: .continuous))
-            .foregroundStyle(secondary ? Color.secondary : Color.cassetteAccent)
+                : Color.accent.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard, style: .continuous))
+            .foregroundStyle(secondary ? Color.secondary : Color.accent)
         }
         .buttonStyle(.plain)
     }

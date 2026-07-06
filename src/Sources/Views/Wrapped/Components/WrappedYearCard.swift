@@ -52,7 +52,7 @@ struct WrappedYearCard: View {
             .frame(maxWidth: .infinity)
             .frame(height: 380)
             .overlay { overlayContent }
-            .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.hero, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.hero, style: .continuous))
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(accessibilityLabel)
     }
@@ -88,9 +88,9 @@ struct WrappedYearCard: View {
                 .foregroundStyle(.white.opacity(0.7))
                 .shadow(color: .black.opacity(0.15), radius: 3, y: 1)
                 .lineLimit(2)
-                .padding(.top, CassetteSpacing.xs)
+                .padding(.top, DiapasonSpacing.xs)
         }
-        .padding(CassetteSpacing.l)
+        .padding(DiapasonSpacing.l)
     }
 
     @ViewBuilder

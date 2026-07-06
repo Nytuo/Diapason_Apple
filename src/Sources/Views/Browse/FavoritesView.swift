@@ -20,7 +20,7 @@ struct FavoritesView: View {
                 LoadingStateView()
             }
         }
-        .cassetteContentWidth()
+        .diapasonContentWidth()
         .navigationTitle("Favorites")
         .navigationBarTitleDisplayModeInline()
         .onAppear {
@@ -77,7 +77,7 @@ struct FavoritesView: View {
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(Color.cassetteAccent)
+                    .tint(Color.accentColor)
 
                     Button {
                         Task {
@@ -92,7 +92,7 @@ struct FavoritesView: View {
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.bordered)
-                    .tint(Color.cassetteAccent)
+                    .tint(Color.accent)
                 }
                 .listRowSeparatorCompat(.hidden)
                 .listRowBackground(Color.clear)

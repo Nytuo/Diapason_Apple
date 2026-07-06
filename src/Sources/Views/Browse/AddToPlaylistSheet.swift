@@ -121,14 +121,14 @@ struct AddToPlaylistSheet: View {
                         showCreateSheet = true
                     } label: {
                         Label("New Playlist", systemImage: "plus.circle")
-                            .foregroundStyle(Color.cassetteAccent)
+                            .foregroundStyle(Color.accent)
                     }
                 }
 
                 if vm.playlists.isEmpty {
                     Section {
                         Text("No playlists yet. Create one above.")
-                            .font(.cassetteCaption)
+                            .font(.Caption)
                             .foregroundStyle(.secondary)
                     }
                 } else {
@@ -159,7 +159,7 @@ struct AddToPlaylistSheet: View {
                     }
                 }
             }
-            .cassetteSheetListStyle()
+            .diapasonSheetListStyle()
         }
     }
 }
@@ -184,15 +184,15 @@ private struct AddToPlaylistRow: View {
     private var isAdding: Bool { vm.addingToPlaylistIds.contains(playlist.id) }
 
     var body: some View {
-        HStack(spacing: CassetteSpacing.m) {
+        HStack(spacing: DiapasonSpacing.m) {
             CoverArtCard(id: playlist.coverArt ?? playlist.id, size: 44)
             VStack(alignment: .leading, spacing: 2) {
                 Text(playlist.name)
-                    .font(.cassetteCellTitle)
+                    .font(.CellTitle)
                     .foregroundStyle(.primary)
                     .lineLimit(1)
                 Text("\(playlist.songCount) track\(playlist.songCount == 1 ? "" : "s")")
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(.secondary)
             }
             Spacer(minLength: 0)
@@ -202,7 +202,7 @@ private struct AddToPlaylistRow: View {
                     .frame(width: 22, height: 22)
             }
         }
-        .padding(.vertical, CassetteSpacing.xs)
+        .padding(.vertical, DiapasonSpacing.xs)
         .contentShape(Rectangle())
         .task(id: playlist.id) {
             coverImage = await artworkImageCache.load(coverArtId: playlist.coverArt ?? playlist.id)

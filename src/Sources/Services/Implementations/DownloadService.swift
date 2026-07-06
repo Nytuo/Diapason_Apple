@@ -36,7 +36,7 @@ actor DownloadService: DownloadServiceProtocol {
         self.downloadSession = URLSession(configuration: sessionConfig)
 
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let base = docs.appendingPathComponent("app.cassette", isDirectory: true)
+        let base = docs.appendingPathComponent("app.diapason", isDirectory: true)
         self.downloadsDirectory = base.appendingPathComponent("downloads", isDirectory: true)
         self.coverArtsDirectory = base.appendingPathComponent("coverarts", isDirectory: true)
 
@@ -200,7 +200,7 @@ actor DownloadService: DownloadServiceProtocol {
         let creds = try await serverService.activeCredentials()
         let client = try await serverService.makeSwiftSonicClient()
         guard let streamURL = client.streamURL(id: song.id) else {
-            throw CassetteError.mediaNotFound(songId: song.id)
+            throw DiapasonError.mediaNotFound(songId: song.id)
         }
 
         var request = URLRequest(url: streamURL)
@@ -213,7 +213,7 @@ actor DownloadService: DownloadServiceProtocol {
         guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
             let code = (response as? HTTPURLResponse)?.statusCode ?? -1
             struct HTTPError: Error & Sendable { let statusCode: Int }
-            throw CassetteError.downloadFailed(songId: song.id, underlying: HTTPError(statusCode: code))
+            throw DiapasonError.downloadFailed(songId: song.id, underlying: HTTPError(statusCode: code))
         }
 
         // Never save a poisoned payload as a permanent download (Subsonic error-as-200
@@ -222,7 +222,7 @@ actor DownloadService: DownloadServiceProtocol {
         do {
             try AudioResponseValidator.validate(fileAt: tempURL, response: response, songId: song.id, logger: Logger.download)
         } catch {
-            throw CassetteError.downloadFailed(songId: song.id, underlying: error)
+            throw DiapasonError.downloadFailed(songId: song.id, underlying: error)
         }
 
         let mimeType = response.mimeType ?? "audio/mpeg"
@@ -624,7 +624,7 @@ actor DownloadService: DownloadServiceProtocol {
         let creds = try await serverService.activeCredentials()
         let client = try await serverService.makeSwiftSonicClient()
         guard let artURL = client.coverArtURL(id: id, size: 600) else {
-            throw CassetteError.mediaNotFound(songId: id)
+            throw DiapasonError.mediaNotFound(songId: id)
         }
 
         var request = URLRequest(url: artURL)
@@ -634,7 +634,7 @@ actor DownloadService: DownloadServiceProtocol {
         guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
             let code = (response as? HTTPURLResponse)?.statusCode ?? -1
             struct HTTPError: Error & Sendable { let statusCode: Int }
-            throw CassetteError.downloadFailed(songId: id, underlying: HTTPError(statusCode: code))
+            throw DiapasonError.downloadFailed(songId: id, underlying: HTTPError(statusCode: code))
         }
 
         try FileManager.default.createDirectory(at: coverArtsDirectory, withIntermediateDirectories: true)

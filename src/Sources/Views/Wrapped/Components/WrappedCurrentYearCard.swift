@@ -26,7 +26,7 @@ struct WrappedCurrentYearCard: View {
             MeshGradientBackground(palette: palette, animated: !reduceMotion)
                 .frame(width: 140, height: 160)
                 .overlay { cardOverlay }
-                .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.large, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.large, style: .continuous))
                 .drawingGroup()
 
             Button {
@@ -40,9 +40,9 @@ struct WrappedCurrentYearCard: View {
                     .shadow(color: .black.opacity(0.3), radius: 4, y: 2)
             }
             .buttonStyle(.plain)
-            .padding(CassetteSpacing.s)
+            .padding(DiapasonSpacing.s)
         }
-        .cassetteFullScreenCover(isPresented: $showStoryPlayer) {
+        .diapasonFullScreenCover(isPresented: $showStoryPlayer) {
             WrappedStoryPlayerView(year: year)
         }
     }
@@ -60,6 +60,6 @@ struct WrappedCurrentYearCard: View {
                 .lineLimit(1)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(CassetteSpacing.s)
+        .padding(DiapasonSpacing.s)
     }
 }

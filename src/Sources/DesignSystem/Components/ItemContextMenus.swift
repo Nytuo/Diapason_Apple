@@ -15,7 +15,7 @@ struct CollectionContextPreview: View {
     let displaySubtitle: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.m) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.m) {
             Group {
                 if let coverImage {
                     Image(platformImage: coverImage)
@@ -35,7 +35,7 @@ struct CollectionContextPreview: View {
             .frame(maxWidth: 280, maxHeight: 280)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
-            VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
                 Text(displayName)
                     .font(.headline)
                     .foregroundStyle(.primary)
@@ -49,7 +49,7 @@ struct CollectionContextPreview: View {
                 }
             }
         }
-        .padding(CassetteSpacing.l)
+        .padding(DiapasonSpacing.l)
         .frame(width: 320)
     }
 }
@@ -59,7 +59,7 @@ struct SongContextPreview: View {
     let song: DisplayableSong
 
     var body: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.m) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.m) {
             Group {
                 if let coverImage {
                     Image(platformImage: coverImage)
@@ -79,7 +79,7 @@ struct SongContextPreview: View {
             .frame(maxWidth: 240, maxHeight: 240)
             .clipShape(RoundedRectangle(cornerRadius: 10))
 
-            VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
                 Text(song.title)
                     .font(.headline)
                     .foregroundStyle(.primary)
@@ -100,7 +100,7 @@ struct SongContextPreview: View {
                 }
             }
         }
-        .padding(CassetteSpacing.l)
+        .padding(DiapasonSpacing.l)
         .frame(width: 280)
     }
 }

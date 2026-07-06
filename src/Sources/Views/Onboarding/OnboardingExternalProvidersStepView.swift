@@ -17,7 +17,7 @@ struct OnboardingExternalProvidersStepView: View {
 
     var body: some View {
         ZStack {
-            CassetteColors.backgroundPrimary.ignoresSafeArea()
+            DiapasonColors.backgroundPrimary.ignoresSafeArea()
 
             VStack(spacing: 0) {
                 ScrollView(showsIndicators: false) {
@@ -30,10 +30,10 @@ struct OnboardingExternalProvidersStepView: View {
                                     .transition(.opacity.animation(.easeInOut(duration: 0.25)))
                             } else {
                                 ProgressView()
-                                    .padding(.top, CassetteSpacing.xxxxl)
+                                    .padding(.top, DiapasonSpacing.xxxxl)
                             }
                         }
-                        .padding(.horizontal, CassetteSpacing.l)
+                        .padding(.horizontal, DiapasonSpacing.l)
                         .opacity(appeared ? 1 : 0)
                         .offset(y: appeared ? 0 : 24)
                         .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.2), value: appeared)
@@ -71,17 +71,17 @@ struct OnboardingExternalProvidersStepView: View {
     // MARK: - Header
 
     private var stepHeader: some View {
-        VStack(spacing: CassetteSpacing.l) {
+        VStack(spacing: DiapasonSpacing.l) {
             BouncingIconHero()
-                .padding(.top, CassetteSpacing.xxl)
+                .padding(.top, DiapasonSpacing.xxl)
                 .opacity(appeared ? 1 : 0)
                 .scaleEffect(appeared ? 1 : 0.7)
                 .animation(.spring(duration: 0.6, bounce: 0.4), value: appeared)
 
-            VStack(spacing: CassetteSpacing.xs) {
+            VStack(spacing: DiapasonSpacing.xs) {
                 Text("Open releases your way")
                     .font(.system(.title2, design: .rounded, weight: .bold))
-                    .foregroundStyle(CassetteColors.textPrimary)
+                    .foregroundStyle(DiapasonColors.textPrimary)
                     .multilineTextAlignment(.center)
                     .opacity(appeared ? 1 : 0)
                     .offset(y: appeared ? 0 : 24)
@@ -89,27 +89,27 @@ struct OnboardingExternalProvidersStepView: View {
 
                 Text("Add a provider to look up albums on Discogs,\nMusicBrainz, or anywhere you like.")
                     .font(.system(.subheadline, design: .rounded))
-                    .foregroundStyle(CassetteColors.textSecondary)
+                    .foregroundStyle(DiapasonColors.textSecondary)
                     .multilineTextAlignment(.center)
                     .lineSpacing(2)
                     .opacity(appeared ? 1 : 0)
                     .offset(y: appeared ? 0 : 24)
                     .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.1), value: appeared)
             }
-            .padding(.horizontal, CassetteSpacing.xxxl)
+            .padding(.horizontal, DiapasonSpacing.xxxl)
 
             stepDots(current: 2, total: 3)
                 .opacity(appeared ? 1 : 0)
                 .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.15), value: appeared)
         }
-        .padding(.bottom, CassetteSpacing.xxl)
+        .padding(.bottom, DiapasonSpacing.xxl)
     }
 
     private func stepDots(current: Int, total: Int) -> some View {
-        HStack(spacing: CassetteSpacing.s) {
+        HStack(spacing: DiapasonSpacing.s) {
             ForEach(0..<total, id: \.self) { i in
                 Capsule()
-                    .fill(i == current ? CassetteColors.accent : Color.secondary.opacity(0.3))
+                    .fill(i == current ? DiapasonColors.accent : Color.secondary.opacity(0.3))
                     .frame(width: i == current ? 20 : 6, height: 6)
             }
         }
@@ -119,7 +119,7 @@ struct OnboardingExternalProvidersStepView: View {
 
     @ViewBuilder
     private func providersContent(vm: ExternalProvidersSettingsViewModel) -> some View {
-        VStack(spacing: CassetteSpacing.m) {
+        VStack(spacing: DiapasonSpacing.m) {
             if vm.providers.isEmpty {
                 emptyState
             } else {
@@ -131,18 +131,18 @@ struct OnboardingExternalProvidersStepView: View {
             Button {
                 showingAdd = true
             } label: {
-                HStack(spacing: CassetteSpacing.s) {
+                HStack(spacing: DiapasonSpacing.s) {
                     Image(systemName: "plus.circle.fill")
-                        .foregroundStyle(CassetteColors.accent)
+                        .foregroundStyle(DiapasonColors.accent)
                     Text("Add Provider")
                         .font(.system(.callout, design: .rounded, weight: .medium))
-                        .foregroundStyle(CassetteColors.accent)
+                        .foregroundStyle(DiapasonColors.accent)
                     Spacer()
                 }
-                .padding(CassetteSpacing.l)
+                .padding(DiapasonSpacing.l)
                 .background(
-                    RoundedRectangle(cornerRadius: CassetteCornerRadius.large)
-                        .fill(CassetteColors.accentBackground)
+                    RoundedRectangle(cornerRadius: DiapasonCornerRadius.large)
+                        .fill(DiapasonColors.accentBackground)
                 )
             }
             .buttonStyle(.plain)
@@ -150,21 +150,21 @@ struct OnboardingExternalProvidersStepView: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: CassetteSpacing.s) {
+        VStack(spacing: DiapasonSpacing.s) {
             Text("No providers yet")
                 .font(.system(.callout, design: .rounded, weight: .medium))
-                .foregroundStyle(CassetteColors.textSecondary)
+                .foregroundStyle(DiapasonColors.textSecondary)
             Text("Releases open in ListenBrainz by default.")
                 .font(.system(.caption, design: .rounded))
-                .foregroundStyle(CassetteColors.textTertiary)
+                .foregroundStyle(DiapasonColors.textTertiary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, CassetteSpacing.xxl)
-        .padding(.horizontal, CassetteSpacing.l)
+        .padding(.vertical, DiapasonSpacing.xxl)
+        .padding(.horizontal, DiapasonSpacing.l)
         .background(
-            RoundedRectangle(cornerRadius: CassetteCornerRadius.large)
-                .fill(CassetteColors.backgroundSecondary)
+            RoundedRectangle(cornerRadius: DiapasonCornerRadius.large)
+                .fill(DiapasonColors.backgroundSecondary)
         )
     }
 
@@ -175,16 +175,16 @@ struct OnboardingExternalProvidersStepView: View {
             HStack {
                 Text(provider.name)
                     .font(.system(.callout, design: .rounded, weight: .medium))
-                    .foregroundStyle(CassetteColors.textPrimary)
+                    .foregroundStyle(DiapasonColors.textPrimary)
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.caption)
-                    .foregroundStyle(CassetteColors.textTertiary)
+                    .foregroundStyle(DiapasonColors.textTertiary)
             }
-            .padding(CassetteSpacing.l)
+            .padding(DiapasonSpacing.l)
             .background(
-                RoundedRectangle(cornerRadius: CassetteCornerRadius.large)
-                    .fill(CassetteColors.backgroundSecondary)
+                RoundedRectangle(cornerRadius: DiapasonCornerRadius.large)
+                    .fill(DiapasonColors.backgroundSecondary)
             )
         }
         .buttonStyle(.plain)
@@ -197,7 +197,7 @@ struct OnboardingExternalProvidersStepView: View {
     // MARK: - Bottom bar
 
     private var bottomBar: some View {
-        VStack(spacing: CassetteSpacing.m) {
+        VStack(spacing: DiapasonSpacing.m) {
             Button(action: onContinue) {
                 Text("Done")
                     .font(.system(.body, design: .rounded, weight: .semibold))
@@ -205,15 +205,15 @@ struct OnboardingExternalProvidersStepView: View {
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
-            .tint(CassetteColors.accent)
+            .tint(DiapasonColors.accent)
 
             Button("Skip", action: onSkip)
                 .font(.subheadline)
-                .foregroundStyle(CassetteColors.textSecondary)
+                .foregroundStyle(DiapasonColors.textSecondary)
         }
-        .padding(.horizontal, CassetteSpacing.xxxl)
-        .padding(.top, CassetteSpacing.l)
-        .padding(.bottom, CassetteSpacing.xxl)
+        .padding(.horizontal, DiapasonSpacing.xxxl)
+        .padding(.top, DiapasonSpacing.l)
+        .padding(.bottom, DiapasonSpacing.xxl)
         .background(.regularMaterial)
     }
 }

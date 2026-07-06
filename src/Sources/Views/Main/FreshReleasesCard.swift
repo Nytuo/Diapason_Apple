@@ -18,27 +18,27 @@ struct FreshReleasesCard: View {
     var zoomNamespace: Namespace.ID? = nil
 
     var body: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
             HStack {
                 Text("Fresh Releases")
-                    .font(.cassetteSectionTitle)
+                    .font(.SectionTitle)
                 Spacer(minLength: 0)
                 if !releases.isEmpty {
                     Button(action: onSeeAll) {
                         Text("See all")
-                            .font(.cassetteCaption)
-                            .foregroundStyle(Color.cassetteAccent)
+                            .font(.Caption)
+                            .foregroundStyle(Color.accent)
                     }
                     .buttonStyle(.plain)
                 }
             }
-            .padding(.horizontal, CassetteSpacing.m)
+            .padding(.horizontal, DiapasonSpacing.m)
 
             if isLoading {
                 skeletonScroll
             } else if !releases.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(spacing: CassetteSpacing.s) {
+                    LazyHStack(spacing: DiapasonSpacing.s) {
                         ForEach(Array(releases.enumerated()), id: \.offset) { _, release in
                             #if os(iOS)
                             FreshReleaseAlbumCell(
@@ -54,7 +54,7 @@ struct FreshReleasesCard: View {
                         }
                         seeAllCell
                     }
-                    .padding(.horizontal, CassetteSpacing.m)
+                    .padding(.horizontal, DiapasonSpacing.m)
                 }
             } else if !isListenBrainzConnected {
                 emptyStatePlaceholder(
@@ -71,40 +71,40 @@ struct FreshReleasesCard: View {
     }
 
     private func emptyStatePlaceholder(icon: String, message: String) -> some View {
-        VStack(spacing: CassetteSpacing.s) {
+        VStack(spacing: DiapasonSpacing.s) {
             Image(systemName: icon)
                 .font(.title2)
                 .foregroundStyle(.secondary)
             Text(message)
-                .font(.cassetteCaption)
+                .font(.Caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, minHeight: 168)
-        .padding(.horizontal, CassetteSpacing.m)
+        .padding(.horizontal, DiapasonSpacing.m)
     }
 
     private var seeAllCell: some View {
         Button(action: onSeeAll) {
-            VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
                 Color.clear
                     .aspectRatio(1, contentMode: .fit)
                     .overlay {
                         ZStack {
-                            RoundedRectangle(cornerRadius: CassetteCornerRadius.standard, style: .continuous)
-                                .fill(Color.cassetteAccent.opacity(0.08))
-                            VStack(spacing: CassetteSpacing.xs) {
+                            RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard, style: .continuous)
+                                .fill(Color.accentColor.opacity(0.08))
+                            VStack(spacing: DiapasonSpacing.xs) {
                                 Image(systemName: "arrow.right.circle.fill")
                                     .font(.title)
-                                    .foregroundStyle(Color.cassetteAccent)
+                                    .foregroundStyle(Color.accent)
                                 Text("See all")
-                                    .font(.cassetteCellTitle)
-                                    .foregroundStyle(Color.cassetteAccent)
+                                    .font(.CellTitle)
+                                    .foregroundStyle(Color.accent)
                             }
                         }
                     }
                 Text("Past 90 days")
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }
@@ -115,17 +115,17 @@ struct FreshReleasesCard: View {
 
     private var skeletonScroll: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: CassetteSpacing.s) {
+            LazyHStack(spacing: DiapasonSpacing.s) {
                 ForEach(0..<6, id: \.self) { _ in
-                    VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
-                        SkeletonBlock(width: 140, height: 140, cornerRadius: CassetteCornerRadius.standard)
+                    VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
+                        SkeletonBlock(width: 140, height: 140, cornerRadius: DiapasonCornerRadius.standard)
                         SkeletonBlock(width: 110, height: 12)
                         SkeletonBlock(width: 80, height: 10)
                     }
                     .frame(width: 140)
                 }
             }
-            .padding(.horizontal, CassetteSpacing.m)
+            .padding(.horizontal, DiapasonSpacing.m)
         }
         .allowsHitTesting(false)
     }
@@ -154,7 +154,7 @@ struct FreshReleaseAlbumCell: View {
             cellContent
         }
         .buttonStyle(.plain)
-        .cassetteMatchedTransitionSource(id: zoomSourceId, in: zoomNamespace)
+        .diapasonMatchedTransitionSource(id: zoomSourceId, in: zoomNamespace)
         #else
         Button(action: { onTap?() }) {
             cellContent
@@ -164,7 +164,7 @@ struct FreshReleaseAlbumCell: View {
     }
 
     private var cellContent: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
             Color.clear
                 .aspectRatio(1, contentMode: .fit)
                 .overlay {
@@ -172,20 +172,20 @@ struct FreshReleaseAlbumCell: View {
                         Color.secondary.opacity(0.2)
                     }
                 }
-                .cassetteCoverStyle()
+                .diapasonCoverStyle()
 
             Text(release.title)
-                .font(.cassetteCellTitle)
+                .font(.CellTitle)
                 .lineLimit(1)
 
             Text(release.artistName)
-                .font(.cassetteCaption)
+                .font(.Caption)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
 
             if let date = release.releaseDate {
                 Text(Self.relativeFormatter.localizedString(for: date, relativeTo: Date()))
-                    .font(.cassetteCaption2)
+                    .font(.Caption2)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }

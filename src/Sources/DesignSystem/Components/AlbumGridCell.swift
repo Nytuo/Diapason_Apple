@@ -17,28 +17,23 @@ struct AlbumGridCell: View {
     @State private var isHovered = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
             GeometryReader { geo in
                 CoverArtView(id: album.coverArt ?? album.id, size: Int(geo.size.width * 2))
                     .frame(width: geo.size.width, height: geo.size.width)
-                    .cassetteCoverStyle(cornerRadius: CassetteCornerRadius.standard)
+                    .diapasonCoverStyle(cornerRadius: DiapasonCornerRadius.standard)
             }
             .aspectRatio(1, contentMode: .fit)
-            .cassetteMatchedTransitionSource(id: zoomSourceId, in: zoomNamespace)
-            #if os(macOS)
-            .scaleEffect(isHovered ? 1.03 : 1.0)
-            .animation(.easeInOut(duration: 0.15), value: isHovered)
-            .onHover { isHovered = $0 }
-            #endif
+            .diapasonMatchedTransitionSource(id: zoomSourceId, in: zoomNamespace)
 
             Text(album.name)
-                .font(.cassetteCellTitle)
+                .font(.CellTitle)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             if let artist = album.artist {
                 Text(artist)
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }

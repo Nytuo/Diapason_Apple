@@ -18,7 +18,7 @@ struct WrappedTopTrackSlide: View {
             MeshGradientBackground(palette: palette, animated: !reduceMotion)
 
             VStack(spacing: 0) {
-                Spacer(minLength: CassetteSpacing.xxxxl)
+                Spacer(minLength: DiapasonSpacing.xxxxl)
 
                 Text("YOUR #1 TRACK")
                     .font(.system(size: 13, weight: .heavy, design: .rounded))
@@ -28,12 +28,12 @@ struct WrappedTopTrackSlide: View {
                 Spacer()
 
                 if let track = topTrack {
-                    CoverArtCard(id: track.trackId, size: 300, cornerRadius: CassetteCornerRadius.large)
+                    CoverArtCard(id: track.trackId, size: 300, cornerRadius: DiapasonCornerRadius.large)
                         .shadow(color: .black.opacity(0.4), radius: 24, y: 12)
 
-                    Spacer(minLength: CassetteSpacing.xl)
+                    Spacer(minLength: DiapasonSpacing.xl)
 
-                    VStack(spacing: CassetteSpacing.xs) {
+                    VStack(spacing: DiapasonSpacing.xs) {
                         Text(track.title)
                             .font(.system(size: 30, weight: .black, design: .rounded))
                             .kerning(-0.5)
@@ -47,15 +47,15 @@ struct WrappedTopTrackSlide: View {
                             .foregroundStyle(.white.opacity(0.8))
                             .lineLimit(1)
                     }
-                    .padding(.horizontal, CassetteSpacing.xl)
+                    .padding(.horizontal, DiapasonSpacing.xl)
 
-                    Spacer(minLength: CassetteSpacing.l)
+                    Spacer(minLength: DiapasonSpacing.l)
 
                     Text(track.playCount.plural("play", "plays"))
                         .font(.system(size: 15, weight: .semibold, design: .rounded))
                         .foregroundStyle(.white)
-                        .padding(.horizontal, CassetteSpacing.m)
-                        .padding(.vertical, CassetteSpacing.s)
+                        .padding(.horizontal, DiapasonSpacing.m)
+                        .padding(.vertical, DiapasonSpacing.s)
                         .background(Color.white.opacity(0.2), in: Capsule())
                 } else {
                     Text("No track data yet")

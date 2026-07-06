@@ -15,7 +15,7 @@ struct WrappedAwardsSection: View {
         self.data = data
         let (minuteStr, _) = data.totalSecondsListened.wrappedHeroMinutesFormat()
         awards = [
-            AwardEntry(id: 0, icon: .cassette, title: "Time Devoted", value: minuteStr, subline: "minutes listened"),
+            AwardEntry(id: 0, icon: .diapason, title: "Time Devoted", value: minuteStr, subline: "minutes listened"),
             AwardEntry(id: 1, icon: .sf("flame.fill"), title: "Daily Habit", value: "\(data.streakDays)", subline: data.streakDays == 1 ? "day streak" : "days streak"),
             AwardEntry(id: 2, icon: .sf("music.note"), title: "Discovery", value: "\(data.totalUniqueTracks)", subline: data.totalUniqueTracks == 1 ? "unique track" : "unique tracks"),
             AwardEntry(id: 3, icon: .sf("person.2.fill"), title: "Variety", value: "\(data.totalUniqueArtists)", subline: data.totalUniqueArtists == 1 ? "artist heard" : "artists heard"),
@@ -28,12 +28,12 @@ struct WrappedAwardsSection: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.m) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.m) {
             Text("Awards")
-                .font(.cassetteSectionTitle)
+                .font(.SectionTitle)
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: CassetteSpacing.m) {
+                HStack(spacing: DiapasonSpacing.m) {
                     ForEach(awards) { award in
                         carouselCell(award)
                             .id(award.id)
@@ -41,16 +41,16 @@ struct WrappedAwardsSection: View {
                 }
                 .scrollTargetLayout()
             }
-            .contentMargins(.horizontal, CassetteSpacing.l, for: .scrollContent)
-            .padding(.horizontal, -CassetteSpacing.l)
+            .contentMargins(.horizontal, DiapasonSpacing.l, for: .scrollContent)
+            .padding(.horizontal, -DiapasonSpacing.l)
             .scrollTargetBehavior(.viewAligned)
             .scrollPosition(id: $focusedId)
         }
-        .padding(.vertical, CassetteSpacing.m)
+        .padding(.vertical, DiapasonSpacing.m)
     }
 
     private func carouselCell(_ award: AwardEntry) -> some View {
-        VStack(spacing: CassetteSpacing.s) {
+        VStack(spacing: DiapasonSpacing.s) {
             WrappedAwardMedal(
                 icon: award.icon,
                 value: award.value,

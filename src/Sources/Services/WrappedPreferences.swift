@@ -54,15 +54,15 @@ nonisolated struct WrappedPreferences: Sendable {
     }
 
     private static func lastMonthKey(_ serverId: String) -> String {
-        "cassette.wrapped.lastUpdatedMonth.\(serverId)"
+        "diapason.wrapped.lastUpdatedMonth.\(serverId)"
     }
 
     private static func playlistIdKey(_ year: Int, _ serverId: String) -> String {
-        "cassette.wrapped.playlistId.\(year).\(serverId)"
+        "diapason.wrapped.playlistId.\(year).\(serverId)"
     }
 
     private static func lastYearKey(_ serverId: String) -> String {
-        "cassette.wrapped.lastYear.\(serverId)"
+        "diapason.wrapped.lastYear.\(serverId)"
     }
 
     // MARK: - Last updated month

@@ -21,7 +21,7 @@ struct LastFmSettingsSection: View {
                 HStack {
                     SettingsIcon(systemImage: "waveform.circle.fill", color: .red)
                     VStack(alignment: .leading, spacing: 1) {
-                        Text("Connected").foregroundStyle(CassetteColors.textPrimary)
+                        Text("Connected").foregroundStyle(DiapasonColors.textPrimary)
                         if let username { Text(username).font(.caption).foregroundStyle(.secondary) }
                     }
                     Spacer()

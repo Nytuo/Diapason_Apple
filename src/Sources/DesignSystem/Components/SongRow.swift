@@ -25,7 +25,7 @@ struct SongRow: View {
 
     @Environment(\.appContainer) private var container
     @Environment(ArtworkImageCache.self) private var artworkImageCache
-    @Environment(\.cassettePlayingAccent) private var playingAccent
+    @Environment(\.diapasonPlayingAccent) private var playingAccent
     @State private var coverImage: PlatformImage?
     #if os(macOS)
     @State private var isHovered = false
@@ -50,7 +50,7 @@ struct SongRow: View {
     private var isPlaying: Bool { container?.playerState.playbackState == .playing }
 
     var body: some View {
-        HStack(spacing: CassetteSpacing.s) {
+        HStack(spacing: DiapasonSpacing.s) {
             if showCoverArt {
                 CoverArtCard(id: song.coverArtId ?? song.id, size: 44)
                     .overlay(alignment: .topLeading) {
@@ -71,7 +71,7 @@ struct SongRow: View {
                             .font(.system(size: 13))
                             .foregroundStyle(.secondary)
                             #else
-                            .font(.cassetteCaption)
+                            .font(.Caption)
                             .foregroundStyle(secondaryColor.opacity(0.6))
                             #endif
                             .opacity(isFavorite ? 0 : 1)
@@ -92,7 +92,7 @@ struct SongRow: View {
                     #if os(macOS)
                     .font(.system(size: 14, weight: .regular))
                     #else
-                    .font(.cassetteCellTitle)
+                    .font(.CellTitle)
                     #endif
                     .foregroundStyle(isCurrentTrack ? playingAccent : titleColor)
                     .lineLimit(1)
@@ -102,7 +102,7 @@ struct SongRow: View {
                         .font(.system(size: 12))
                         .foregroundStyle(.secondary)
                         #else
-                        .font(.cassetteCaption)
+                        .font(.Caption)
                         .foregroundStyle(secondaryColor)
                         #endif
                         .lineLimit(1)
@@ -111,10 +111,10 @@ struct SongRow: View {
 
             Spacer(minLength: 0)
 
-            HStack(spacing: CassetteSpacing.s) {
+            HStack(spacing: DiapasonSpacing.s) {
                 if song.isDownloaded {
                     Image(systemName: "arrow.down.circle.fill")
-                        .font(.cassetteCaption)
+                        .font(.Caption)
                         .foregroundStyle(secondaryColor.opacity(0.6))
                 } else if isDownloading {
                     ProgressView()
@@ -127,23 +127,15 @@ struct SongRow: View {
                         .font(.system(size: 12))
                         .foregroundStyle(.secondary)
                         #else
-                        .font(.cassetteCaption)
+                        .font(.Caption)
                         .foregroundStyle(secondaryColor.opacity(0.6))
                         #endif
                         .monospacedDigit()
                 }
             }
         }
-        .padding(.vertical, CassetteSpacing.s)
-        #if os(macOS)
-        .padding(.trailing, CassetteSpacing.s)
-        #endif
+        .padding(.vertical, DiapasonSpacing.s)
         .contentShape(Rectangle())
-        #if os(macOS)
-        .background(isHovered ? Color.primary.opacity(0.06) : Color.clear, in: RoundedRectangle(cornerRadius: 4))
-        .animation(.easeOut(duration: 0.12), value: isHovered)
-        .onHover { isHovered = $0 }
-        #endif
         .task(id: song.id) {
             coverImage = await artworkImageCache.load(coverArtId: song.coverArtId ?? song.id)
         }

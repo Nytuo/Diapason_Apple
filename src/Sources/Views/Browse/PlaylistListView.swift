@@ -21,7 +21,7 @@ struct PlaylistListView: View {
                 LoadingStateView()
             }
         }
-        .cassetteContentWidth()
+        .diapasonContentWidth()
         .navigationTitle("Playlists")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -103,20 +103,20 @@ private struct OnlinePlaylistRow: View {
     @State private var showDeleteConfirm = false
 
     var body: some View {
-        HStack(spacing: CassetteSpacing.m) {
+        HStack(spacing: DiapasonSpacing.m) {
             CoverArtCard(id: playlist.coverArt ?? playlist.id, size: 56)
-                .cassetteMatchedTransitionSource(id: playlist.id, in: namespace)
+                .diapasonMatchedTransitionSource(id: playlist.id, in: namespace)
             VStack(alignment: .leading, spacing: 2) {
                 Text(playlist.name)
-                    .font(.cassetteCellTitle)
+                    .font(.CellTitle)
                     .lineLimit(1)
                 Text("\(playlist.songCount) track\(playlist.songCount == 1 ? "" : "s")")
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(.secondary)
             }
             Spacer(minLength: 0)
         }
-        .padding(.vertical, CassetteSpacing.xs)
+        .padding(.vertical, DiapasonSpacing.xs)
         .task(id: playlist.id) {
             coverImage = await artworkImageCache.load(coverArtId: playlist.coverArt ?? playlist.id)
         }
@@ -191,19 +191,19 @@ private struct OfflinePlaylistRow: View {
     @State private var coverImage: PlatformImage?
 
     var body: some View {
-        HStack(spacing: CassetteSpacing.m) {
+        HStack(spacing: DiapasonSpacing.m) {
             CoverArtCard(id: playlist.coverArtId ?? playlist.playlistId, size: 56)
             VStack(alignment: .leading, spacing: 2) {
                 Text(playlist.name)
-                    .font(.cassetteCellTitle)
+                    .font(.CellTitle)
                     .lineLimit(1)
                 Text("\(playlist.tracksCount) track\(playlist.tracksCount == 1 ? "" : "s")")
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(.secondary)
             }
             Spacer(minLength: 0)
         }
-        .padding(.vertical, CassetteSpacing.xs)
+        .padding(.vertical, DiapasonSpacing.xs)
         .task(id: playlist.playlistId) {
             coverImage = await artworkImageCache.load(coverArtId: playlist.coverArtId ?? playlist.playlistId)
         }

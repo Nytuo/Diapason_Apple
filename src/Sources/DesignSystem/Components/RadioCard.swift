@@ -21,7 +21,7 @@ struct RadioCard: View {
                 bottomOverlay
             }
             .frame(width: 140, height: 160)
-            .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.large, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.large, style: .continuous))
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Play \(station.name)")
@@ -60,7 +60,7 @@ struct RadioCard: View {
             .lineLimit(2)
             .shadow(color: .black.opacity(0.5), radius: 3, y: 1)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(CassetteSpacing.s)
+            .padding(DiapasonSpacing.s)
             .background(
                 LinearGradient(
                     colors: [.clear, .black.opacity(0.65)],

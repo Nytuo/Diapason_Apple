@@ -12,7 +12,7 @@ struct ArtistRow: View {
     let artist: ArtistID3
 
     var body: some View {
-        HStack(spacing: CassetteSpacing.m) {
+        HStack(spacing: DiapasonSpacing.m) {
             CoverArtView(
                 id: artist.coverArt ?? artist.id,
                 size: 88,
@@ -23,19 +23,19 @@ struct ArtistRow: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(artist.name)
-                    .font(.cassetteCellTitle)
+                    .font(.CellTitle)
                     .foregroundStyle(.primary)
                     .lineLimit(1)
                 if let count = artist.albumCount {
                     Text("\(count) album\(count == 1 ? "" : "s")")
-                        .font(.cassetteCaption)
+                        .font(.Caption)
                         .foregroundStyle(.secondary)
                 }
             }
 
             Spacer(minLength: 0)
         }
-        .padding(.vertical, CassetteSpacing.xs)
+        .padding(.vertical, DiapasonSpacing.xs)
         .contentShape(Rectangle())
     }
 }

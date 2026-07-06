@@ -21,7 +21,7 @@ struct AlbumsListView: View {
             }
         }
         #if os(iOS)
-        .cassetteContentWidth()
+        .diapasonContentWidth()
         #endif
         .navigationTitle("Albums")
         .task(id: container?.serverState.isOnline) {

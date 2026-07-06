@@ -59,7 +59,7 @@ struct AllFreshReleasesView: View {
                 release: release,
                 providers: container?.externalProvidersStore.load() ?? []
             )
-            .cassetteZoomTransition(
+            .diapasonZoomTransition(
                 sourceID: release.id ?? "\(release.artistName)-\(release.title)",
                 in: releaseZoomNamespace
             )
@@ -109,19 +109,19 @@ struct AllFreshReleasesView: View {
             LazyVStack(alignment: .leading, spacing: 0, pinnedViews: .sectionHeaders) {
                 ForEach(vm.groupedReleases, id: \.month) { section in
                     Section {
-                        LazyVGrid(columns: gridColumns, spacing: CassetteSpacing.m) {
+                        LazyVGrid(columns: gridColumns, spacing: DiapasonSpacing.m) {
                             ForEach(Array(section.items.enumerated()), id: \.offset) { _, release in
                                 FreshReleaseAlbumCell(release: release, onTap: { selectedRelease = release })
                             }
                         }
-                        .padding(.horizontal, CassetteSpacing.m)
-                        .padding(.bottom, CassetteSpacing.l)
+                        .padding(.horizontal, DiapasonSpacing.m)
+                        .padding(.bottom, DiapasonSpacing.l)
                     } header: {
                         Text(Self.monthFormatter.string(from: section.month))
                             .font(.title3.bold())
                             .foregroundStyle(.secondary)
-                            .padding(.horizontal, CassetteSpacing.m)
-                            .padding(.vertical, CassetteSpacing.xs)
+                            .padding(.horizontal, DiapasonSpacing.m)
+                            .padding(.vertical, DiapasonSpacing.xs)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(.regularMaterial)
                     }
@@ -159,7 +159,7 @@ struct AllFreshReleasesView: View {
         }()
 
         var body: some View {
-            HStack(spacing: CassetteSpacing.m) {
+            HStack(spacing: DiapasonSpacing.m) {
                 Color.clear
                     .aspectRatio(1, contentMode: .fit)
                     .overlay {
@@ -167,21 +167,21 @@ struct AllFreshReleasesView: View {
                             Color.secondary.opacity(0.2)
                         }
                     }
-                    .cassetteCoverStyle()
+                    .diapasonCoverStyle()
                     .frame(width: 52, height: 52)
-                    .cassetteMatchedTransitionSource(id: zoomSourceId, in: zoomNamespace)
+                    .diapasonMatchedTransitionSource(id: zoomSourceId, in: zoomNamespace)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(release.title)
-                        .font(.cassetteCellTitle)
+                        .font(.CellTitle)
                         .lineLimit(1)
                     Text(release.artistName)
-                        .font(.cassetteCaption)
+                        .font(.Caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                     if let date = release.releaseDate {
                         Text(Self.relativeFormatter.localizedString(for: date, relativeTo: Date()))
-                            .font(.cassetteCaption2)
+                            .font(.Caption2)
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
                     }

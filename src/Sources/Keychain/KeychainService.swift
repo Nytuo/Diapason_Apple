@@ -9,7 +9,7 @@ import OSLog
 
 actor KeychainService: KeychainServiceProtocol {
     // kSecAttrService groups all Cassette credentials for bulk queries and cleanup.
-    private let service = "app.cassette.server-credentials"
+    private let service = "app.diapason.server-credentials"
 
     func store<T: Codable & Sendable>(_ value: T, forKey key: String) async throws {
         let data = try JSONEncoder().encode(value)
@@ -37,7 +37,7 @@ actor KeychainService: KeychainServiceProtocol {
         guard status == errSecSuccess else {
             // Never log `data` — it may contain credentials.
             Logger.keychain.error("Keychain write failed for key '\(key, privacy: .public)' — OSStatus \(status)")
-            throw CassetteError.keychainWriteFailed(status)
+            throw DiapasonError.keychainWriteFailed(status)
         }
     }
 
@@ -56,7 +56,7 @@ actor KeychainService: KeychainServiceProtocol {
         guard status != errSecItemNotFound else { return nil }
         guard status == errSecSuccess else {
             Logger.keychain.error("Keychain read failed for key '\(key, privacy: .public)' — OSStatus \(status)")
-            throw CassetteError.keychainReadFailed(status)
+            throw DiapasonError.keychainReadFailed(status)
         }
 
         guard let data = result as? Data else { return nil }
@@ -73,7 +73,7 @@ actor KeychainService: KeychainServiceProtocol {
         let status = SecItemDelete(query as CFDictionary)
         guard status == errSecSuccess || status == errSecItemNotFound else {
             Logger.keychain.error("Keychain delete failed for key '\(key, privacy: .public)' — OSStatus \(status)")
-            throw CassetteError.keychainDeleteFailed(status)
+            throw DiapasonError.keychainDeleteFailed(status)
         }
     }
 }

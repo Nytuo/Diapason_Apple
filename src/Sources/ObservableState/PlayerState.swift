@@ -34,7 +34,7 @@ final class PlayerState {
     var isSmartShuffleActive: Bool = false
     /// User preference: when enabled, the player automatically appends a fresh smart shuffle batch
     /// when ≤15 tracks remain. Suppressed by loop mode and live stream mode. Persisted in UserDefaults.
-    var isAutoExtendEnabled: Bool = UserDefaults.standard.bool(forKey: "cassette.player.autoExtendEnabled")
+    var isAutoExtendEnabled: Bool = UserDefaults.standard.bool(forKey: "diapason.player.autoExtendEnabled")
     /// Boundary between user-intentional queue tracks and auto-extended tracks.
     /// `nil` when no auto-extend has occurred in the current session.
     /// When set, indices `[0..<originalQueueEndIndex]` are user-intentional (album, playlist, or initial

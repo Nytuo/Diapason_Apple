@@ -128,7 +128,7 @@ struct TVRail<Item: Identifiable, Card: View>: View {
                         .font(.system(size: 24, weight: .semibold))
                     }
                     .buttonStyle(.plain)
-                    .foregroundStyle(Color.cassetteAccent)
+                    .foregroundStyle(Color.accentColor)
                 }
             }
             .padding(.horizontal, TVMetrics.screenH)
@@ -162,7 +162,7 @@ struct TVSongRow: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(song.title)
                     .font(.system(size: 26, weight: isCurrent ? .bold : .medium))
-                    .foregroundStyle(isCurrent ? Color.cassetteAccent : .primary)
+                    .foregroundStyle(isCurrent ? Color.accent : .primary)
                     .lineLimit(1)
                 if let artist = song.artist {
                     Text(artist)

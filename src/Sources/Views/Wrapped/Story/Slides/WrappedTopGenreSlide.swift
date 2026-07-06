@@ -16,7 +16,7 @@ struct WrappedTopGenreSlide: View {
             MeshGradientBackground(palette: palette, animated: !reduceMotion)
 
             VStack(alignment: .leading, spacing: 0) {
-                Spacer(minLength: CassetteSpacing.xxxxl)
+                Spacer(minLength: DiapasonSpacing.xxxxl)
 
                 Text("YOUR SOUND")
                     .font(.system(size: 13, weight: .heavy, design: .rounded))
@@ -34,7 +34,7 @@ struct WrappedTopGenreSlide: View {
                         .foregroundStyle(.white.opacity(0.8))
                 }
 
-                Spacer(minLength: CassetteSpacing.l)
+                Spacer(minLength: DiapasonSpacing.l)
 
                 Text(data.dominantGenre ?? "Mixed")
                     .font(.system(size: 64, weight: .black, design: .rounded))
@@ -45,7 +45,7 @@ struct WrappedTopGenreSlide: View {
 
                 Spacer()
             }
-            .padding(.horizontal, CassetteSpacing.xl)
+            .padding(.horizontal, DiapasonSpacing.xl)
             .wrappedSlideEntrance()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -77,8 +77,8 @@ actor PlayerService: PlayerServiceProtocol {
     /// setVolume() never persists 0, so a missing key and an intentional-0 are indistinguishable
     /// here — using 0.7 as the initial default is correct.
     nonisolated var restoredVolume: Float {
-        guard UserDefaults.standard.object(forKey: "cassette.lastVolume") != nil else { return 0.7 }
-        return Float(UserDefaults.standard.double(forKey: "cassette.lastVolume"))
+        guard UserDefaults.standard.object(forKey: "diapason.lastVolume") != nil else { return 0.7 }
+        return Float(UserDefaults.standard.double(forKey: "diapason.lastVolume"))
     }
     private var positionSaveTask: Task<Void, Never>?
     /// Task reserved for the playing-now notification. Cancelled on track change.
@@ -103,7 +103,7 @@ actor PlayerService: PlayerServiceProtocol {
     private var originalQueueOrder: [DisplayableSong]?
     /// Single-slot guard preventing concurrent auto-extend fetches.
     private var autoExtendFetchTask: Task<Void, Never>?
-    private nonisolated static let autoExtendUserDefaultsKey = "cassette.player.autoExtendEnabled"
+    private nonisolated static let autoExtendUserDefaultsKey = "diapason.player.autoExtendEnabled"
 
     /// Wall-clock time when the current track first started (used as event timestamp). Nil before first track.
     private var trackPlayStartDate: Date?
@@ -208,7 +208,7 @@ actor PlayerService: PlayerServiceProtocol {
 
         guard let serverId = await MainActor.run(body: { serverService.state.activeServer?.id }) else {
             await MainActor.run { state.playbackState = .error(.serverNotConfigured) }
-            throw CassetteError.serverNotConfigured
+            throw DiapasonError.serverNotConfigured
         }
 
         await MainActor.run {
@@ -225,7 +225,7 @@ actor PlayerService: PlayerServiceProtocol {
         let source: MediaSource
         do {
             source = try await mediaResolver.resolve(songId: song.id, serverId: serverId)
-        } catch let e as CassetteError {
+        } catch let e as DiapasonError {
             await MainActor.run { state.playbackState = .error(e) }
             throw e
         } catch {
@@ -413,7 +413,7 @@ actor PlayerService: PlayerServiceProtocol {
             Logger.player.warning("[RADIO-CODEC] rejected stream, content-type=\(contentType, privacy: .public)")
             await MainActor.run {
                 toastService.show(
-                    "This radio uses an unsupported audio format. Cassette can play MP3 and AAC live streams currently.",
+                    "This radio uses an unsupported audio format. Diapason can play MP3 and AAC live streams currently.",
                     style: .error,
                     duration: 5.0
                 )
@@ -557,7 +557,7 @@ actor PlayerService: PlayerServiceProtocol {
         let tracks = try await libraryService.smartShuffleQueue(targetSize: 50)
         guard !tracks.isEmpty else {
             Logger.player.info("Smart shuffle returned empty — library too small or no downloads offline")
-            throw CassetteError.smartShuffleEmpty
+            throw DiapasonError.smartShuffleEmpty
         }
 
         // play(tracks:) resets isSmartShuffleActive via the new-queue check, so set the flag after.
@@ -572,7 +572,7 @@ actor PlayerService: PlayerServiceProtocol {
         audioPlayer.volume = clamped
         // Don't persist 0 — muting should not overwrite the saved restore volume.
         if clamped > 0 {
-            UserDefaults.standard.set(clamped, forKey: "cassette.lastVolume")
+            UserDefaults.standard.set(clamped, forKey: "diapason.lastVolume")
         }
     }
 

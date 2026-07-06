@@ -83,7 +83,7 @@ struct ConnectSettingsSection: View {
                         Text(device.name)
                         Spacer()
                         if controller.manager.connectedDevice == device {
-                            Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.cassetteAccent)
+                            Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.accent)
                         }
                     }
                 }
@@ -105,7 +105,7 @@ struct ConnectSettingsSection: View {
                         Button { controller.send("next") } label: { Image(systemName: "forward.fill") }
                     }
                     .font(.title3)
-                    .foregroundStyle(Color.cassetteAccent)
+                    .foregroundStyle(Color.accent)
                     .frame(maxWidth: .infinity)
                     .padding(.top, 4)
                 }

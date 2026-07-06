@@ -115,7 +115,7 @@ private struct iPodNowPlayingView: View {
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {
                             Capsule().fill(Color(white: 0.85)).frame(height: 5)
-                            Capsule().fill(Color.cassetteAccent)
+                            Capsule().fill(Color.accent)
                                 .frame(width: max(0, CGFloat(ratio(ps)) * geo.size.width), height: 5)
                         }
                     }

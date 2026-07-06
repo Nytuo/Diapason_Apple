@@ -99,7 +99,7 @@ actor ExternalArtistImageResolver {
         guard let url = components.url else { return nil }
 
         var req = URLRequest(url: url)
-        req.setValue("Cassette/1.0 (support@getcassette.app)", forHTTPHeaderField: "User-Agent")
+        req.setValue("Diapason/1.0", forHTTPHeaderField: "User-Agent")
         req.timeoutInterval = 10
 
         do {
@@ -138,7 +138,7 @@ actor ExternalArtistImageResolver {
             return nil
         }
         var req = URLRequest(url: reqURL)
-        req.setValue("Cassette/1.0 (support@getcassette.app)", forHTTPHeaderField: "User-Agent")
+        req.setValue("Diapason/1.0", forHTTPHeaderField: "User-Agent")
         req.timeoutInterval = 10
 
         do {

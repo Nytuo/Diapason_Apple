@@ -19,19 +19,19 @@ struct ConnectionErrorView: View {
         VStack(alignment: .leading, spacing: 0) {
             Image(systemName: iconName)
                 .font(.title2)
-                .foregroundStyle(CassetteColors.accent)
-                .padding(.bottom, CassetteSpacing.s)
+                .foregroundStyle(DiapasonColors.accent)
+                .padding(.bottom, DiapasonSpacing.s)
 
             Text(error.presentation.title)
                 .font(.headline)
-                .foregroundStyle(CassetteColors.textPrimary)
-                .padding(.bottom, CassetteSpacing.xs)
+                .foregroundStyle(DiapasonColors.textPrimary)
+                .padding(.bottom, DiapasonSpacing.xs)
 
             Text(error.presentation.description)
                 .font(.subheadline)
-                .foregroundStyle(CassetteColors.textSecondary)
+                .foregroundStyle(DiapasonColors.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
-                .padding(.bottom, CassetteSpacing.m)
+                .padding(.bottom, DiapasonSpacing.m)
 
             CopyableCodeLabel(code: error.presentation.technicalCode)
         }

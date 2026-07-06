@@ -13,24 +13,24 @@ struct OnboardingCompleteView: View {
 
     var body: some View {
         ZStack {
-            CassetteColors.backgroundPrimary.ignoresSafeArea()
+            DiapasonColors.backgroundPrimary.ignoresSafeArea()
 
             VStack(spacing: 0) {
                 Spacer()
 
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 80))
-                    .foregroundStyle(CassetteColors.accent)
+                    .foregroundStyle(DiapasonColors.accent)
                     .scaleEffect(appeared ? 1 : 0.3)
                     .opacity(appeared ? 1 : 0)
                     .animation(.spring(duration: 0.6, bounce: 0.4), value: appeared)
 
-                Spacer().frame(height: CassetteSpacing.xxxxl)
+                Spacer().frame(height: DiapasonSpacing.xxxxl)
 
-                VStack(spacing: CassetteSpacing.m) {
+                VStack(spacing: DiapasonSpacing.m) {
                     Text("You're all set.")
                         .font(.system(.largeTitle, design: .rounded, weight: .bold))
-                        .foregroundStyle(CassetteColors.textPrimary)
+                        .foregroundStyle(DiapasonColors.textPrimary)
                         .multilineTextAlignment(.center)
                         .opacity(appeared ? 1 : 0)
                         .offset(y: appeared ? 0 : 24)
@@ -38,7 +38,7 @@ struct OnboardingCompleteView: View {
 
                     Text("Your library is waiting.\nTime to press play.")
                         .font(.system(.body, design: .rounded))
-                        .foregroundStyle(CassetteColors.textSecondary)
+                        .foregroundStyle(DiapasonColors.textSecondary)
                         .multilineTextAlignment(.center)
                         .lineLimit(2)
                         .opacity(appeared ? 1 : 0)
@@ -47,13 +47,13 @@ struct OnboardingCompleteView: View {
 
                     Text("You can adjust everything anytime in Settings.")
                         .font(.system(.footnote, design: .rounded))
-                        .foregroundStyle(CassetteColors.textTertiary)
+                        .foregroundStyle(DiapasonColors.textTertiary)
                         .multilineTextAlignment(.center)
                         .opacity(appeared ? 1 : 0)
                         .offset(y: appeared ? 0 : 24)
                         .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.4), value: appeared)
                 }
-                .padding(.horizontal, CassetteSpacing.xxxl)
+                .padding(.horizontal, DiapasonSpacing.xxxl)
 
                 Spacer()
 
@@ -66,9 +66,9 @@ struct OnboardingCompleteView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
-                .tint(CassetteColors.accent)
-                .padding(.horizontal, CassetteSpacing.xxxl)
-                .padding(.bottom, CassetteSpacing.xxxl)
+                .tint(DiapasonColors.accent)
+                .padding(.horizontal, DiapasonSpacing.xxxl)
+                .padding(.bottom, DiapasonSpacing.xxxl)
                 .opacity(appeared ? 1 : 0)
                 .offset(y: appeared ? 0 : 30)
                 .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.5), value: appeared)

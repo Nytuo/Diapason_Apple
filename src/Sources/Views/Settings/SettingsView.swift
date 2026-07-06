@@ -19,7 +19,7 @@ struct SettingsView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .cassetteContentWidth()
+        .diapasonContentWidth()
         .navigationTitle("Settings")
         .task {
             guard let container else { return }
@@ -80,7 +80,7 @@ struct SettingsView: View {
                     Label {
                         Text("Server Configuration")
                     } icon: {
-                        SettingsIcon(systemImage: "server.rack", color: Color.cassetteAccent)
+                        SettingsIcon(systemImage: "server.rack", color: Color.accent)
                     }
                 }
             } else {
@@ -124,7 +124,7 @@ struct SettingsView: View {
                     .frame(maxWidth: .infinity)
                 Button {
                     Logger.settings.debug("Ko-fi support button tapped")
-                    ExternalLinkOpener.open(CassetteURLs.kofi)
+                    ExternalLinkOpener.open(DiapasonURLs.kofi)
                 } label: {
                     Image("kofiButton")
                         .resizable()
@@ -153,23 +153,35 @@ struct SettingsView: View {
             LabeledContent("Version") {
                 Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—")
             }
-            LabeledContent("License") {
-                Text("Mozilla Public License 2.0")
+            LabeledContent("Diapason License") {
+                Text("GNU General Public License v3")
+            }
+            LabeledContent("Fork of Cassette") {
+                Text("by Mathieu Dubart")
+                Text("Cassette source code licensed under MPL 2.0")
+                Button("GitHub") {
+                    ExternalLinkOpener.open(DiapasonURLs.cassette)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(Color.accentColor)
             }
             LabeledContent("SwiftSonic") {
                 Text("MIT License — MathieuDubart")
             }
             LabeledContent("AudioStreaming") {
                 Button("MIT License — dimitris-c") {
-                    ExternalLinkOpener.open(CassetteURLs.audioStreaming)
+                    ExternalLinkOpener.open(DiapasonURLs.audioStreaming)
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(Color.accentColor)
             }
-            Button("View on GitHub") {
-                ExternalLinkOpener.open(CassetteURLs.cassette)
+            Button("View Diapason on GitHub") {
+                ExternalLinkOpener.open(DiapasonURLs.diapason)
             }
-            Link("Send Feedback / Report a Bug", destination: URL(string: "mailto:support@getcassette.app?subject=Feedback%20%2F%20Bug%20Report")!)
+            Button("View other Diapason apps on GitHub") {
+                ExternalLinkOpener.open(DiapasonURLs.diapasonApps)
+            }
+            Link("Send Feedback / Report a Bug", destination: URL(string: "mailto:nytuogames.launcher+diapasonIOS@gmail.com?subject=Feedback%20%2F%20Bug%20Report")!)
         }
     }
 }
@@ -236,7 +248,7 @@ struct CacheSectionView: View {
                         Label {
                             Text("Max tracks")
                         } icon: {
-                            SettingsIcon(systemImage: "tray.full.fill", color: Color.cassetteAccent)
+                            SettingsIcon(systemImage: "tray.full.fill", color: Color.accent)
                         }
                         Spacer()
                         Text("\(maxTracks)")
@@ -283,7 +295,7 @@ struct CacheSectionView: View {
                 Task { await clearCache() }
             } label: {
                 if isClearing {
-                    HStack(spacing: CassetteSpacing.s) {
+                    HStack(spacing: DiapasonSpacing.s) {
                         ProgressView().scaleEffect(0.8)
                         Text("Clearing…")
                     }
@@ -356,7 +368,7 @@ struct DownloadsSectionView: View {
             if !vm.displayAlbums.isEmpty {
                 PlatformDisclosureGroup {
                     ForEach(vm.displayAlbums) { album in
-                        HStack(spacing: CassetteSpacing.m) {
+                        HStack(spacing: DiapasonSpacing.m) {
                             CoverArtCard(id: album.coverArtId ?? album.albumId, size: 40)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(album.name)
@@ -386,7 +398,7 @@ struct DownloadsSectionView: View {
                     Label {
                         Text("Albums (\(vm.displayAlbums.count))")
                     } icon: {
-                        SettingsIcon(systemImage: "music.note.list", color: Color.cassetteAccent)
+                        SettingsIcon(systemImage: "music.note.list", color: Color.accent)
                     }
                 }
             }
@@ -394,7 +406,7 @@ struct DownloadsSectionView: View {
             if !vm.downloadedPlaylists.isEmpty {
                 PlatformDisclosureGroup {
                     ForEach(vm.downloadedPlaylists) { playlist in
-                        HStack(spacing: CassetteSpacing.m) {
+                        HStack(spacing: DiapasonSpacing.m) {
                             CoverArtCard(id: playlist.playlistId, size: 40)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(playlist.name)
@@ -433,7 +445,7 @@ struct DownloadsSectionView: View {
                 Task { await vm.clearAll() }
             } label: {
                 if vm.isClearingAll {
-                    HStack(spacing: CassetteSpacing.s) {
+                    HStack(spacing: DiapasonSpacing.s) {
                         ProgressView().scaleEffect(0.8)
                         Text("Clearing…")
                     }

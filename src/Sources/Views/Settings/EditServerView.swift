@@ -109,7 +109,7 @@ struct EditServerView: View {
         .controlSize(.large)
         .disabled(!viewModel.canSave || viewModel.isSaving)
         .padding(.horizontal)
-        .padding(.vertical, CassetteSpacing.m)
+        .padding(.vertical, DiapasonSpacing.m)
         .background(.regularMaterial)
     }
 
@@ -185,7 +185,7 @@ struct EditServerView: View {
         if let error = viewModel.connectionError, error != .invalidURL {
             Section {
                 ConnectionErrorView(error: error)
-                    .padding(.vertical, CassetteSpacing.xs)
+                    .padding(.vertical, DiapasonSpacing.xs)
             }
         }
         if let error = viewModel.saveError {

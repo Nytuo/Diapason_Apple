@@ -11,26 +11,26 @@ struct ToastView: View {
     let toast: ToastService.Toast
 
     var body: some View {
-        HStack(spacing: CassetteSpacing.s) {
+        HStack(spacing: DiapasonSpacing.s) {
             Image(systemName: toast.style.systemImage)
                 .foregroundStyle(toast.style.tint)
             Text(toast.message)
-                .font(.cassetteCellTitle)
+                .font(.CellTitle)
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
         }
-        .padding(.horizontal, CassetteSpacing.l)
-        .padding(.vertical, CassetteSpacing.m)
+        .padding(.horizontal, DiapasonSpacing.l)
+        .padding(.vertical, DiapasonSpacing.m)
         .background(
-            RoundedRectangle(cornerRadius: CassetteCornerRadius.large)
+            RoundedRectangle(cornerRadius: DiapasonCornerRadius.large)
                 .fill(.regularMaterial)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: CassetteCornerRadius.large)
+            RoundedRectangle(cornerRadius: DiapasonCornerRadius.large)
                 .stroke(toast.style.tint.opacity(0.3), lineWidth: 1)
         )
         .shadow(radius: 8, y: 2)
-        .padding(.horizontal, CassetteSpacing.l)
+        .padding(.horizontal, DiapasonSpacing.l)
         .transition(.move(edge: .top).combined(with: .opacity))
     }
 }
@@ -45,7 +45,7 @@ struct ToastOverlay: ViewModifier {
             .overlay(alignment: .top) {
                 if let toast = toastService.current {
                     ToastView(toast: toast)
-                        .padding(.top, CassetteSpacing.s)
+                        .padding(.top, DiapasonSpacing.s)
                         .id(toast.id)
                 }
             }

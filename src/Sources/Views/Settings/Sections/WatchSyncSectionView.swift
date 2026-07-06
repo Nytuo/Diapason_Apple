@@ -18,7 +18,7 @@ struct WatchSyncSectionView: View {
                 Label {
                     Text("Sync Music to Apple Watch")
                 } icon: {
-                    SettingsIcon(systemImage: "applewatch", color: Color.cassetteAccent)
+                    SettingsIcon(systemImage: "applewatch", color: Color.accent)
                 }
             }
             .disabled(count == 0)
@@ -80,7 +80,7 @@ struct WatchSyncPickerView: View {
                                 }
                                 Spacer()
                                 Image(systemName: selected.contains(playlist.id) ? "checkmark.circle.fill" : "circle")
-                                    .foregroundStyle(selected.contains(playlist.id) ? Color.cassetteAccent : .secondary)
+                                    .foregroundStyle(selected.contains(playlist.id) ? Color.accent : .secondary)
                             }
                         }
                         .buttonStyle(.plain)

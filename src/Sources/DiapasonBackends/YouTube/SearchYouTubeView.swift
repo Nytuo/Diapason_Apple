@@ -32,17 +32,17 @@ struct SearchYouTubeView: View {
                 List {
                     ForEach(Array(results.enumerated()), id: \.element.id) { index, r in
                         let s = song(r)
-                        HStack(spacing: CassetteSpacing.m) {
+                        HStack(spacing: DiapasonSpacing.m) {
                             Button { play(at: index) } label: {
-                                HStack(spacing: CassetteSpacing.m) {
-                                    RoundedRectangle(cornerRadius: CassetteCornerRadius.standard)
+                                HStack(spacing: DiapasonSpacing.m) {
+                                    RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard)
                                         .fill(Color.red.opacity(0.15))
                                         .frame(width: 44, height: 44)
                                         .overlay(Image(systemName: "play.rectangle.fill").foregroundStyle(.red))
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text(r.title).font(.cassetteCellTitle).foregroundStyle(CassetteColors.textPrimary).lineLimit(2)
+                                        Text(r.title).font(.CellTitle).foregroundStyle(DiapasonColors.textPrimary).lineLimit(2)
                                         if !r.author.isEmpty {
-                                            Text(r.author).font(.cassetteCaption).foregroundStyle(CassetteColors.textSecondary).lineLimit(1)
+                                            Text(r.author).font(.Caption).foregroundStyle(DiapasonColors.textSecondary).lineLimit(1)
                                         }
                                     }
                                     Spacer(minLength: 0)
@@ -60,7 +60,7 @@ struct SearchYouTubeView: View {
         .navigationTitle("Search YouTube")
         .searchable(text: $query, prompt: "Songs on YouTube")
         .onSubmit(of: .search) { Task { await runSearch() } }
-        .background(CassetteColors.backgroundPrimary.ignoresSafeArea())
+        .background(DiapasonColors.backgroundPrimary.ignoresSafeArea())
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink { YouTubeDownloadsView() } label: {
@@ -74,12 +74,12 @@ struct SearchYouTubeView: View {
     private func downloadButton(for s: DisplayableSong) -> some View {
         if downloads.isDownloaded(s.id) {
             Image(systemName: "checkmark.circle.fill")
-                .foregroundStyle(Color.cassetteAccent)
+                .foregroundStyle(Color.accent)
         } else if downloads.isDownloading(s.id) {
             ProgressView()
         } else {
             Button { downloads.download(s) } label: {
-                Image(systemName: "arrow.down.circle").foregroundStyle(CassetteColors.textSecondary)
+                Image(systemName: "arrow.down.circle").foregroundStyle(DiapasonColors.textSecondary)
             }
             .buttonStyle(.plain)
         }
@@ -116,11 +116,11 @@ struct YouTubeDownloadsView: View {
                 List {
                     ForEach(Array(songs.enumerated()), id: \.element.id) { index, s in
                         Button { play(songs, at: index) } label: {
-                            HStack(spacing: CassetteSpacing.m) {
+                            HStack(spacing: DiapasonSpacing.m) {
                                 CoverArtCard(id: s.coverArtId ?? s.id, size: 44)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(s.title).font(.cassetteCellTitle).foregroundStyle(CassetteColors.textPrimary).lineLimit(1)
-                                    if let a = s.artist { Text(a).font(.cassetteCaption).foregroundStyle(CassetteColors.textSecondary).lineLimit(1) }
+                                    Text(s.title).font(.CellTitle).foregroundStyle(DiapasonColors.textPrimary).lineLimit(1)
+                                    if let a = s.artist { Text(a).font(.Caption).foregroundStyle(DiapasonColors.textSecondary).lineLimit(1) }
                                 }
                                 Spacer(minLength: 0)
                             }
@@ -140,7 +140,7 @@ struct YouTubeDownloadsView: View {
             }
         }
         .navigationTitle("YouTube Downloads")
-        .background(CassetteColors.backgroundPrimary.ignoresSafeArea())
+        .background(DiapasonColors.backgroundPrimary.ignoresSafeArea())
     }
 
     private func play(_ list: [DisplayableSong], at index: Int) {

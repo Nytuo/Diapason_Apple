@@ -41,24 +41,24 @@ struct SearchHistoryEntryRow: View, Equatable {
 
     var body: some View {
         let _ = Self._printChanges()
-        HStack(spacing: CassetteSpacing.m) {
+        HStack(spacing: DiapasonSpacing.m) {
             CoverArtView(id: data.coverArtId ?? data.itemId, size: 88)
                 .frame(width: 44, height: 44)
                 .clipShape(
                     data.itemType == "artist"
                         ? AnyShape(Circle())
-                        : AnyShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.standard))
+                        : AnyShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard))
                 )
             Text(data.displayName)
-                .font(.cassetteCellTitle)
+                .font(.CellTitle)
                 .lineLimit(1)
             Spacer(minLength: 0)
             Image(systemName: "arrow.up.left")
                 .font(.caption)
                 .foregroundStyle(.tertiary)
         }
-        .padding(.vertical, CassetteSpacing.xs)
-        .padding(.horizontal, CassetteSpacing.m)
+        .padding(.vertical, DiapasonSpacing.xs)
+        .padding(.horizontal, DiapasonSpacing.m)
         .contentShape(Rectangle())
     }
 }

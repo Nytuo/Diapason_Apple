@@ -27,21 +27,21 @@ struct EditPinnedView: View {
                 } else {
                     List {
                         ForEach(items) { item in
-                            HStack(spacing: CassetteSpacing.m) {
+                            HStack(spacing: DiapasonSpacing.m) {
                                 CoverArtCard(id: item.coverArtId ?? item.itemId, size: 44)
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(item.displayName)
-                                        .font(.cassetteCellTitle)
+                                        .font(.CellTitle)
                                         .lineLimit(1)
                                     if !item.displaySubtitle.isEmpty {
                                         Text(item.displaySubtitle)
-                                            .font(.cassetteCaption)
+                                            .font(.Caption)
                                             .foregroundStyle(.secondary)
                                             .lineLimit(1)
                                     }
                                 }
                             }
-                            .padding(.vertical, CassetteSpacing.xs)
+                            .padding(.vertical, DiapasonSpacing.xs)
                             .opacity(draggedItem?.id == item.id ? 0.5 : 1.0)
                             .onDrag {
                                 draggedItem = item

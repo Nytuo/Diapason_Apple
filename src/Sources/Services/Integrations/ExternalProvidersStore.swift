@@ -10,7 +10,7 @@ import OSLog
 /// Persists to UserDefaults as JSON. Not an actor — all callers are on MainActor
 /// (SWIFT_DEFAULT_ACTOR_ISOLATION=MainActor applies module-wide).
 final class ExternalProvidersStore {
-    private static let defaultsKey = "app.cassette.integrations.external-providers"
+    private static let defaultsKey = "app.diapason.integrations.external-providers"
     private let defaults: UserDefaults
 
     init(defaults: UserDefaults = .standard) {

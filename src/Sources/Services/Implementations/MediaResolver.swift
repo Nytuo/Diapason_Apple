@@ -58,20 +58,20 @@ actor MediaResolver: MediaResolverProtocol {
         // Diapason: YouTube-backed virtual songs (recommendations / YouTube search).
         if songId.hasPrefix(YouTubeID.videoPrefix) {
             let isOnline = await MainActor.run { serverState.isOnline }
-            guard isOnline else { throw CassetteError.offlineUnavailable(songId: songId) }
+            guard isOnline else { throw DiapasonError.offlineUnavailable(songId: songId) }
             guard let videoId = YouTubeID.decodeVideo(songId),
                   let audio = await YouTubeResolver.shared.resolveVideo(id: videoId) else {
-                throw CassetteError.mediaNotFound(songId: songId)
+                throw DiapasonError.mediaNotFound(songId: songId)
             }
             Logger.resolver.debug("Resolved '\(songId, privacy: .public)' via YouTube video.")
             return .stream(audio.url, customHeaders: [:])
         }
         if songId.hasPrefix(YouTubeID.prefix) {
             let isOnline = await MainActor.run { serverState.isOnline }
-            guard isOnline else { throw CassetteError.offlineUnavailable(songId: songId) }
+            guard isOnline else { throw DiapasonError.offlineUnavailable(songId: songId) }
             guard let (artist, title) = YouTubeID.decode(songId),
                   let audio = await YouTubeResolver.shared.resolve(artist: artist, title: title) else {
-                throw CassetteError.mediaNotFound(songId: songId)
+                throw DiapasonError.mediaNotFound(songId: songId)
             }
             Logger.resolver.debug("Resolved '\(songId, privacy: .public)' via YouTube.")
             return .stream(audio.url, customHeaders: [:])
@@ -83,7 +83,7 @@ actor MediaResolver: MediaResolverProtocol {
         // Local files are always available offline — resolve before the online guard.
         if backendKind == "local" {
             guard let fileURL = await libraryService.streamURL(songId: songId) else {
-                throw CassetteError.mediaNotFound(songId: songId)
+                throw DiapasonError.mediaNotFound(songId: songId)
             }
             Logger.resolver.debug("Resolved '\(songId, privacy: .public)' as local file.")
             return .downloaded(fileURL)
@@ -93,13 +93,13 @@ actor MediaResolver: MediaResolverProtocol {
         let isOnline = await MainActor.run { serverState.isOnline }
         guard isOnline else {
             Logger.resolver.warning("'\(songId, privacy: .public)' not available offline.")
-            throw CassetteError.offlineUnavailable(songId: songId)
+            throw DiapasonError.offlineUnavailable(songId: songId)
         }
 
         // Plex: the router builds a tokened stream URL (no extra auth headers needed).
         if backendKind == "plex" {
             guard let streamURL = await libraryService.streamURL(songId: songId) else {
-                throw CassetteError.mediaNotFound(songId: songId)
+                throw DiapasonError.mediaNotFound(songId: songId)
             }
             Logger.resolver.debug("Resolved '\(songId, privacy: .public)' as Plex stream.")
             return .stream(streamURL, customHeaders: [:])
@@ -110,7 +110,7 @@ actor MediaResolver: MediaResolverProtocol {
         // TODO(v1.x): trigger background cache write alongside the stream.
         let client = try await serverService.makeSwiftSonicClient()
         guard let streamURL = client.streamURL(id: songId) else {
-            throw CassetteError.mediaNotFound(songId: songId)
+            throw DiapasonError.mediaNotFound(songId: songId)
         }
         let creds = try await serverService.activeCredentials()
         Logger.resolver.debug("Resolved '\(songId, privacy: .public)' as stream.")
@@ -120,13 +120,13 @@ actor MediaResolver: MediaResolverProtocol {
     func resolveRadio(_ station: InternetRadioStation) async throws -> MediaSource {
         guard let url = URL(string: station.streamUrl) else {
             Logger.resolver.error("Invalid stream URL for radio station '\(station.id, privacy: .public)': \(station.streamUrl, privacy: .private)")
-            throw CassetteError.mediaNotFound(songId: station.id)
+            throw DiapasonError.mediaNotFound(songId: station.id)
         }
 
         let isOnline = await MainActor.run { serverState.isOnline }
         guard isOnline else {
             Logger.resolver.warning("Radio '\(station.id, privacy: .public)' not available offline.")
-            throw CassetteError.offlineUnavailable(songId: station.id)
+            throw DiapasonError.offlineUnavailable(songId: station.id)
         }
 
         let creds = try await serverService.activeCredentials()

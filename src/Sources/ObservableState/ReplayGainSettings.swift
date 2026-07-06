@@ -98,10 +98,10 @@ final class ReplayGainSettings {
     static let minPreAmp: Double = -15
     static let maxPreAmp: Double = 15
 
-    private static let enabledKey = "cassette.replayGain.enabled"
-    private static let modeKey = "cassette.replayGain.mode"
-    private static let preAmpKey = "cassette.replayGain.preAmp"
-    private static let preventClippingKey = "cassette.replayGain.preventClipping"
+    private static let enabledKey = "diapason.replayGain.enabled"
+    private static let modeKey = "diapason.replayGain.mode"
+    private static let preAmpKey = "diapason.replayGain.preAmp"
+    private static let preventClippingKey = "diapason.replayGain.preventClipping"
 
     // MARK: - Derived
 

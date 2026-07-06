@@ -18,33 +18,33 @@ extension Font {
     // MARK: Headings (SF Pro Rounded)
 
     /// Full-player track title. ~28pt. Rounded, bold.
-    static let cassettePlayerTitle = Font.system(.title, design: .rounded, weight: .bold)
+    static let PlayerTitle = Font.system(.title, design: .rounded, weight: .bold)
 
     /// Album or artist name in detail-screen headers. ~22pt. Rounded, semibold.
-    static let cassetteDetailTitle = Font.system(.title2, design: .rounded, weight: .semibold)
+    static let DetailTitle = Font.system(.title2, design: .rounded, weight: .semibold)
 
     /// Section header labels (e.g. "Albums", "Tracks"). ~17pt. Rounded, semibold.
-    static let cassetteSectionTitle = Font.system(.headline, design: .rounded, weight: .semibold)
+    static let SectionTitle = Font.system(.headline, design: .rounded, weight: .semibold)
 
     // MARK: Body & cells (SF Pro Default)
 
     /// Standard readable body. ~17pt. Regular.
-    static let cassetteBody = Font.system(.body, design: .default, weight: .regular)
+    static let Body = Font.system(.body, design: .default, weight: .regular)
 
     /// Primary label in list cells (track title, album name). ~16pt. Semibold.
-    static let cassetteCellTitle = Font.system(.callout, design: .default, weight: .semibold)
+    static let CellTitle = Font.system(.callout, design: .default, weight: .semibold)
 
     /// Secondary label in cells (artist name below track title). ~15pt. Regular.
-    static let cassetteCellSubtitle = Font.system(.subheadline, design: .default, weight: .regular)
+    static let CellSubtitle = Font.system(.subheadline, design: .default, weight: .regular)
 
     /// Tertiary metadata (duration, year, genre). ~12pt. Regular.
-    static let cassetteCaption = Font.system(.caption, design: .default, weight: .regular)
+    static let Caption = Font.system(.caption, design: .default, weight: .regular)
 
     /// Very small labels (track count badge, etc.). ~11pt. Regular.
-    static let cassetteCaption2 = Font.system(.caption2, design: .default, weight: .regular)
+    static let Caption2 = Font.system(.caption2, design: .default, weight: .regular)
 
     // MARK: Lyrics
 
     /// Lyric line text in the full-player lyrics view. ~28pt. Rounded, semibold.
-    static let cassetteLyricsLine = Font.system(.title, design: .rounded, weight: .semibold)
+    static let LyricsLine = Font.system(.title, design: .rounded, weight: .semibold)
 }

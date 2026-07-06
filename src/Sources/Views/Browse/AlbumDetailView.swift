@@ -102,7 +102,7 @@ struct AlbumDetailView: View {
         dominantColor == .clear ? .secondary : (isLightBackground ? Color.black.opacity(0.7) : Color.white.opacity(0.7))
     }
     private var heroIconColor: Color {
-        colorScheme == .dark ? Color.cassetteAccentSecondary : CassetteColors.accentForeground(on: dominantColor)
+        colorScheme == .dark ? Color.accentSecondary : DiapasonColors.accentForeground(on: dominantColor)
     }
     private var systemBackgroundColor: Color {
         #if os(tvOS)
@@ -232,8 +232,8 @@ struct AlbumDetailView: View {
             .ignoresSafeArea()
             .animation(.easeInOut(duration: 0.3), value: dominantColor)
         )
-        .cassetteContentWidth()
-        .environment(\.cassettePlayingAccent, CassetteColors.accentForeground(on: dominantColor))
+        .diapasonContentWidth()
+        .environment(\.diapasonPlayingAccent, DiapasonColors.accentForeground(on: dominantColor))
         .navigationTitle("")
         .navigationBarTitleDisplayModeInline()
         .navigationBarBackButtonHidden(true)
@@ -262,7 +262,7 @@ struct AlbumDetailView: View {
                     }
                 } label: {
                     Image(systemName: isAlbumFavorite ? "star.fill" : "star")
-                        .foregroundStyle(isAlbumFavorite ? CassetteColors.accentForeground(on: dominantColor) : .primary)
+                        .foregroundStyle(isAlbumFavorite ? DiapasonColors.accentForeground(on: dominantColor) : .primary)
                         .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isAlbumFavorite)
                 }
                 .disabled(!isOnline)
@@ -296,7 +296,7 @@ struct AlbumDetailView: View {
 
             await loadDominantColor(coverArtId: artId)
         }
-        .cassetteZoomTransition(sourceID: zoomSourceId, in: zoomNamespace)
+        .diapasonZoomTransition(sourceID: zoomSourceId, in: zoomNamespace)
     }
 
     // MARK: - Skeleton rows
@@ -304,7 +304,7 @@ struct AlbumDetailView: View {
     @ViewBuilder
     private var skeletonRows: some View {
         ForEach(0..<5, id: \.self) { _ in
-            HStack(spacing: CassetteSpacing.m) {
+            HStack(spacing: DiapasonSpacing.m) {
                 SkeletonBlock(width: 20, height: 20, cornerRadius: 4)
                 VStack(alignment: .leading, spacing: 6) {
                     SkeletonBlock(width: 200, height: 16, cornerRadius: 4)
@@ -312,8 +312,8 @@ struct AlbumDetailView: View {
                 }
                 Spacer()
             }
-            .padding(.vertical, CassetteSpacing.xs)
-            .padding(.horizontal, CassetteSpacing.l)
+            .padding(.vertical, DiapasonSpacing.xs)
+            .padding(.horizontal, DiapasonSpacing.l)
         }
     }
 
@@ -343,30 +343,30 @@ struct AlbumDetailView: View {
 
     private func albumHeader(vm: AlbumDetailViewModel?) -> some View {
         let songs = displaySongs()
-        return VStack(spacing: CassetteSpacing.l) {
+        return VStack(spacing: DiapasonSpacing.l) {
             Group {
                 if effectiveInitialImage == nil && vm?.coverArtId == nil && coverArtId == nil {
-                    SkeletonBlock(width: 220, height: 220, cornerRadius: CassetteCornerRadius.large)
+                    SkeletonBlock(width: 220, height: 220, cornerRadius: DiapasonCornerRadius.large)
                 } else {
                     CoverArtCard(
                         id: vm?.coverArtId ?? coverArtId ?? albumId,
                         size: 300,
-                        cornerRadius: CassetteCornerRadius.large,
+                        cornerRadius: DiapasonCornerRadius.large,
                         initialImage: effectiveInitialImage
                     )
                 }
             }
-            .padding(.top, CassetteSpacing.xxl)
+            .padding(.top, DiapasonSpacing.xxl)
 
             VStack(spacing: 0) {
                 Text(vm?.albumName ?? initialName)
                     .font(.system(.title, design: .rounded, weight: .semibold))
                     .foregroundStyle(headerTextColor)
                     .multilineTextAlignment(.center)
-                    .padding(.bottom, CassetteSpacing.xs)
+                    .padding(.bottom, DiapasonSpacing.xs)
                 if vm == nil {
                     SkeletonBlock(width: 140, height: 18, cornerRadius: 4)
-                        .padding(.bottom, CassetteSpacing.s)
+                        .padding(.bottom, DiapasonSpacing.s)
                 } else if let artist = vm?.artistName {
                     if let artistId = vm?.artistId, vm?.isOffline != true {
                         NavigationLink(value: HomeDestination.artist(ArtistID3(id: artistId, name: artist))) {
@@ -375,18 +375,18 @@ struct AlbumDetailView: View {
                                 .foregroundStyle(headerSecondaryColor)
                         }
                         .buttonStyle(.plain)
-                        .padding(.bottom, CassetteSpacing.s)
+                        .padding(.bottom, DiapasonSpacing.s)
                     } else {
                         Text(artist)
                             .font(.callout.weight(.semibold))
                             .foregroundStyle(headerSecondaryColor)
-                            .padding(.bottom, CassetteSpacing.s)
+                            .padding(.bottom, DiapasonSpacing.s)
                     }
                 }
                 if vm == nil {
                     SkeletonBlock(width: 100, height: 14, cornerRadius: 4)
                 } else if let vm {
-                    HStack(spacing: CassetteSpacing.s) {
+                    HStack(spacing: DiapasonSpacing.s) {
                         if let year = vm.year { Text(String(year)) }
                         if let genre = vm.genre { Text("·"); Text(genre) }
                         if let format = songs.first?.audioFormat {
@@ -396,13 +396,13 @@ struct AlbumDetailView: View {
                             Text(format.uppercased())
                         }
                     }
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(headerSecondaryColor.opacity(0.8))
                 }
             }
-            .padding(.horizontal, CassetteSpacing.l)
+            .padding(.horizontal, DiapasonSpacing.l)
 
-            HStack(spacing: CassetteSpacing.m) {
+            HStack(spacing: DiapasonSpacing.m) {
                 Button {
                     HapticFeedback.medium.trigger()
                     Task {
@@ -411,9 +411,9 @@ struct AlbumDetailView: View {
                     }
                 } label: {
                     Image(systemName: "shuffle")
-                        .font(.cassetteCellTitle)
+                        .font(.CellTitle)
                         .foregroundStyle(heroIconColor)
-                        .cassetteGlassButton(size: 44)
+                        .GlassButton(size: 44)
                 }
                 .disabled(songs.isEmpty)
                 .opacity(vm == nil ? 0.4 : 1)
@@ -438,35 +438,35 @@ struct AlbumDetailView: View {
                         }
                     } label: {
                         Image(systemName: "trash")
-                            .font(.cassetteCellTitle)
+                            .font(.CellTitle)
                             .foregroundStyle(heroIconColor)
-                            .cassetteGlassButton(size: 44)
+                            .GlassButton(size: 44)
                     }
                 } else if vm?.isOffline != true {
                     if let vm {
                         if vm.isDownloadingAlbum {
                             Button { Task { await vm.cancelAlbumDownload() } } label: {
                                 Image(systemName: "xmark")
-                                    .font(.cassetteCellTitle)
+                                    .font(.CellTitle)
                                     .foregroundStyle(heroIconColor)
-                                    .cassetteGlassButton(size: 44)
+                                    .GlassButton(size: 44)
                             }
                         } else {
                             switch downloadState(for: vm) {
                             case .notDownloaded:
                                 Button { Task { await vm.downloadAlbum() } } label: {
                                     Image(systemName: "arrow.down.circle")
-                                        .font(.cassetteCellTitle)
+                                        .font(.CellTitle)
                                         .foregroundStyle(heroIconColor)
-                                        .cassetteGlassButton(size: 44)
+                                        .GlassButton(size: 44)
                                 }
                                 .disabled(vm.songs.isEmpty)
                             case .partiallyDownloaded:
                                 Button { Task { await vm.downloadMissingTracks() } } label: {
                                     Image(systemName: "arrow.down.circle.dotted")
-                                        .font(.cassetteCellTitle)
+                                        .font(.CellTitle)
                                         .foregroundStyle(heroIconColor)
-                                        .cassetteGlassButton(size: 44)
+                                        .GlassButton(size: 44)
                                 }
                             case .fullyDownloaded:
                                 Button {
@@ -474,18 +474,18 @@ struct AlbumDetailView: View {
                                     showDeleteAlert = true
                                 } label: {
                                     Image(systemName: "trash")
-                                        .font(.cassetteCellTitle)
+                                        .font(.CellTitle)
                                         .foregroundStyle(heroIconColor)
-                                        .cassetteGlassButton(size: 44)
+                                        .GlassButton(size: 44)
                                 }
                             }
                         }
                     } else {
                         Button { } label: {
                             Image(systemName: "arrow.down.circle")
-                                .font(.cassetteCellTitle)
+                                .font(.CellTitle)
                                 .foregroundStyle(heroIconColor)
-                                .cassetteGlassButton(size: 44)
+                                .GlassButton(size: 44)
                         }
                         .disabled(true)
                         .opacity(0.4)
@@ -493,33 +493,33 @@ struct AlbumDetailView: View {
                 }
             }
             .buttonStyle(.borderless)
-            .padding(.horizontal, CassetteSpacing.xxxl)
+            .padding(.horizontal, DiapasonSpacing.xxxl)
 
             if mode == .full, let vm, vm.isDownloadingAlbum {
                 let total = vm.songs.count
                 let downloaded = downloadedCount
-                VStack(spacing: CassetteSpacing.xs) {
+                VStack(spacing: DiapasonSpacing.xs) {
                     if downloaded == 0 {
-                        HStack(spacing: CassetteSpacing.s) {
+                        HStack(spacing: DiapasonSpacing.s) {
                             ProgressView().scaleEffect(0.8)
                             Text("Starting download…")
-                                .font(.cassetteCaption)
+                                .font(.Caption)
                                 .foregroundStyle(headerSecondaryColor)
                         }
                     } else {
                         ProgressView(value: Double(downloaded), total: Double(max(total, 1)))
                             .progressViewStyle(.linear)
-                            .tint(CassetteColors.accentForeground(on: dominantColor))
+                            .tint(DiapasonColors.accentForeground(on: dominantColor))
                             .frame(maxWidth: 280)
                         Text("Downloading \(downloaded)/\(total) tracks")
-                            .font(.cassetteCaption)
+                            .font(.Caption)
                             .foregroundStyle(headerSecondaryColor)
                     }
                 }
                 .frame(minHeight: 44)
             }
         }
-        .padding(.bottom, CassetteSpacing.xxl)
+        .padding(.bottom, DiapasonSpacing.xxl)
         .frame(maxWidth: .infinity)
     }
 }
@@ -601,23 +601,16 @@ struct AlbumSongRows: View {
             let isDownloading = downloadingIds.contains(song.id)
             let downloadAction: (() -> Void)? = (liveDownloaded || isDownloading) ? nil : onDownload.map { action in { action(song.id) } }
             let removeAction: (() -> Void)? = liveDownloaded ? onRemoveDownload.map { action in { action(song.id) } } : nil
-            #if os(macOS)
-            SongRow(song: liveSong, index: index + 1, isFavorite: favoriteSongIds.contains("song:\(song.id)"), titleColor: titleColor, secondaryColor: secondaryColor, onDownload: downloadAction, onRemoveDownload: removeAction, isDownloading: isDownloading, onAddToPlaylist: onAddToPlaylist)
-                .padding(.horizontal, CassetteSpacing.l)
-                .onTapGesture { onTap(index) }
-                .listRowBackground(Color.clear)
-                .listRowSeparatorCompat(.hidden)
-            #else
+          
             VStack(spacing: 0) {
                 SongRow(song: liveSong, index: index + 1, isFavorite: favoriteSongIds.contains("song:\(song.id)"), titleColor: titleColor, secondaryColor: secondaryColor, onDownload: downloadAction, onRemoveDownload: removeAction, isDownloading: isDownloading, onAddToPlaylist: onAddToPlaylist)
-                    .padding(.horizontal, CassetteSpacing.l)
+                    .padding(.horizontal, DiapasonSpacing.l)
                     .onTapGesture { onTap(index) }
                 if index < songs.count - 1 {
                     Divider()
-                        .padding(.leading, CassetteSpacing.l)
+                        .padding(.leading, DiapasonSpacing.l)
                 }
             }
-            #endif
         }
     }
 }

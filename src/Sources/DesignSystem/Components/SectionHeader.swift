@@ -11,11 +11,11 @@ struct SectionHeader: View {
 
     var body: some View {
         Text(title)
-            .font(.cassetteSectionTitle)
+            .font(.SectionTitle)
             .foregroundStyle(.primary)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, CassetteSpacing.l)
-            .padding(.vertical, CassetteSpacing.s)
+            .padding(.horizontal, DiapasonSpacing.l)
+            .padding(.vertical, DiapasonSpacing.s)
     }
 }
 

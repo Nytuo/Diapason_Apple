@@ -7,7 +7,7 @@ import SwiftUI
 
 extension View {
     /// iOS uses insetGrouped (native sheet look); macOS uses inset (native macOS look).
-    func cassetteSheetListStyle() -> some View {
+    func diapasonSheetListStyle() -> some View {
         #if os(macOS)
         self.listStyle(.inset)
         #elseif os(tvOS)

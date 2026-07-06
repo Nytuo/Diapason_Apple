@@ -5,7 +5,7 @@
 
 import Foundation
 
-nonisolated enum CassetteError: Error, Sendable {
+nonisolated enum DiapasonError: Error, Sendable {
     case serverNotConfigured
     case connectionFailed(underlying: any Error & Sendable)
     case mediaNotFound(songId: String)
@@ -31,7 +31,7 @@ nonisolated enum CassetteError: Error, Sendable {
     case timeout
 }
 
-extension CassetteError: LocalizedError {
+extension DiapasonError: LocalizedError {
     nonisolated var errorDescription: String? {
         switch self {
         case .serverNotConfigured:

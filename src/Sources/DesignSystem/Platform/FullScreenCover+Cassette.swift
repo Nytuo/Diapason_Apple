@@ -8,7 +8,7 @@ import SwiftUI
 extension View {
     /// Presents a full-screen modal on iOS; falls back to a sheet on macOS where `fullScreenCover` is unavailable.
     @ViewBuilder
-    func cassetteFullScreenCover<Content: View>(
+    func diapasonFullScreenCover<Content: View>(
         isPresented: Binding<Bool>,
         onDismiss: (() -> Void)? = nil,
         @ViewBuilder content: @escaping () -> Content

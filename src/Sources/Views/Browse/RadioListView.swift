@@ -43,7 +43,7 @@ struct RadioListView: View {
                 .refreshableCompat { await load(forceRefresh: true) }
             }
         }
-        .cassetteContentWidth()
+        .diapasonContentWidth()
         .navigationTitle("Radio")
         .task(id: container?.serverState.isOnline) {
             guard container?.serverState.isOnline == true else { return }
@@ -81,28 +81,28 @@ private struct RadioStationRow: View {
     let station: InternetRadioStation
 
     var body: some View {
-        HStack(spacing: CassetteSpacing.m) {
+        HStack(spacing: DiapasonSpacing.m) {
             if let coverArt = station.coverArt, !coverArt.isEmpty {
                 CoverArtCard(id: coverArt, size: 56)
             } else {
                 ZStack {
-                    RoundedRectangle(cornerRadius: CassetteCornerRadius.standard, style: .continuous)
-                        .fill(Color.cassetteAccent.opacity(0.15))
+                    RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard, style: .continuous)
+                        .fill(Color.accent.opacity(0.15))
                         .frame(width: 56, height: 56)
                     Image(systemName: "antenna.radiowaves.left.and.right")
                         .font(.title2)
-                        .foregroundStyle(Color.cassetteAccent)
+                        .foregroundStyle(Color.accent)
                 }
             }
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(station.name)
-                    .font(.cassetteCellTitle)
+                    .font(.CellTitle)
                     .foregroundStyle(.primary)
                     .lineLimit(1)
                 if let homePageUrl = station.homePageUrl, !homePageUrl.isEmpty {
                     Text(homePageUrl)
-                        .font(.cassetteCaption)
+                        .font(.Caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                         .truncationMode(.middle)
@@ -113,9 +113,9 @@ private struct RadioStationRow: View {
 
             Image(systemName: "play.circle.fill")
                 .font(.title2)
-                .foregroundStyle(Color.cassetteAccent)
+                .foregroundStyle(Color.accent)
         }
-        .padding(.vertical, CassetteSpacing.xs)
+        .padding(.vertical, DiapasonSpacing.xs)
         .contentShape(Rectangle())
     }
 }

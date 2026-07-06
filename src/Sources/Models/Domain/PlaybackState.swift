@@ -10,7 +10,7 @@ nonisolated enum PlaybackState: Sendable, Equatable {
     case loading
     case playing
     case paused
-    case error(CassetteError)
+    case error(DiapasonError)
 
     nonisolated static func == (lhs: PlaybackState, rhs: PlaybackState) -> Bool {
         switch (lhs, rhs) {

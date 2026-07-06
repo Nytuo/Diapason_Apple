@@ -45,7 +45,7 @@ nonisolated enum SyncResult: Sendable, Equatable {
 /// replace mode. All persistence is either in UserDefaults (WrappedPreferences)
 /// or on the server — no SwiftData access.
 actor WrappedPlaylistService {
-    nonisolated static let wrappedPlaylistNamePrefix = "Cassette Wrapped "
+    nonisolated static let wrappedPlaylistNamePrefix = "Diapason Wrapped "
 
     private let statsService: StatsService
     private let preferences: WrappedPreferences
@@ -239,7 +239,7 @@ actor WrappedPlaylistService {
             return cached
         }
 
-        let name = "Cassette Wrapped \(year)"
+        let name = "Diapason Wrapped \(year)"
         let playlists = try await client.getPlaylists(username: nil)
 
         if let existing = playlists.first(where: { $0.name == name }) {

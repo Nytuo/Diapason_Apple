@@ -89,7 +89,7 @@ struct PlaylistDetailView: View {
         dominantColor == .clear ? .secondary : (isLightBackground ? Color.black.opacity(0.7) : Color.white.opacity(0.7))
     }
     private var heroIconColor: Color {
-        colorScheme == .dark ? Color.cassetteAccentSecondary : CassetteColors.accentForeground(on: dominantColor)
+        colorScheme == .dark ? Color.accentSecondary : DiapasonColors.accentForeground(on: dominantColor)
     }
     private var systemBackgroundColor: Color {
         #if os(tvOS)
@@ -202,8 +202,8 @@ struct PlaylistDetailView: View {
             .ignoresSafeArea()
             .animation(.easeInOut(duration: 0.3), value: dominantColor)
         )
-        .cassetteContentWidth()
-        .environment(\.cassettePlayingAccent, CassetteColors.accentForeground(on: dominantColor))
+        .diapasonContentWidth()
+        .environment(\.diapasonPlayingAccent, DiapasonColors.accentForeground(on: dominantColor))
         .navigationTitle("")
         .navigationBarTitleDisplayModeInline()
         .navigationBarBackButtonHidden(true)
@@ -254,15 +254,15 @@ struct PlaylistDetailView: View {
 
             await loadDominantColor(coverArtId: artId)
         }
-        .cassetteZoomTransition(sourceID: zoomSourceId, in: zoomNamespace)
+        .diapasonZoomTransition(sourceID: zoomSourceId, in: zoomNamespace)
         #if os(iOS)
         .sheet(isPresented: $showImageOptions) {
             VStack(spacing: 0) {
                 Text("Change Cover Art")
                     .font(.system(.subheadline, design: .rounded, weight: .semibold))
-                    .foregroundStyle(CassetteColors.textSecondary)
-                    .padding(.top, CassetteSpacing.l)
-                    .padding(.bottom, CassetteSpacing.m)
+                    .foregroundStyle(DiapasonColors.textSecondary)
+                    .padding(.top, DiapasonSpacing.l)
+                    .padding(.bottom, DiapasonSpacing.m)
 
                 Divider()
 
@@ -323,7 +323,7 @@ struct PlaylistDetailView: View {
                     enterEditMode()
                 } label: {
                     Image(systemName: "pencil")
-                        .foregroundStyle(CassetteColors.accent)
+                        .foregroundStyle(DiapasonColors.accent)
                 }
                 .disabled(container?.serverState.isOnline != true || viewModel?.playlistDetail == nil)
             }
@@ -431,15 +431,15 @@ struct PlaylistDetailView: View {
 
     private func coverPickerRow(icon: String, label: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            HStack(spacing: CassetteSpacing.m) {
+            HStack(spacing: DiapasonSpacing.m) {
                 Image(systemName: icon)
                     .font(.body)
-                    .foregroundStyle(CassetteColors.accent)
+                    .foregroundStyle(DiapasonColors.accent)
                     .frame(width: 28)
-                    .padding(.leading, CassetteSpacing.l)
+                    .padding(.leading, DiapasonSpacing.l)
                 Text(label)
                     .font(.system(.body, design: .rounded))
-                    .foregroundStyle(CassetteColors.textPrimary)
+                    .foregroundStyle(DiapasonColors.textPrimary)
                 Spacer()
             }
             .frame(height: 52)
@@ -454,7 +454,7 @@ struct PlaylistDetailView: View {
     @ViewBuilder
     private var skeletonRows: some View {
         ForEach(0..<5, id: \.self) { _ in
-            HStack(spacing: CassetteSpacing.m) {
+            HStack(spacing: DiapasonSpacing.m) {
                 SkeletonBlock(width: 20, height: 20, cornerRadius: 4)
                 VStack(alignment: .leading, spacing: 6) {
                     SkeletonBlock(width: 200, height: 16, cornerRadius: 4)
@@ -462,8 +462,8 @@ struct PlaylistDetailView: View {
                 }
                 Spacer()
             }
-            .padding(.vertical, CassetteSpacing.xs)
-            .listRowInsets(EdgeInsets(top: 0, leading: CassetteSpacing.l, bottom: 0, trailing: CassetteSpacing.l))
+            .padding(.vertical, DiapasonSpacing.xs)
+            .listRowInsets(EdgeInsets(top: 0, leading: DiapasonSpacing.l, bottom: 0, trailing: DiapasonSpacing.l))
             .listRowBackground(Color.clear)
             .listRowSeparatorCompat(.hidden)
         }
@@ -494,7 +494,7 @@ struct PlaylistDetailView: View {
     // MARK: - Header
 
     private func playlistHeader(vm: PlaylistDetailViewModel?) -> some View {
-        VStack(spacing: CassetteSpacing.l) {
+        VStack(spacing: DiapasonSpacing.l) {
             // Cover art
             Group {
                 #if os(iOS)
@@ -505,11 +505,11 @@ struct PlaylistDetailView: View {
                                 .resizable()
                                 .aspectRatio(1, contentMode: .fill)
                                 .frame(width: 220, height: 220)
-                                .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.large))
+                                .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.large))
                         } else {
                             coverArtContent(vm: vm)
                         }
-                        RoundedRectangle(cornerRadius: CassetteCornerRadius.large)
+                        RoundedRectangle(cornerRadius: DiapasonCornerRadius.large)
                             .fill(Color.black.opacity(0.4))
                         Image(systemName: "camera.fill")
                             .font(.title2)
@@ -524,52 +524,52 @@ struct PlaylistDetailView: View {
                 coverArtContent(vm: vm)
                 #endif
             }
-            .padding(.top, CassetteSpacing.xxl)
+            .padding(.top, DiapasonSpacing.xxl)
 
             VStack(spacing: 0) {
                 if isEditing {
                     TextField("Playlist name", text: $editName)
-                        .font(.cassetteDetailTitle)
+                        .font(.DetailTitle)
                         .foregroundStyle(headerTextColor)
                         .multilineTextAlignment(.center)
                         .textFieldStyle(.plain)
-                        .padding(.horizontal, CassetteSpacing.l)
-                        .padding(.bottom, CassetteSpacing.s)
+                        .padding(.horizontal, DiapasonSpacing.l)
+                        .padding(.bottom, DiapasonSpacing.s)
                     TextField("Add a description...", text: $editDescription, axis: .vertical)
-                        .font(.cassetteCellSubtitle)
+                        .font(.CellSubtitle)
                         .foregroundStyle(headerSecondaryColor)
                         .multilineTextAlignment(.center)
                         .textFieldStyle(.plain)
                         .lineLimit(1...4)
-                        .padding(.horizontal, CassetteSpacing.l)
+                        .padding(.horizontal, DiapasonSpacing.l)
                 } else {
                     Text(vm?.name ?? initialName)
-                        .font(.cassetteDetailTitle)
+                        .font(.DetailTitle)
                         .foregroundStyle(headerTextColor)
                         .multilineTextAlignment(.center)
-                        .padding(.bottom, CassetteSpacing.xs)
+                        .padding(.bottom, DiapasonSpacing.xs)
                     if vm == nil {
                         SkeletonBlock(width: 140, height: 18, cornerRadius: 4)
-                            .padding(.bottom, CassetteSpacing.s)
+                            .padding(.bottom, DiapasonSpacing.s)
                     } else if let owner = vm?.owner {
                         Text("by \(owner)")
                             .font(.callout.weight(.semibold))
                             .foregroundStyle(headerSecondaryColor)
-                            .padding(.bottom, CassetteSpacing.s)
+                            .padding(.bottom, DiapasonSpacing.s)
                     }
                     if vm == nil {
                         SkeletonBlock(width: 100, height: 14, cornerRadius: 4)
                     } else if let vm {
                         Text("\(vm.songs.count) track\(vm.songs.count == 1 ? "" : "s")")
-                            .font(.cassetteCaption)
+                            .font(.Caption)
                             .foregroundStyle(headerSecondaryColor.opacity(0.8))
                     }
                 }
             }
-            .padding(.horizontal, CassetteSpacing.l)
+            .padding(.horizontal, DiapasonSpacing.l)
 
             if !isEditing {
-                HStack(spacing: CassetteSpacing.m) {
+                HStack(spacing: DiapasonSpacing.m) {
                     Button {
                         HapticFeedback.medium.trigger()
                         Task {
@@ -579,9 +579,9 @@ struct PlaylistDetailView: View {
                         }
                     } label: {
                         Image(systemName: "shuffle")
-                            .font(.cassetteCellTitle)
+                            .font(.CellTitle)
                             .foregroundStyle(heroIconColor)
-                            .cassetteGlassButton(size: 44)
+                            .GlassButton(size: 44)
                     }
                     .disabled(vm?.songs.isEmpty != false)
                     .opacity(vm == nil ? 0.4 : 1)
@@ -599,26 +599,26 @@ struct PlaylistDetailView: View {
                             if vm.isDownloadingPlaylist {
                                 Button { Task { await vm.cancelPlaylistDownload() } } label: {
                                     Image(systemName: "xmark")
-                                        .font(.cassetteCellTitle)
+                                        .font(.CellTitle)
                                         .foregroundStyle(heroIconColor)
-                                        .cassetteGlassButton(size: 44)
+                                        .GlassButton(size: 44)
                                 }
                             } else {
                                 switch downloadState(for: vm) {
                                 case .notDownloaded:
                                     Button { Task { await vm.downloadPlaylist() } } label: {
                                         Image(systemName: "arrow.down.circle")
-                                            .font(.cassetteCellTitle)
+                                            .font(.CellTitle)
                                             .foregroundStyle(heroIconColor)
-                                            .cassetteGlassButton(size: 44)
+                                            .GlassButton(size: 44)
                                     }
                                     .disabled(vm.songs.isEmpty)
                                 case .partiallyDownloaded:
                                     Button { Task { await vm.downloadMissingTracks() } } label: {
                                         Image(systemName: "arrow.down.circle.dotted")
-                                            .font(.cassetteCellTitle)
+                                            .font(.CellTitle)
                                             .foregroundStyle(heroIconColor)
-                                            .cassetteGlassButton(size: 44)
+                                            .GlassButton(size: 44)
                                     }
                                 case .fullyDownloaded:
                                     Button {
@@ -626,18 +626,18 @@ struct PlaylistDetailView: View {
                                         showDeleteAlert = true
                                     } label: {
                                         Image(systemName: "trash")
-                                            .font(.cassetteCellTitle)
+                                            .font(.CellTitle)
                                             .foregroundStyle(heroIconColor)
-                                            .cassetteGlassButton(size: 44)
+                                            .GlassButton(size: 44)
                                     }
                                 }
                             }
                         } else {
                             Button { } label: {
                                 Image(systemName: "arrow.down.circle")
-                                    .font(.cassetteCellTitle)
+                                    .font(.CellTitle)
                                     .foregroundStyle(heroIconColor)
-                                    .cassetteGlassButton(size: 44)
+                                    .GlassButton(size: 44)
                             }
                             .disabled(true)
                             .opacity(0.4)
@@ -645,7 +645,7 @@ struct PlaylistDetailView: View {
                     }
                 }
                 .buttonStyle(.borderless)
-                .padding(.horizontal, CassetteSpacing.xxxl)
+                .padding(.horizontal, DiapasonSpacing.xxxl)
 
                 if let vm, vm.isDownloadingPlaylist {
                     let serverId = container?.serverState.activeServer?.id ?? UUID()
@@ -658,19 +658,19 @@ struct PlaylistDetailView: View {
                 }
             }
         }
-        .padding(.bottom, CassetteSpacing.xxl)
+        .padding(.bottom, DiapasonSpacing.xxl)
         .frame(maxWidth: .infinity)
     }
 
     @ViewBuilder
     private func coverArtContent(vm: PlaylistDetailViewModel?) -> some View {
         if initialCoverImage == nil && vm?.coverArtId == nil && coverArtId == nil {
-            SkeletonBlock(width: 220, height: 220, cornerRadius: CassetteCornerRadius.large)
+            SkeletonBlock(width: 220, height: 220, cornerRadius: DiapasonCornerRadius.large)
         } else {
             CoverArtCard(
                 id: vm?.coverArtId ?? coverArtId ?? playlistId,
                 size: 300,
-                cornerRadius: CassetteCornerRadius.large,
+                cornerRadius: DiapasonCornerRadius.large,
                 initialImage: initialCoverImage
             )
             .id(coverRefreshID)
@@ -709,21 +709,21 @@ private struct PlaylistDownloadProgressView: View {
     }
 
     var body: some View {
-        VStack(spacing: CassetteSpacing.xs) {
+        VStack(spacing: DiapasonSpacing.xs) {
             if downloaded == 0 {
-                HStack(spacing: CassetteSpacing.s) {
+                HStack(spacing: DiapasonSpacing.s) {
                     ProgressView().scaleEffect(0.8)
                     Text("Starting download…")
-                        .font(.cassetteCaption)
+                        .font(.Caption)
                         .foregroundStyle(secondaryColor)
                 }
             } else {
                 ProgressView(value: Double(downloaded), total: Double(max(total, 1)))
                     .progressViewStyle(.linear)
-                    .tint(Color.cassetteAccent)
+                    .tint(Color.accent)
                     .frame(maxWidth: 280)
                 Text("Downloading \(downloaded)/\(total) tracks")
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(secondaryColor)
             }
         }

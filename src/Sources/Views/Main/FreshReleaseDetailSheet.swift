@@ -19,7 +19,7 @@ struct FreshReleaseDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: CassetteSpacing.l) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.l) {
                 Color.clear
                     .aspectRatio(1, contentMode: .fit)
                     .overlay {
@@ -27,28 +27,28 @@ struct FreshReleaseDetailView: View {
                             Color.secondary.opacity(0.2)
                         }
                     }
-                    .cassetteCoverStyle(cornerRadius: CassetteCornerRadius.large)
+                    .diapasonCoverStyle(cornerRadius: DiapasonCornerRadius.large)
                     .frame(maxWidth: 280)
                     .frame(maxWidth: .infinity, alignment: .center)
 
-                VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+                VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
                     Text(release.title)
                         .font(.title2.bold())
 
                     Text(release.artistName)
-                        .font(.cassetteCellTitle)
+                        .font(.CellTitle)
                         .foregroundStyle(.secondary)
 
                     if let date = release.releaseDate {
                         Text(Self.dateFormatter.string(from: date))
-                            .font(.cassetteCaption)
+                            .font(.Caption)
                             .foregroundStyle(.secondary)
                     }
                 }
 
                 externalLinksSection
             }
-            .padding(CassetteSpacing.l)
+            .padding(DiapasonSpacing.l)
         }
         .navigationTitle(release.title)
         #if os(iOS)
@@ -71,7 +71,7 @@ struct FreshReleaseDetailView: View {
                 externalLinkButton(title: "View on ListenBrainz", url: lbURL)
             }
         } else {
-            VStack(spacing: CassetteSpacing.s) {
+            VStack(spacing: DiapasonSpacing.s) {
                 ForEach(providers) { provider in
                     if let url = provider.buildURL(artistName: release.artistName, albumTitle: release.title) {
                         externalLinkButton(title: "View on \(provider.name)", url: url)
@@ -90,12 +90,12 @@ struct FreshReleaseDetailView: View {
                 Spacer(minLength: 0)
                 Image(systemName: "arrow.up.right")
             }
-            .font(.cassetteCellTitle)
-            .padding(CassetteSpacing.m)
+            .font(.CellTitle)
+            .padding(DiapasonSpacing.m)
             .frame(maxWidth: .infinity)
-            .background(Color.cassetteAccent.opacity(0.1))
-            .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.standard, style: .continuous))
-            .foregroundStyle(Color.cassetteAccent)
+            .background(Color.accent.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard, style: .continuous))
+            .foregroundStyle(Color.accent)
         }
         .buttonStyle(.plain)
     }

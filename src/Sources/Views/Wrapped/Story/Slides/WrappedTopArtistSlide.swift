@@ -18,7 +18,7 @@ struct WrappedTopArtistSlide: View {
             MeshGradientBackground(palette: palette, animated: !reduceMotion)
 
             VStack(alignment: .leading, spacing: 0) {
-                Spacer(minLength: CassetteSpacing.xxxxl)
+                Spacer(minLength: DiapasonSpacing.xxxxl)
 
                 Text("TOP ARTIST")
                     .font(.system(size: 13, weight: .heavy, design: .rounded))
@@ -35,9 +35,9 @@ struct WrappedTopArtistSlide: View {
                         .lineLimit(3)
                         .minimumScaleFactor(0.5)
 
-                    Spacer(minLength: CassetteSpacing.l)
+                    Spacer(minLength: DiapasonSpacing.l)
 
-                    HStack(spacing: CassetteSpacing.s) {
+                    HStack(spacing: DiapasonSpacing.s) {
                         statBadge(artist.playCount.plural("play", "plays"))
                         statBadge(artist.uniqueTracks.plural("track", "tracks"))
                     }
@@ -49,7 +49,7 @@ struct WrappedTopArtistSlide: View {
 
                 Spacer()
             }
-            .padding(.horizontal, CassetteSpacing.xl)
+            .padding(.horizontal, DiapasonSpacing.xl)
             .wrappedSlideEntrance()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -59,8 +59,8 @@ struct WrappedTopArtistSlide: View {
         Text(text)
             .font(.system(size: 15, weight: .semibold, design: .rounded))
             .foregroundStyle(.white)
-            .padding(.horizontal, CassetteSpacing.m)
-            .padding(.vertical, CassetteSpacing.s)
+            .padding(.horizontal, DiapasonSpacing.m)
+            .padding(.vertical, DiapasonSpacing.s)
             .background(Color.white.opacity(0.2), in: Capsule())
     }
 }

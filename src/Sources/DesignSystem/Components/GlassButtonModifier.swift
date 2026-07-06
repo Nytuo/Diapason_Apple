@@ -10,7 +10,7 @@ extension View {
     /// Apply this to the *label* of a Button (not the Button itself)
     /// so that the parent .buttonStyle(.borderless) gesture fix is preserved.
     @ViewBuilder
-    func cassetteGlassButton(size: CGFloat = 44, tint: Color? = nil) -> some View {
+    func GlassButton(size: CGFloat = 44, tint: Color? = nil) -> some View {
         if #available(macOS 26.0, iOS 26.0, *) {
             // .interactive() removed — causes infinite StyleModifier recursion during
             // NavigationStack transitions on macOS 26.5 (54k-frame stack overflow).
@@ -28,7 +28,7 @@ extension View {
 
     /// Applies a capsule Liquid Glass effect (for wider controls).
     @ViewBuilder
-    func cassetteGlassCapsule(tint: Color? = nil) -> some View {
+    func diapasonGlassCapsule(tint: Color? = nil) -> some View {
         if #available(macOS 26.0, iOS 26.0, *) {
             // .interactive() removed — same crash risk as cassetteGlassButton.
             let glass: Glass = tint.map { Glass.regular.tint($0) } ?? Glass.regular

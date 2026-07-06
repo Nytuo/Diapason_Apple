@@ -16,16 +16,16 @@ struct AlbumCard: View {
     private let cardSize: CGFloat = 140
 
     var body: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
             CoverArtCard(id: album.coverArt ?? album.id, size: cardSize)
             Text(album.name)
-                .font(.cassetteCaption)
+                .font(.Caption)
                 .fontWeight(.semibold)
                 .lineLimit(1)
                 .truncationMode(.tail)
             if let artist = album.artist {
                 Text(artist)
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }

@@ -99,7 +99,7 @@ struct WrappedStoryPlayerView: View {
 
     private var overlayControls: some View {
         VStack(spacing: 0) {
-            HStack(alignment: .center, spacing: CassetteSpacing.s) {
+            HStack(alignment: .center, spacing: DiapasonSpacing.s) {
                 WrappedStoryProgressBar(
                     totalSlides: slides.count,
                     currentIndex: currentIndex,
@@ -117,8 +117,8 @@ struct WrappedStoryPlayerView: View {
                 }
                 .buttonStyle(.plain)
             }
-            .padding(.horizontal, CassetteSpacing.l)
-            .padding(.top, CassetteSpacing.s)
+            .padding(.horizontal, DiapasonSpacing.l)
+            .padding(.top, DiapasonSpacing.s)
             Spacer()
         }
     }
@@ -279,7 +279,7 @@ struct WrappedStoryPlayerView: View {
                 guard !isRendering else { return }
                 Task { await renderAndShare(data: data) }
             } label: {
-                HStack(spacing: CassetteSpacing.s) {
+                HStack(spacing: DiapasonSpacing.s) {
                     if isRendering {
                         ProgressView()
                             .tint(.white)
@@ -292,12 +292,12 @@ struct WrappedStoryPlayerView: View {
                 .font(.system(size: 16, weight: .semibold, design: .rounded))
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, CassetteSpacing.m)
-                .background(Color.white.opacity(0.2), in: RoundedRectangle(cornerRadius: CassetteCornerRadius.large, style: .continuous))
+                .padding(.vertical, DiapasonSpacing.m)
+                .background(Color.white.opacity(0.2), in: RoundedRectangle(cornerRadius: DiapasonCornerRadius.large, style: .continuous))
             }
             .buttonStyle(.plain)
-            .padding(.horizontal, CassetteSpacing.xl)
-            .padding(.bottom, CassetteSpacing.xl)
+            .padding(.horizontal, DiapasonSpacing.xl)
+            .padding(.bottom, DiapasonSpacing.xl)
         }
     }
 

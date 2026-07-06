@@ -25,31 +25,31 @@ struct CoverArtCard: View {
     /// (`size*2 >= 480 ? .hero : .thumb`) — existing callers are unaffected. Pass `.hero` for a
     /// full-res surface whose display size is below 480px (e.g. Wrapped artist cards).
     var tier: ArtworkTier? = nil
-    var cornerRadius: CGFloat = CassetteCornerRadius.standard
+    var cornerRadius: CGFloat = DiapasonCornerRadius.standard
     var placeholderSystemImage: String = "music.note"
     var initialImage: PlatformImage? = nil
 
     var body: some View {
         CoverArtView(id: id, size: Int(size * 2), tier: tier, cornerRadius: cornerRadius, placeholderSystemImage: placeholderSystemImage, initialImage: initialImage)  // 2× for @2x sharpness
             .frame(width: size, height: size)
-            .cassetteCoverStyle(cornerRadius: cornerRadius)
+            .diapasonCoverStyle(cornerRadius: cornerRadius)
     }
 }
 
 #Preview("Light") {
-    HStack(spacing: CassetteSpacing.l) {
+    HStack(spacing: DiapasonSpacing.l) {
         CoverArtCard(id: "preview-small", size: 44)
         CoverArtCard(id: "preview-medium", size: 60)
-        CoverArtCard(id: "preview-large", size: 160, cornerRadius: CassetteCornerRadius.large)
+        CoverArtCard(id: "preview-large", size: 160, cornerRadius: DiapasonCornerRadius.large)
     }
     .padding()
 }
 
 #Preview("Dark") {
-    HStack(spacing: CassetteSpacing.l) {
+    HStack(spacing: DiapasonSpacing.l) {
         CoverArtCard(id: "preview-small", size: 44)
         CoverArtCard(id: "preview-medium", size: 60)
-        CoverArtCard(id: "preview-large", size: 160, cornerRadius: CassetteCornerRadius.large)
+        CoverArtCard(id: "preview-large", size: 160, cornerRadius: DiapasonCornerRadius.large)
     }
     .padding()
     .preferredColorScheme(.dark)

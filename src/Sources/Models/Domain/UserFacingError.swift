@@ -70,8 +70,8 @@ nonisolated enum UserFacingError: LocalizedError, Identifiable, Sendable {
                 return .serverUnreachable
             }
         }
-        if let cassetteError = error as? CassetteError {
-            switch cassetteError {
+        if let diapasonError = error as? DiapasonError {
+            switch diapasonError {
             case .offlineUnavailable:
                 return .contentUnavailableOffline
             case .downloadFailed:

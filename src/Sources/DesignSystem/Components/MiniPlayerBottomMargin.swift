@@ -18,7 +18,7 @@ private struct MiniPlayerBottomMargin: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .contentMargins(.bottom, isMiniPlayerVisible ? CassetteSpacing.miniPlayerBottomMargin : 0, for: .scrollContent)
+            .contentMargins(.bottom, isMiniPlayerVisible ? DiapasonSpacing.miniPlayerBottomMargin : 0, for: .scrollContent)
     }
 }
 #endif

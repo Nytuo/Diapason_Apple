@@ -18,7 +18,7 @@ struct OnboardingWelcomeView: View {
 
     var body: some View {
         ZStack {
-            CassetteColors.backgroundPrimary.ignoresSafeArea()
+            DiapasonColors.backgroundPrimary.ignoresSafeArea()
 
             VStack(spacing: 0) {
                 Spacer()
@@ -28,12 +28,12 @@ struct OnboardingWelcomeView: View {
                     .scaleEffect(appeared ? 1 : 0.7)
                     .animation(.spring(duration: 0.6, bounce: 0.4), value: appeared)
 
-                Spacer().frame(height: CassetteSpacing.xxxxl)
+                Spacer().frame(height: DiapasonSpacing.xxxxl)
 
-                VStack(spacing: CassetteSpacing.m) {
+                VStack(spacing: DiapasonSpacing.m) {
                     Text("Your music.\nYour rules.")
                         .font(.system(.largeTitle, design: .rounded, weight: .bold))
-                        .foregroundStyle(CassetteColors.textPrimary)
+                        .foregroundStyle(DiapasonColors.textPrimary)
                         .multilineTextAlignment(.center)
                         .lineSpacing(4)
                         .opacity(appeared ? 1 : 0)
@@ -42,20 +42,20 @@ struct OnboardingWelcomeView: View {
 
                     Text("Stream your library from your own server.\nNo subscriptions. No Ads.")
                         .font(.system(.body, design: .rounded))
-                        .foregroundStyle(CassetteColors.textSecondary)
+                        .foregroundStyle(DiapasonColors.textSecondary)
                         .multilineTextAlignment(.center)
                         .lineSpacing(3)
                         .opacity(appeared ? 1 : 0)
                         .offset(y: appeared ? 0 : 24)
                         .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.1), value: appeared)
                 }
-                .padding(.horizontal, CassetteSpacing.xxxl)
+                .padding(.horizontal, DiapasonSpacing.xxxl)
 
                 Spacer()
 
                 getStartedButton
-                    .padding(.horizontal, CassetteSpacing.xxxl)
-                    .padding(.bottom, CassetteSpacing.xxxl)
+                    .padding(.horizontal, DiapasonSpacing.xxxl)
+                    .padding(.bottom, DiapasonSpacing.xxxl)
                     .opacity(appeared ? 1 : 0)
                     .offset(y: appeared ? 0 : 30)
                     .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.2), value: appeared)
@@ -85,7 +85,7 @@ struct OnboardingWelcomeView: View {
         if let viewModel {
             #if os(tvOS)
             ZStack {
-                CassetteColors.backgroundPrimary.ignoresSafeArea()
+                DiapasonColors.backgroundPrimary.ignoresSafeArea()
                 NavigationStack {
                     ServerFormView(viewModel: viewModel)
                 }
@@ -115,7 +115,7 @@ struct OnboardingWelcomeView: View {
         }
         .buttonStyle(.borderedProminent)
         .controlSize(.large)
-        .tint(CassetteColors.accent)
+        .tint(DiapasonColors.accent)
         .disabled(viewModel == nil)
     }
 
@@ -138,7 +138,7 @@ private struct AnimatedDiapasonHero: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(CassetteColors.accent.opacity(0.08))
+                .fill(DiapasonColors.accent.opacity(0.08))
                 .frame(width: 290, height: 290)
                 .blur(radius: 60)
 
@@ -146,13 +146,13 @@ private struct AnimatedDiapasonHero: View {
                 let delay = CGFloat(i) * 0.34
                 let progress = (waveProgress + delay).truncatingRemainder(dividingBy: 1)
                 Circle()
-                    .stroke(CassetteColors.accent.opacity(0.5 * (1 - progress)), lineWidth: 2)
+                    .stroke(DiapasonColors.accent.opacity(0.5 * (1 - progress)), lineWidth: 2)
                     .frame(width: waveBaseSize + progress * 130, height: waveBaseSize + progress * 130)
             }
 
             Image(systemName: "tuningfork")
                 .font(.system(size: forkSize, weight: .light))
-                .foregroundStyle(CassetteColors.accent)
+                .foregroundStyle(DiapasonColors.accent)
                 .rotationEffect(.degrees(wiggleAngle))
         }
         .frame(width: 200, height: 130)

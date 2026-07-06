@@ -122,7 +122,7 @@ struct ServerFormView: View {
         if let error = viewModel.connectionError, error != .invalidURL {
             Section {
                 ConnectionErrorView(error: error)
-                    .padding(.vertical, CassetteSpacing.xs)
+                    .padding(.vertical, DiapasonSpacing.xs)
             }
         }
     }
@@ -177,7 +177,7 @@ struct CustomHeaderRowView: View {
             Text("Value")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-                .padding(.top, CassetteSpacing.xs)
+                .padding(.top, DiapasonSpacing.xs)
             HStack(spacing: 0) {
                 valueField
                     .roundedBorderTextFieldStyleCompat()
@@ -189,7 +189,7 @@ struct CustomHeaderRowView: View {
                     isRevealed.toggle()
                 } label: {
                     Image(systemName: isRevealed ? "eye.slash" : "eye")
-                        .foregroundStyle(isRevealed ? CassetteColors.accent : CassetteColors.textTertiary)
+                        .foregroundStyle(isRevealed ? DiapasonColors.accent : DiapasonColors.textTertiary)
                         .contentTransition(.symbolEffect(.replace))
                         .frame(width: 44, height: 44)
                 }
@@ -200,7 +200,7 @@ struct CustomHeaderRowView: View {
                     copyValueToClipboard()
                 } label: {
                     Image(systemName: justCopied ? "checkmark" : "doc.on.doc")
-                        .foregroundStyle(value.isEmpty ? CassetteColors.textTertiary : CassetteColors.accent)
+                        .foregroundStyle(value.isEmpty ? DiapasonColors.textTertiary : DiapasonColors.accent)
                         .contentTransition(.symbolEffect(.replace))
                         .frame(width: 44, height: 44)
                 }
@@ -230,7 +230,7 @@ struct CustomHeaderRowView: View {
             }
         }
         .labelsHidden()
-        .padding(.vertical, CassetteSpacing.xs)
+        .padding(.vertical, DiapasonSpacing.xs)
         .onDisappear {
             isRevealed = false
             copyFeedbackTask?.cancel()

@@ -11,7 +11,7 @@ import OSLog
 /// Start once from AppContainer; safe to call from any context.
 final class NetworkMonitor: Sendable {
     private let monitor = NWPathMonitor()
-    private let queue = DispatchQueue(label: "app.cassette.network", qos: .utility)
+    private let queue = DispatchQueue(label: "app.diapason.network", qos: .utility)
 
     func start(serverState: ServerState) {
         monitor.pathUpdateHandler = { path in

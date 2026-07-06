@@ -75,7 +75,7 @@ actor ServerService: ServerServiceProtocol {
                 predicate: #Predicate { $0.id == id }
             )
             guard let config = try context.fetch(descriptor).first else {
-                throw CassetteError.serverNotFound(id: id)
+                throw DiapasonError.serverNotFound(id: id)
             }
             context.delete(config)
             try context.save()
@@ -95,7 +95,7 @@ actor ServerService: ServerServiceProtocol {
             let context = ModelContext(modelContainer)
             let all = try context.fetch(FetchDescriptor<ServerConfig>())
             guard let target = all.first(where: { $0.id == id }) else {
-                throw CassetteError.serverNotFound(id: id)
+                throw DiapasonError.serverNotFound(id: id)
             }
             for config in all { config.isActive = false }
             target.isActive = true
@@ -121,7 +121,7 @@ actor ServerService: ServerServiceProtocol {
         try validateHeaders(headers)
         let credKey = ServerCredentials.keychainKey(for: id)
         guard let existing = try await keychain.retrieve(ServerCredentials.self, forKey: credKey) else {
-            throw CassetteError.serverNotFound(id: id)
+            throw DiapasonError.serverNotFound(id: id)
         }
         let updated = ServerCredentials(password: existing.password, customHeaders: headers)
         try await keychain.store(updated, forKey: credKey)
@@ -148,7 +148,7 @@ actor ServerService: ServerServiceProtocol {
                 let context = ModelContext(modelContainer)
                 let descriptor = FetchDescriptor<ServerConfig>(predicate: #Predicate { $0.id == id })
                 guard let config = try context.fetch(descriptor).first else {
-                    throw CassetteError.serverNotFound(id: id)
+                    throw DiapasonError.serverNotFound(id: id)
                 }
                 config.displayName = displayName
                 config.baseURL = baseURL
@@ -222,7 +222,7 @@ actor ServerService: ServerServiceProtocol {
             configuration: ServerConfiguration(serverURL: serverURL, username: username, password: password),
             transport: transport,
             retryPolicy: .none,
-            logSubsystem: "app.cassette.server"
+            logSubsystem: "app.diapason.server"
         )
         do {
             try await client.ping()
@@ -241,35 +241,35 @@ actor ServerService: ServerServiceProtocol {
         Logger.server.debug("makeSwiftSonicClient — activeServer=\(String(describing: snapshot?.baseURL), privacy: .public)")
         guard let snapshot else {
             Logger.server.error("makeSwiftSonicClient: activeServer is nil → serverNotConfigured")
-            throw CassetteError.serverNotConfigured
+            throw DiapasonError.serverNotConfigured
         }
 
         let creds = try await keychain.retrieve(
             ServerCredentials.self,
             forKey: ServerCredentials.keychainKey(for: snapshot.id)
         )
-        guard let creds else { throw CassetteError.serverNotConfigured }
+        guard let creds else { throw DiapasonError.serverNotConfigured }
 
         guard let url = URL(string: snapshot.baseURL) else {
-            throw CassetteError.invalidServerURL(snapshot.baseURL)
+            throw DiapasonError.invalidServerURL(snapshot.baseURL)
         }
 
         let transport = CustomHeadersTransport(headers: creds.customHeaders)
         return SwiftSonicClient(
             configuration: ServerConfiguration(serverURL: url, username: snapshot.username, password: creds.password),
             transport: transport,
-            logSubsystem: "app.cassette.server"
+            logSubsystem: "app.diapason.server"
         )
     }
 
     func activeCredentials() async throws -> ServerCredentials {
         let snapshot = await MainActor.run { state.activeServer }
-        guard let snapshot else { throw CassetteError.serverNotConfigured }
+        guard let snapshot else { throw DiapasonError.serverNotConfigured }
 
         guard let creds = try await keychain.retrieve(
             ServerCredentials.self,
             forKey: ServerCredentials.keychainKey(for: snapshot.id)
-        ) else { throw CassetteError.serverNotConfigured }
+        ) else { throw DiapasonError.serverNotConfigured }
 
         return creds
     }
@@ -334,10 +334,10 @@ actor ServerService: ServerServiceProtocol {
     private func validateHeaders(_ headers: [String: String]) throws {
         for (key, value) in headers {
             guard HeaderValidator.isValidName(key) else {
-                throw CassetteError.invalidHeaderName(key: key)
+                throw DiapasonError.invalidHeaderName(key: key)
             }
             guard HeaderValidator.isValidValue(value) else {
-                throw CassetteError.invalidHeaderValue(key: key)
+                throw DiapasonError.invalidHeaderValue(key: key)
             }
         }
     }

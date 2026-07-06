@@ -30,7 +30,7 @@ actor CacheService: CacheServiceProtocol {
         self.maxTracks = max(Self.minMaxTracks, min(Self.maxMaxTracks, maxTracks))
 
         let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-        self.cacheDirectory = caches.appendingPathComponent("app.cassette/audio", isDirectory: true)
+        self.cacheDirectory = caches.appendingPathComponent("app.diapason/audio", isDirectory: true)
 
         do {
             try FileManager.default.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)

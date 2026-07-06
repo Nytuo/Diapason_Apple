@@ -5,9 +5,9 @@
 
 import SwiftUI
 
-private struct CassettePlayingAccentKey: EnvironmentKey {
+private struct DiapasonPlayingAccentKey: EnvironmentKey {
     // Falls back to the standard brand accent when no dominant background is available.
-    static let defaultValue: Color = CassetteColors.accent
+    static let defaultValue: Color = DiapasonColors.accent
 }
 
 extension EnvironmentValues {
@@ -15,8 +15,8 @@ extension EnvironmentValues {
     /// Parent views with a dominant background should override this with
     /// `CassetteColors.accentForeground(on: dominantColor)` so child components
     /// automatically stay WCAG-contrast-safe without prop drilling.
-    var cassettePlayingAccent: Color {
-        get { self[CassettePlayingAccentKey.self] }
-        set { self[CassettePlayingAccentKey.self] = newValue }
+    var diapasonPlayingAccent: Color {
+        get { self[DiapasonPlayingAccentKey.self] }
+        set { self[DiapasonPlayingAccentKey.self] = newValue }
     }
 }

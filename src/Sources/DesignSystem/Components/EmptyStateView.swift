@@ -26,18 +26,18 @@ struct EmptyStateView: View {
     var action: Action? = nil
 
     var body: some View {
-        VStack(spacing: CassetteSpacing.l) {
+        VStack(spacing: DiapasonSpacing.l) {
             Image(systemName: systemImage)
                 .font(.system(size: 48, weight: .light))
                 .foregroundStyle(.secondary)
 
-            VStack(spacing: CassetteSpacing.s) {
+            VStack(spacing: DiapasonSpacing.s) {
                 Text(title)
-                    .font(.cassetteSectionTitle)
+                    .font(.SectionTitle)
                     .multilineTextAlignment(.center)
                 if let subtitle {
                     Text(subtitle)
-                        .font(.cassetteBody)
+                        .font(.Body)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: 280)
@@ -47,10 +47,10 @@ struct EmptyStateView: View {
             if let action {
                 Button(action.label, action: action.handler)
                     .buttonStyle(.borderedProminent)
-                    .tint(Color.cassetteAccent)
+                    .tint(Color.accent)
             }
         }
-        .padding(CassetteSpacing.xxxl)
+        .padding(DiapasonSpacing.xxxl)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

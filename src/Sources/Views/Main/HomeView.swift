@@ -40,7 +40,7 @@ struct HomeView: View {
     @State private var localPinnedItems: [PinnedItem] = []
     @State private var dropTargetId: String?
     private let recentColumns = [
-        GridItem(.adaptive(minimum: 140, maximum: 180), spacing: CassetteSpacing.m)
+        GridItem(.adaptive(minimum: 140, maximum: 180), spacing: DiapasonSpacing.m)
     ]
     private let pinnedColumns = [
         GridItem(.flexible()),
@@ -104,7 +104,7 @@ struct HomeView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: CassetteSpacing.xl) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.xl) {
                 #if os(iOS)
                 if !visiblePinnedItems.isEmpty {
                     pinnedSection
@@ -119,9 +119,9 @@ struct HomeView: View {
                 recentlySection
                 #endif
             }
-            .padding(.horizontal, CassetteSpacing.l)
-            .padding(.top, CassetteSpacing.m)
-            .padding(.bottom, CassetteSpacing.xl)
+            .padding(.horizontal, DiapasonSpacing.l)
+            .padding(.top, DiapasonSpacing.m)
+            .padding(.bottom, DiapasonSpacing.xl)
         }
         .navigationTitle("Home")
         .toolbar {
@@ -225,119 +225,13 @@ struct HomeView: View {
         }
     }
 
-    // MARK: - macOS carousels
-
-    #if os(macOS)
-    @ViewBuilder
-    private var macOSCarousels: some View {
-        VStack(alignment: .leading, spacing: 32) {
-            if isOnline {
-                smartShuffleCard
-            }
-            if let vm = viewModel {
-                if vm.isLoading && vm.recentAlbums.isEmpty && vm.recentlyPlayed.isEmpty && vm.mostPlayed.isEmpty {
-                    ProgressView("Loading your library...")
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 60)
-                } else if let error = vm.error, vm.recentAlbums.isEmpty {
-                    EmptyStateView(
-                        systemImage: "exclamationmark.triangle",
-                        title: "Unable to Load",
-                        subtitle: error.displayMessage,
-                        action: .init(label: "Retry") { Task { await vm.load() } }
-                    )
-                } else if !vm.isLoading && vm.recentAlbums.isEmpty && vm.recentlyPlayed.isEmpty && vm.mostPlayed.isEmpty {
-                    EmptyStateView(
-                        systemImage: "music.note.list",
-                        title: "No music yet",
-                        subtitle: "Add some music to your server to get started"
-                    )
-                } else {
-                    VStack(alignment: .leading, spacing: 32) {
-                        if !vm.recentAlbums.isEmpty {
-                            CarouselSection(title: "Recently Added", onSeeAll: {
-                                #if os(macOS)
-                                NotificationCenter.default.post(name: .cassetteSelectAlbums, object: nil)
-                                #else
-                                navigateToAllAlbums = true
-                                #endif
-                            }) {
-                                ForEach(vm.recentAlbums) { album in
-                                    CarouselAlbumCard(album: album)
-                                }
-                            }
-                        }
-                        if !vm.recentlyPlayed.isEmpty {
-                            CarouselSection(title: "Recently Played") {
-                                ForEach(vm.recentlyPlayed) { album in
-                                    CarouselAlbumCard(album: album)
-                                }
-                            }
-                        }
-                        if !vm.mostPlayed.isEmpty {
-                            CarouselSection(title: "Most Played") {
-                                ForEach(vm.mostPlayed) { album in
-                                    CarouselAlbumCard(album: album)
-                                }
-                            }
-                        }
-                    }
-                    .padding(.vertical, 8)
-                }
-            }
-        }
-    }
-
-    private var smartShuffleCard: some View {
-        Button {
-            Task {
-                guard let container else { return }
-                do {
-                    try await container.playerService.playSmartShuffle()
-                } catch {
-                    let msg: String
-                    if case CassetteError.smartShuffleEmpty = error {
-                        msg = "Smart Shuffle unavailable — try playing some tracks first or download more music for offline use."
-                    } else {
-                        msg = "Smart Shuffle failed. Please try again."
-                    }
-                    container.toastService.showError(msg)
-                }
-            }
-        } label: {
-            HStack(spacing: CassetteSpacing.s) {
-                Image(systemName: "shuffle.circle.fill")
-                    .font(.title2)
-                    .foregroundStyle(Color.cassetteAccent)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Smart Shuffle")
-                        .font(.cassetteCellTitle)
-                    Text("A random mix from your library")
-                        .font(.cassetteCaption)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer(minLength: 0)
-                Image(systemName: "play.fill")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Color.cassetteAccent)
-            }
-            .padding(CassetteSpacing.m)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.cassetteAccent.opacity(0.08))
-            .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.standard, style: .continuous))
-            .foregroundStyle(.primary)
-        }
-        .buttonStyle(.plain)
-    }
-    #endif
-
     // MARK: - Pinned section
 
     private var pinnedSection: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
             Text("Pinned")
-                .font(.cassetteSectionTitle)
-            LazyVGrid(columns: pinnedColumns, spacing: CassetteSpacing.m) {
+                .font(.SectionTitle)
+            LazyVGrid(columns: pinnedColumns, spacing: DiapasonSpacing.m) {
                 ForEach(visiblePinnedItems) { item in
                     let card = HomePinnedCard(item: item, namespace: pinnedZoomNamespace)
                         .scaleEffect(dropTargetId == item.id ? 1.05 : 1.0)
@@ -374,9 +268,9 @@ struct HomeView: View {
     // MARK: - Library section
 
     private var librarySection: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
             Text("Library")
-                .font(.cassetteSectionTitle)
+                .font(.SectionTitle)
             VStack(spacing: 0) {
                 NavigationLink(value: HomeDestination.libraryPlaylists) {
                     HomeLibraryRowLabel(title: "Playlists", systemImage: "music.note.list")
@@ -417,15 +311,15 @@ struct HomeView: View {
     private var recentlySection: some View {
         if isOnline {
             if let vm = viewModel, !vm.recentAlbums.isEmpty || vm.isLoading {
-                VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+                VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
                     Text("Recently Added")
-                        .font(.cassetteSectionTitle)
+                        .font(.SectionTitle)
                     if vm.isLoading && vm.recentAlbums.isEmpty {
-                        LazyVGrid(columns: recentColumns, spacing: CassetteSpacing.m) {
+                        LazyVGrid(columns: recentColumns, spacing: DiapasonSpacing.m) {
                             ForEach(0..<6, id: \.self) { _ in SkeletonAlbumCard() }
                         }
                     } else {
-                        LazyVGrid(columns: recentColumns, spacing: CassetteSpacing.m) {
+                        LazyVGrid(columns: recentColumns, spacing: DiapasonSpacing.m) {
                             ForEach(vm.recentAlbums) { album in
                                 NavigationLink(value: HomeDestination.album(album)) {
                                     HomeAlbumCell(album: album, namespace: recentlyAddedZoomNamespace)
@@ -437,9 +331,9 @@ struct HomeView: View {
                 }
             }
         } else {
-            VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
                 Text("Recently Downloaded")
-                    .font(.cassetteSectionTitle)
+                    .font(.SectionTitle)
                 if recentDownloadedItems.isEmpty {
                     EmptyStateView(
                         systemImage: "arrow.down.circle",
@@ -447,7 +341,7 @@ struct HomeView: View {
                         subtitle: "Albums and playlists you download will appear here"
                     )
                 } else {
-                    LazyVGrid(columns: recentColumns, spacing: CassetteSpacing.m) {
+                    LazyVGrid(columns: recentColumns, spacing: DiapasonSpacing.m) {
                         ForEach(recentDownloadedItems) { item in
                             let dest: HomeDestination = item.type == .album
                                 ? .albumById(id: item.itemId, name: item.name, subtitle: item.subtitle, coverArtId: item.coverArtId)
@@ -486,24 +380,24 @@ private struct HomePinnedCard: View {
 
     var body: some View {
         NavigationLink(value: homeNavDestination) {
-            VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
                 GeometryReader { geo in
                     CoverArtView(id: item.coverArtId ?? item.itemId, size: Int(geo.size.width * 2))
                         .frame(width: geo.size.width, height: geo.size.width)
-                        .cassetteCoverStyle(cornerRadius: CassetteCornerRadius.standard)
+                        .diapasonCoverStyle(cornerRadius: DiapasonCornerRadius.standard)
                         .id("\(item.coverArtId ?? item.itemId)_\(coverArtUploadVersion)")
                 }
                 .aspectRatio(1, contentMode: .fit)
-                .cassetteMatchedTransitionSource(id: item.itemId, in: namespace)
+                .diapasonMatchedTransitionSource(id: item.itemId, in: namespace)
                 Text(item.displayName)
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .fontWeight(.semibold)
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 if !item.displaySubtitle.isEmpty {
                     Text(item.displaySubtitle)
-                        .font(.cassetteCaption)
+                        .font(.Caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
@@ -568,10 +462,10 @@ private struct HomeLibraryRowLabel: View {
     let systemImage: String
 
     var body: some View {
-        HStack(spacing: CassetteSpacing.m) {
+        HStack(spacing: DiapasonSpacing.m) {
             ZStack {
                 RoundedRectangle(cornerRadius: 7, style: .continuous)
-                    .fill(Color.cassetteAccent)
+                    .fill(Color.accent)
                     .frame(width: 30, height: 30)
                 Image(systemName: systemImage)
                     .font(.caption)
@@ -579,7 +473,7 @@ private struct HomeLibraryRowLabel: View {
                     .foregroundStyle(.white)
             }
             Text(title)
-                .font(.cassetteCellTitle)
+                .font(.CellTitle)
                 .foregroundStyle(.primary)
             Spacer(minLength: 0)
             Image(systemName: "chevron.right")
@@ -587,8 +481,8 @@ private struct HomeLibraryRowLabel: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(.tertiary)
         }
-        .padding(.horizontal, CassetteSpacing.m)
-        .padding(.vertical, CassetteSpacing.m)
+        .padding(.horizontal, DiapasonSpacing.m)
+        .padding(.vertical, DiapasonSpacing.m)
         .contentShape(Rectangle())
     }
 }
@@ -605,23 +499,23 @@ private struct HomeDownloadedItemCard: View {
 
     var body: some View {
         NavigationLink(value: destination) {
-            VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
                 GeometryReader { geo in
                     CoverArtView(id: item.coverArtId ?? item.itemId, size: Int(geo.size.width * 2))
                         .frame(width: geo.size.width, height: geo.size.width)
-                        .cassetteCoverStyle(cornerRadius: CassetteCornerRadius.standard)
+                        .diapasonCoverStyle(cornerRadius: DiapasonCornerRadius.standard)
                         .id("\(item.coverArtId ?? item.itemId)_\(coverArtUploadVersion)")
                 }
                 .aspectRatio(1, contentMode: .fit)
                 Text(item.name)
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .fontWeight(.semibold)
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 if !item.subtitle.isEmpty {
                     Text(item.subtitle)
-                        .font(.cassetteCaption)
+                        .font(.Caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
@@ -697,23 +591,23 @@ private struct HomeAlbumCell: View {
     @State private var coverImage: PlatformImage?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
             GeometryReader { geo in
                 CoverArtView(id: album.coverArt ?? album.id, size: Int(geo.size.width * 2))
                     .frame(width: geo.size.width, height: geo.size.width)
-                    .cassetteCoverStyle(cornerRadius: CassetteCornerRadius.standard)
+                    .diapasonCoverStyle(cornerRadius: DiapasonCornerRadius.standard)
             }
             .aspectRatio(1, contentMode: .fit)
-            .cassetteMatchedTransitionSource(id: album.id, in: namespace)
+            .diapasonMatchedTransitionSource(id: album.id, in: namespace)
             Text(album.name)
-                .font(.cassetteCaption)
+                .font(.Caption)
                 .fontWeight(.semibold)
                 .lineLimit(1)
                 .truncationMode(.tail)
                 .frame(maxWidth: .infinity, alignment: .leading)
             if let artist = album.artist {
                 Text(artist)
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }

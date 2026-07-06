@@ -36,7 +36,7 @@ struct AlphabetJumpBar: View {
                     .frame(width: 14, height: 16)
                     .foregroundStyle(
                         availableLetters.contains(letter)
-                            ? Color.cassetteAccent
+                            ? Color.accentColor
                             : Color.secondary.opacity(0.3)
                     )
             }
@@ -77,7 +77,7 @@ struct AlphabetJumpBar: View {
                         .frame(width: 14, height: 14)
                         .foregroundStyle(
                             availableLetters.contains(letter)
-                                ? Color.cassetteAccent
+                                ? Color.accent
                                 : Color.secondary.opacity(0.3)
                         )
                 }

@@ -55,7 +55,7 @@ final class AppContainer {
     let crossfadeSettings = CrossfadeSettings()
 
     init(inMemory: Bool = false) throws {
-        modelContainer = try ModelContainer.cassette(inMemory: inMemory)
+        modelContainer = try ModelContainer.diapason(inMemory: inMemory)
         sessionService = PlaybackSessionService(modelContainer: try ModelContainer.session(inMemory: inMemory))
 
         let keychain = KeychainService()
@@ -119,7 +119,7 @@ final class AppContainer {
         guard let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             fatalError("Documents directory unavailable — cannot initialise AppContainer")
         }
-        let coversDir = docs.appendingPathComponent("app.cassette/coverarts", isDirectory: true)
+        let coversDir = docs.appendingPathComponent("app.diapason/coverarts", isDirectory: true)
         let widgetSync = WidgetSyncService(
             dominantColorExtractor: dominantColorExtractor,
             modelContainer: modelContainer,
@@ -160,7 +160,7 @@ extension ModelContainer {
     /// Creates the Cassette ModelContainer.
     /// - Parameter inMemory: Pass `true` in tests — Swift Testing parallelises tests,
     ///   so each test must create its own in-memory container (never shared).
-    static func cassette(inMemory: Bool = false) throws -> ModelContainer {
+    static func diapason(inMemory: Bool = false) throws -> ModelContainer {
         let schema = Schema([
             ServerConfig.self,
             CachedTrack.self,
@@ -194,7 +194,7 @@ extension ModelContainer {
     /// - Parameter inMemory: Pass `true` in tests.
     static func session(inMemory: Bool = false) throws -> ModelContainer {
         let schema = Schema([PlaybackSession.self])
-        let config = ModelConfiguration("cassette-session", schema: schema, isStoredInMemoryOnly: inMemory)
+        let config = ModelConfiguration("diapason-session", schema: schema, isStoredInMemoryOnly: inMemory)
         return try ModelContainer(for: schema, configurations: config)
     }
 }
@@ -202,7 +202,7 @@ extension ModelContainer {
 // MARK: - Cover art cache invalidation
 
 extension AppContainer {
-    private static let coverArtCacheVersionKey = "cassette.coverArtCacheVersion"
+    private static let coverArtCacheVersionKey = "diapason.coverArtCacheVersion"
     private static let currentCoverArtCacheVersion = 5
 
     /// Purges cover art files from disk on the first launch after a cache format change,
@@ -217,7 +217,7 @@ extension AppContainer {
 
         artworkCache.clearCache()
         let coverArtsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("app.cassette/coverarts")
+            .appendingPathComponent("app.diapason/coverarts")
         try? FileManager.default.removeItem(at: coverArtsDir)
         try? FileManager.default.createDirectory(at: coverArtsDir, withIntermediateDirectories: true)
         URLCache.shared.removeAllCachedResponses()
@@ -230,7 +230,7 @@ extension AppContainer {
 // MARK: - Legacy cover art sweep
 
 extension AppContainer {
-    private static let artworkLegacySweepKey = "cassette.artworkLegacySweep_v2"
+    private static let artworkLegacySweepKey = "diapason.artworkLegacySweep_v2"
 
     /// One-shot background sweep that deletes untagged cover art files written by
     /// pre-tier builds (plain `{id}` filenames with no `@thumb` / `@hero` suffix).
@@ -247,7 +247,7 @@ extension AppContainer {
         Task.detached(priority: .utility) {
             let fm = FileManager.default
             guard let docs = fm.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-            let coverArtsDir = docs.appendingPathComponent("app.cassette/coverarts", isDirectory: true)
+            let coverArtsDir = docs.appendingPathComponent("app.diapason/coverarts", isDirectory: true)
 
             guard let items = try? fm.contentsOfDirectory(at: coverArtsDir, includingPropertiesForKeys: nil) else { return }
 
@@ -275,7 +275,7 @@ extension AppContainer {
 // MARK: - Audio extension migration
 
 extension AppContainer {
-    private static let audioExtMigrationKey = "cassette.audioExtMigration_v1"
+    private static let audioExtMigrationKey = "diapason.audioExtMigration_v1"
 
     /// One-shot migration that fixes downloaded tracks saved with a `.mpeg` extension.
     ///
@@ -299,7 +299,7 @@ extension AppContainer {
         Logger.migration.info("[ExtMigration] Ephemeral audio cache cleared")
 
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let downloadsDir = docs.appendingPathComponent("app.cassette/downloads", isDirectory: true)
+        let downloadsDir = docs.appendingPathComponent("app.diapason/downloads", isDirectory: true)
 
         let ctx = ModelContext(modelContainer)
         let tracks = (try? ctx.fetch(FetchDescriptor<DownloadedTrack>())) ?? []

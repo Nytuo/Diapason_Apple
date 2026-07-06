@@ -166,7 +166,7 @@ actor LibraryService: LibraryServiceProtocol {
 
         guard !collected.isEmpty else {
             Logger.library.error("[ARTIST-TRACKS] all fetches failed artistId=\(artistID, privacy: .public)")
-            throw CassetteError.artistTracksUnavailable
+            throw DiapasonError.artistTracksUnavailable
         }
 
         Logger.library.debug("[ARTIST-TRACKS] fetched \(collected.count)/\(albums.count) albums artistId=\(artistID, privacy: .public)")

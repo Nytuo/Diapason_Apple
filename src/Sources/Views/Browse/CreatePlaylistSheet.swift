@@ -152,16 +152,16 @@ struct CreatePlaylistSheet: View {
         Button {
             showImageOptions = true
         } label: {
-            HStack(spacing: CassetteSpacing.m) {
+            HStack(spacing: DiapasonSpacing.m) {
                 ZStack {
                     if let pending = pendingImage {
                         Image(uiImage: pending)
                             .resizable()
                             .aspectRatio(1, contentMode: .fill)
                             .frame(width: 56, height: 56)
-                            .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.standard))
+                            .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard))
                     } else {
-                        RoundedRectangle(cornerRadius: CassetteCornerRadius.standard)
+                        RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard)
                             .fill(Color.secondary.opacity(0.15))
                             .frame(width: 56, height: 56)
                         Image(systemName: "photo")
@@ -170,7 +170,7 @@ struct CreatePlaylistSheet: View {
                     }
                 }
                 Text(pendingImage == nil ? "Add Cover Art" : "Change Cover Art")
-                    .foregroundStyle(Color.cassetteAccent)
+                    .foregroundStyle(Color.accent)
                 Spacer(minLength: 0)
             }
         }

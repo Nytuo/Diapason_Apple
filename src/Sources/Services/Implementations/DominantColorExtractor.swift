@@ -25,7 +25,7 @@ import AppKit
 @MainActor
 @Observable
 final class DominantColorExtractor {
-    private static let userDefaultsKey = "cassette.dominantColor.cache"
+    private static let userDefaultsKey = "diapason.dominantColor.cache"
 
     private var cache: [String: Color] = [:]
     private let ciContext = CIContext(options: [.workingColorSpace: kCFNull as Any])

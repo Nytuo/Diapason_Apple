@@ -67,8 +67,8 @@ nonisolated struct LBAdditionalInfo: Encodable {
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         if let d = durationMs { try container.encode(d, forKey: .durationMs) }
-        try container.encode("Cassette", forKey: .submissionClient)
-        try container.encode("Cassette", forKey: .mediaPlayer)
+        try container.encode("Diapason", forKey: .submissionClient)
+        try container.encode("Diapason", forKey: .mediaPlayer)
     }
 }
 

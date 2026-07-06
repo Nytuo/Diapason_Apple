@@ -20,17 +20,17 @@ struct DiapasonServerSection: View {
                     switchTo(server)
                 } label: {
                     HStack {
-                        SettingsIcon(systemImage: icon(server.backendKind), color: Color.cassetteAccent)
+                        SettingsIcon(systemImage: icon(server.backendKind), color: Color.accent)
                         VStack(alignment: .leading, spacing: 1) {
                             Text(server.displayName)
-                                .foregroundStyle(CassetteColors.textPrimary)
+                                .foregroundStyle(DiapasonColors.textPrimary)
                             Text(label(server.backendKind))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
                         Spacer()
                         if server.id == activeId {
-                            Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.cassetteAccent)
+                            Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.accent)
                         }
                     }
                 }

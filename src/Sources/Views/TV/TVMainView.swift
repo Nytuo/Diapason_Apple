@@ -45,7 +45,7 @@ struct TVMainView: View {
                 NavigationStack { TVSettingsView() }
             }
         }
-        .accentColor(.cassetteAccent)
+        .accentColor(.accent)
         .task(id: container?.serverState.isOnline) {
             guard container?.serverState.isOnline == true else { return }
             try? await container?.favoritesService.syncFromServer()

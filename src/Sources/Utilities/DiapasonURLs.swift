@@ -5,9 +5,11 @@
 
 import Foundation
 
-enum CassetteURLs {
-    static let kofi = URL(string: "https://ko-fi.com/mathieudbrt")!
+enum DiapasonURLs {
+    static let kofi = URL(string: "https://ko-fi.com/nytuo")!
     static let cassette = URL(string: "https://github.com/MathieuDubart/cassette")!
     static let audioStreaming = URL(string: "https://github.com/dimitris-c/AudioStreaming")!
     static let listenBrainz = URL(string: "https://listenbrainz.org")!
+    static let diapason = URL(string: "https://github.com/Nytuo/Diapason_Apple")!
+    static let diapasonApps = URL(string: "https://github.com/Nytuo/Diapason")!
 }

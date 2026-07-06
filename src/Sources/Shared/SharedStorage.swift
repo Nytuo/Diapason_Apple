@@ -6,7 +6,7 @@
 import Foundation
 
 nonisolated enum SharedStorage {
-    static let appGroupID = "group.fr.mathieu-dubart.Cassette"
+    static let appGroupID = "group.fr.nytuo.Diapason"
 
     /// UserDefaults shared between app and widget extension.
     static var defaults: UserDefaults {

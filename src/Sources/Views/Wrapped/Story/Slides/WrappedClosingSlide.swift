@@ -19,7 +19,7 @@ struct WrappedClosingSlide: View {
             VStack(spacing: 0) {
                 Spacer()
 
-                VStack(spacing: CassetteSpacing.m) {
+                VStack(spacing: DiapasonSpacing.m) {
                     Image(systemName: "waveform")
                         .font(.system(size: 56, weight: .medium))
                         .foregroundStyle(.white)
@@ -35,19 +35,19 @@ struct WrappedClosingSlide: View {
                         .foregroundStyle(.white.opacity(0.75))
                 }
 
-                Spacer(minLength: CassetteSpacing.xl)
+                Spacer(minLength: DiapasonSpacing.xl)
 
-                HStack(spacing: CassetteSpacing.m) {
+                HStack(spacing: DiapasonSpacing.m) {
                     statCard(value: data.totalSecondsListened.wrappedCompactLabel(), label: "listened")
                     statCard(value: "\(data.totalTracksPlayed)", label: data.totalTracksPlayed == 1 ? "play" : "plays")
                     statCard(value: "\(data.totalUniqueArtists)", label: data.totalUniqueArtists == 1 ? "artist" : "artists")
                 }
-                .padding(.horizontal, CassetteSpacing.xl)
+                .padding(.horizontal, DiapasonSpacing.xl)
 
-                Spacer(minLength: CassetteSpacing.l)
+                Spacer(minLength: DiapasonSpacing.l)
 
                 // Space reserved for the share button overlay rendered by WrappedStoryPlayerView
-                Spacer(minLength: CassetteSpacing.xxxxl)
+                Spacer(minLength: DiapasonSpacing.xxxxl)
 
                 Spacer()
             }
@@ -59,7 +59,7 @@ struct WrappedClosingSlide: View {
     // MARK: - Stat card
 
     private func statCard(value: String, label: String) -> some View {
-        VStack(spacing: CassetteSpacing.xs) {
+        VStack(spacing: DiapasonSpacing.xs) {
             Text(value)
                 .font(.system(size: 24, weight: .black, design: .rounded))
                 .kerning(-0.5)
@@ -71,7 +71,7 @@ struct WrappedClosingSlide: View {
                 .foregroundStyle(.white.opacity(0.7))
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, CassetteSpacing.m)
-        .background(Color.white.opacity(0.15), in: RoundedRectangle(cornerRadius: CassetteCornerRadius.large, style: .continuous))
+        .padding(.vertical, DiapasonSpacing.m)
+        .background(Color.white.opacity(0.15), in: RoundedRectangle(cornerRadius: DiapasonCornerRadius.large, style: .continuous))
     }
 }

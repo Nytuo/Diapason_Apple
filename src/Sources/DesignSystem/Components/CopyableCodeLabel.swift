@@ -18,15 +18,15 @@ struct CopyableCodeLabel: View {
     @State private var feedbackTask: Task<Void, Never>?
 
     var body: some View {
-        HStack(spacing: CassetteSpacing.xs) {
+        HStack(spacing: DiapasonSpacing.xs) {
             Text(code)
                 .font(.system(.caption, design: .monospaced))
-                .foregroundStyle(isCopied ? CassetteColors.accent : CassetteColors.textTertiary)
+                .foregroundStyle(isCopied ? DiapasonColors.accent : DiapasonColors.textTertiary)
 
             if isCopied {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.caption)
-                    .foregroundStyle(CassetteColors.accent)
+                    .foregroundStyle(DiapasonColors.accent)
                     .transition(.scale(scale: 0.6).combined(with: .opacity))
             }
         }

@@ -14,7 +14,7 @@ struct OnboardingCacheStepView: View {
 
     var body: some View {
         ZStack {
-            CassetteColors.backgroundPrimary.ignoresSafeArea()
+            DiapasonColors.backgroundPrimary.ignoresSafeArea()
 
             VStack(spacing: 0) {
                 ScrollView(showsIndicators: false) {
@@ -22,7 +22,7 @@ struct OnboardingCacheStepView: View {
                         stepHeader
                         if let settings = container?.cacheSettings {
                             cacheContent(settings: settings)
-                                .padding(.horizontal, CassetteSpacing.l)
+                                .padding(.horizontal, DiapasonSpacing.l)
                                 .opacity(appeared ? 1 : 0)
                                 .offset(y: appeared ? 0 : 24)
                                 .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.2), value: appeared)
@@ -39,17 +39,17 @@ struct OnboardingCacheStepView: View {
     // MARK: - Header
 
     private var stepHeader: some View {
-        VStack(spacing: CassetteSpacing.l) {
+        VStack(spacing: DiapasonSpacing.l) {
             WaveformHero()
-                .padding(.top, CassetteSpacing.xxl)
+                .padding(.top, DiapasonSpacing.xxl)
                 .opacity(appeared ? 1 : 0)
                 .scaleEffect(appeared ? 1 : 0.7)
                 .animation(.spring(duration: 0.6, bounce: 0.4), value: appeared)
 
-            VStack(spacing: CassetteSpacing.xs) {
+            VStack(spacing: DiapasonSpacing.xs) {
                 Text("Speed things up")
                     .font(.system(.title2, design: .rounded, weight: .bold))
-                    .foregroundStyle(CassetteColors.textPrimary)
+                    .foregroundStyle(DiapasonColors.textPrimary)
                     .multilineTextAlignment(.center)
                     .opacity(appeared ? 1 : 0)
                     .offset(y: appeared ? 0 : 24)
@@ -57,27 +57,27 @@ struct OnboardingCacheStepView: View {
 
                 Text("Keep your recent tracks ready instantly,\neven on a slow connection.")
                     .font(.system(.subheadline, design: .rounded))
-                    .foregroundStyle(CassetteColors.textSecondary)
+                    .foregroundStyle(DiapasonColors.textSecondary)
                     .multilineTextAlignment(.center)
                     .lineSpacing(2)
                     .opacity(appeared ? 1 : 0)
                     .offset(y: appeared ? 0 : 24)
                     .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.1), value: appeared)
             }
-            .padding(.horizontal, CassetteSpacing.xxxl)
+            .padding(.horizontal, DiapasonSpacing.xxxl)
 
             stepDots(current: 0, total: 3)
                 .opacity(appeared ? 1 : 0)
                 .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.15), value: appeared)
         }
-        .padding(.bottom, CassetteSpacing.xxl)
+        .padding(.bottom, DiapasonSpacing.xxl)
     }
 
     private func stepDots(current: Int, total: Int) -> some View {
-        HStack(spacing: CassetteSpacing.s) {
+        HStack(spacing: DiapasonSpacing.s) {
             ForEach(0..<total, id: \.self) { i in
                 Capsule()
-                    .fill(i == current ? CassetteColors.accent : Color.secondary.opacity(0.3))
+                    .fill(i == current ? DiapasonColors.accent : Color.secondary.opacity(0.3))
                     .frame(width: i == current ? 20 : 6, height: 6)
             }
         }
@@ -87,7 +87,7 @@ struct OnboardingCacheStepView: View {
 
     @ViewBuilder
     private func cacheContent(settings: CacheSettings) -> some View {
-        VStack(spacing: CassetteSpacing.l) {
+        VStack(spacing: DiapasonSpacing.l) {
             maxTracksCard(settings: settings)
             formatPills(settings: settings)
             cellularToggle(settings: settings)
@@ -95,12 +95,12 @@ struct OnboardingCacheStepView: View {
     }
 
     private func maxTracksCard(settings: CacheSettings) -> some View {
-        VStack(spacing: CassetteSpacing.s) {
+        VStack(spacing: DiapasonSpacing.s) {
             Text("Tracks to cache")
                 .font(.system(.caption, design: .rounded, weight: .medium))
-                .foregroundStyle(CassetteColors.textSecondary)
+                .foregroundStyle(DiapasonColors.textSecondary)
 
-            HStack(spacing: CassetteSpacing.xxl) {
+            HStack(spacing: DiapasonSpacing.xxl) {
                 Button {
                     withAnimation(.spring(duration: 0.3)) {
                         settings.maxTracks = max(CacheSettings.minMaxTracks, settings.maxTracks - 1)
@@ -110,7 +110,7 @@ struct OnboardingCacheStepView: View {
                         .font(.title)
                         .foregroundStyle(
                             settings.maxTracks <= CacheSettings.minMaxTracks
-                                ? CassetteColors.textTertiary : CassetteColors.accent
+                                ? DiapasonColors.textTertiary : DiapasonColors.accent
                         )
                 }
                 .buttonStyle(.plain)
@@ -118,7 +118,7 @@ struct OnboardingCacheStepView: View {
 
                 Text("\(settings.maxTracks)")
                     .font(.system(size: 80, weight: .bold, design: .rounded))
-                    .foregroundStyle(CassetteColors.textPrimary)
+                    .foregroundStyle(DiapasonColors.textPrimary)
                     .contentTransition(.numericText())
                     .animation(.spring(duration: 0.3), value: settings.maxTracks)
                     .frame(minWidth: 90, alignment: .center)
@@ -132,7 +132,7 @@ struct OnboardingCacheStepView: View {
                         .font(.title)
                         .foregroundStyle(
                             settings.maxTracks >= CacheSettings.maxMaxTracks
-                                ? CassetteColors.textTertiary : CassetteColors.accent
+                                ? DiapasonColors.textTertiary : DiapasonColors.accent
                         )
                 }
                 .buttonStyle(.plain)
@@ -141,24 +141,24 @@ struct OnboardingCacheStepView: View {
 
             Text("Oldest track replaced when limit is reached")
                 .font(.system(.caption2, design: .rounded))
-                .foregroundStyle(CassetteColors.textTertiary)
+                .foregroundStyle(DiapasonColors.textTertiary)
         }
-        .padding(.vertical, CassetteSpacing.xl)
+        .padding(.vertical, DiapasonSpacing.xl)
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: CassetteCornerRadius.large)
-                .fill(CassetteColors.backgroundSecondary)
+            RoundedRectangle(cornerRadius: DiapasonCornerRadius.large)
+                .fill(DiapasonColors.backgroundSecondary)
         )
     }
 
     private func formatPills(settings: CacheSettings) -> some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
             Text("Cache format")
                 .font(.system(.caption, design: .rounded, weight: .medium))
-                .foregroundStyle(CassetteColors.textSecondary)
+                .foregroundStyle(DiapasonColors.textSecondary)
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: CassetteSpacing.s) {
+                HStack(spacing: DiapasonSpacing.s) {
                     ForEach(CacheFormat.allCases) { format in
                         Button {
                             withAnimation(.spring(duration: 0.3, bounce: 0.2)) {
@@ -168,15 +168,15 @@ struct OnboardingCacheStepView: View {
                             Text(formatShortName(format))
                                 .font(.system(.subheadline, design: .rounded, weight: .medium))
                                 .foregroundStyle(
-                                    settings.cacheFormat == format ? .white : CassetteColors.textSecondary
+                                    settings.cacheFormat == format ? .white : DiapasonColors.textSecondary
                                 )
-                                .padding(.horizontal, CassetteSpacing.l)
-                                .padding(.vertical, CassetteSpacing.s)
+                                .padding(.horizontal, DiapasonSpacing.l)
+                                .padding(.vertical, DiapasonSpacing.s)
                                 .background(
                                     Capsule()
                                         .fill(
                                             settings.cacheFormat == format
-                                                ? CassetteColors.accent : CassetteColors.backgroundSecondary
+                                                ? DiapasonColors.accent : DiapasonColors.backgroundSecondary
                                         )
                                 )
                         }
@@ -189,13 +189,13 @@ struct OnboardingCacheStepView: View {
 
     private func cellularToggle(settings: CacheSettings) -> some View {
         HStack {
-            VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
                 Text("Use cellular data")
                     .font(.system(.callout, design: .rounded, weight: .medium))
-                    .foregroundStyle(CassetteColors.textPrimary)
+                    .foregroundStyle(DiapasonColors.textPrimary)
                 Text("Allow caching when not on Wi‑Fi")
                     .font(.system(.caption, design: .rounded))
-                    .foregroundStyle(CassetteColors.textSecondary)
+                    .foregroundStyle(DiapasonColors.textSecondary)
             }
             Spacer()
             Toggle(
@@ -206,19 +206,19 @@ struct OnboardingCacheStepView: View {
                 )
             )
             .labelsHidden()
-            .tint(CassetteColors.accent)
+            .tint(DiapasonColors.accent)
         }
-        .padding(CassetteSpacing.l)
+        .padding(DiapasonSpacing.l)
         .background(
-            RoundedRectangle(cornerRadius: CassetteCornerRadius.large)
-                .fill(CassetteColors.backgroundSecondary)
+            RoundedRectangle(cornerRadius: DiapasonCornerRadius.large)
+                .fill(DiapasonColors.backgroundSecondary)
         )
     }
 
     // MARK: - Bottom bar
 
     private var bottomBar: some View {
-        VStack(spacing: CassetteSpacing.m) {
+        VStack(spacing: DiapasonSpacing.m) {
             Button(action: onContinue) {
                 Text("Continue")
                     .font(.system(.body, design: .rounded, weight: .semibold))
@@ -226,15 +226,15 @@ struct OnboardingCacheStepView: View {
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
-            .tint(CassetteColors.accent)
+            .tint(DiapasonColors.accent)
 
             Button("Skip", action: onSkip)
                 .font(.subheadline)
-                .foregroundStyle(CassetteColors.textSecondary)
+                .foregroundStyle(DiapasonColors.textSecondary)
         }
-        .padding(.horizontal, CassetteSpacing.xxxl)
-        .padding(.top, CassetteSpacing.l)
-        .padding(.bottom, CassetteSpacing.xxl)
+        .padding(.horizontal, DiapasonSpacing.xxxl)
+        .padding(.top, DiapasonSpacing.l)
+        .padding(.bottom, DiapasonSpacing.xxl)
         .background(.regularMaterial)
     }
 
@@ -264,7 +264,7 @@ private struct WaveformHero: View {
         HStack(alignment: .center, spacing: 7) {
             ForEach(0..<7, id: \.self) { i in
                 RoundedRectangle(cornerRadius: 4)
-                    .fill(CassetteColors.accent.opacity(0.35 + Double(i % 3) * 0.18))
+                    .fill(DiapasonColors.accent.opacity(0.35 + Double(i % 3) * 0.18))
                     .frame(width: 9, height: animate ? heights[i] : heights[i] * 0.28)
                     .animation(
                         .easeInOut(duration: durations[i])

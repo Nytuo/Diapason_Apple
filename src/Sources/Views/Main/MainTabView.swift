@@ -69,13 +69,13 @@ struct MainTabView: View {
                 .searchable(text: $searchText, prompt: "Artists, albums, songs\u{2026}")
             }
         }
-        .accentColor(.cassetteAccent)
+        .accentColor(.accent)
 
         .task(id: container?.serverState.isOnline) {
             guard container?.serverState.isOnline == true else { return }
             try? await container?.favoritesService.syncFromServer()
         }
-        .onReceive(NotificationCenter.default.publisher(for: .cassetteNavigateToArtist)) { note in
+        .onReceive(NotificationCenter.default.publisher(for: .NavigateToArtist)) { note in
             guard let id   = note.userInfo?["artistId"]   as? String,
                   let name = note.userInfo?["artistName"] as? String else { return }
             let coverArtId = note.userInfo?["coverArtId"] as? String

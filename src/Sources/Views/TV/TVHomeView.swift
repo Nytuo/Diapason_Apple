@@ -61,7 +61,7 @@ struct TVHomeView: View {
                         .font(.system(size: 24, weight: .semibold))
                 }
                 .buttonStyle(.plain)
-                .foregroundStyle(Color.cassetteAccent)
+                .foregroundStyle(Color.accent)
             }
             .padding(.horizontal, TVMetrics.screenH)
 

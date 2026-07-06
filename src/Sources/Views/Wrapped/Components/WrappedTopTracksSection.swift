@@ -12,9 +12,9 @@ struct WrappedTopTracksSection: View {
     @Environment(\.appContainer) private var container
 
     var body: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
             Text("Top Tracks")
-                .font(.cassetteSectionTitle)
+                .font(.SectionTitle)
             if tracks.isEmpty {
                 emptyLabel("No track data for this period.")
             } else {
@@ -24,7 +24,7 @@ struct WrappedTopTracksSection: View {
                         trackRow(track)
                         if index < visible.count - 1 {
                             Divider()
-                                .padding(.leading, CassetteSpacing.m + 28 + CassetteSpacing.m + 44 + CassetteSpacing.m)
+                                .padding(.leading, DiapasonSpacing.m + 28 + DiapasonSpacing.m + 44 + DiapasonSpacing.m)
                         }
                     }
                 }
@@ -63,32 +63,32 @@ struct WrappedTopTracksSection: View {
                 }
             }
         } label: {
-            HStack(spacing: CassetteSpacing.m) {
+            HStack(spacing: DiapasonSpacing.m) {
                 ZStack {
                     Circle()
-                        .fill(track.rank <= 3 ? medalColor(for: track.rank) : Color.cassetteAccent.opacity(0.15))
+                        .fill(track.rank <= 3 ? medalColor(for: track.rank) : Color.accent.opacity(0.15))
                         .frame(width: 28, height: 28)
                     Text("\(track.rank)")
                         .font(.system(.caption, design: .rounded, weight: .heavy))
-                        .foregroundStyle(track.rank <= 3 ? Color.black : Color.cassetteAccent)
+                        .foregroundStyle(track.rank <= 3 ? Color.black : Color.accent)
                 }
                 .frame(width: 28)
                 CoverArtCard(id: track.trackId, size: 44)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(track.title)
-                        .font(.cassetteCellTitle)
+                        .font(.CellTitle)
                         .lineLimit(1)
                     Text(track.artistName)
-                        .font(.cassetteCaption)
+                        .font(.Caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
                 Spacer(minLength: 0)
                 Text(track.playCount.plural("play", "plays"))
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(.secondary)
             }
-            .padding(.vertical, CassetteSpacing.s)
+            .padding(.vertical, DiapasonSpacing.s)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -99,13 +99,13 @@ struct WrappedTopTracksSection: View {
         case 1: return WrappedYearPalette.medalGold
         case 2: return WrappedYearPalette.medalSilver
         case 3: return WrappedYearPalette.medalBronze
-        default: return CassetteColors.accent
+        default: return DiapasonColors.accent
         }
     }
 
     private func emptyLabel(_ text: String) -> some View {
         Text(text)
-            .font(.cassetteCaption)
+            .font(.Caption)
             .foregroundStyle(.secondary)
     }
 }

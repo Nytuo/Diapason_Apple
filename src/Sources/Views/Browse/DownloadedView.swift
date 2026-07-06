@@ -21,7 +21,7 @@ struct DownloadedView: View {
                 )
             }
         }
-        .cassetteContentWidth()
+        .diapasonContentWidth()
         .navigationTitle("Downloads")
     }
 }
@@ -60,73 +60,9 @@ private struct DownloadedContent: View {
                 subtitle: "Albums and playlists you download will be available here, even offline."
             )
         } else {
-            #if os(macOS)
-            downloadedListMacOS
-            #else
             downloadedListiOS
-            #endif
         }
     }
-
-    #if os(macOS)
-    private var downloadedListMacOS: some View {
-        ScrollViewReader { proxy in
-            List {
-                if !displayAlbums.isEmpty {
-                    Section("Albums") {
-                        ForEach(displayAlbums) { display in
-                            NavigationLink(value: HomeDestination.downloadedAlbum(display)) {
-                                HStack(spacing: CassetteSpacing.m) {
-                                    CoverArtCard(id: display.coverArtId ?? display.albumId, size: 56)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(display.name)
-                                            .font(.cassetteCellTitle)
-                                            .lineLimit(1)
-                                        if let artist = display.artist {
-                                            Text(artist)
-                                                .font(.cassetteCellSubtitle)
-                                                .foregroundStyle(.secondary)
-                                                .lineLimit(1)
-                                        }
-                                        Text("\(display.downloadedTracksCount) track\(display.downloadedTracksCount == 1 ? "" : "s")")
-                                            .font(.cassetteCaption)
-                                            .foregroundStyle(.tertiary)
-                                    }
-                                    Spacer(minLength: 0)
-                                }
-                                .padding(.vertical, CassetteSpacing.xs)
-                            }
-                            .id(display.id)
-                        }
-                    }
-                }
-
-                if !playlists.isEmpty {
-                    Section("Playlists") {
-                        ForEach(playlists) { playlist in
-                            NavigationLink(value: HomeDestination.playlistById(id: playlist.playlistId, name: playlist.name, coverArtId: playlist.coverArtId)) {
-                                HStack(spacing: CassetteSpacing.m) {
-                                    CoverArtCard(id: playlist.coverArtId ?? playlist.playlistId, size: 56)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(playlist.name)
-                                            .font(.cassetteCellTitle)
-                                            .lineLimit(1)
-                                        Text("\(playlist.tracksCount) track\(playlist.tracksCount == 1 ? "" : "s")\(playlist.isComplete ? "" : " (incomplete)")")
-                                            .font(.cassetteCaption)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    Spacer(minLength: 0)
-                                }
-                                .padding(.vertical, CassetteSpacing.xs)
-                            }
-                        }
-                    }
-                }
-            }
-            .listStyle(.plain)
-        }
-    }
-    #endif
 
     private var downloadedListiOS: some View {
         ScrollViewReader { proxy in
@@ -135,25 +71,25 @@ private struct DownloadedContent: View {
                     Section("Albums") {
                         ForEach(displayAlbums) { display in
                             NavigationLink(value: HomeDestination.downloadedAlbum(display)) {
-                                HStack(spacing: CassetteSpacing.m) {
+                                HStack(spacing: DiapasonSpacing.m) {
                                     CoverArtCard(id: display.coverArtId ?? display.albumId, size: 56)
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text(display.name)
-                                            .font(.cassetteCellTitle)
+                                            .font(.CellTitle)
                                             .lineLimit(1)
                                         if let artist = display.artist {
                                             Text(artist)
-                                                .font(.cassetteCellSubtitle)
+                                                .font(.CellSubtitle)
                                                 .foregroundStyle(.secondary)
                                                 .lineLimit(1)
                                         }
                                         Text("\(display.downloadedTracksCount) track\(display.downloadedTracksCount == 1 ? "" : "s")")
-                                            .font(.cassetteCaption)
+                                            .font(.Caption)
                                             .foregroundStyle(.tertiary)
                                     }
                                     Spacer(minLength: 0)
                                 }
-                                .padding(.vertical, CassetteSpacing.xs)
+                                .padding(.vertical, DiapasonSpacing.xs)
                             }
                             .id(display.id)
                         }
@@ -164,19 +100,19 @@ private struct DownloadedContent: View {
                     Section("Playlists") {
                         ForEach(playlists) { playlist in
                             NavigationLink(value: HomeDestination.playlistById(id: playlist.playlistId, name: playlist.name, coverArtId: playlist.coverArtId)) {
-                                HStack(spacing: CassetteSpacing.m) {
+                                HStack(spacing: DiapasonSpacing.m) {
                                     CoverArtCard(id: playlist.coverArtId ?? playlist.playlistId, size: 56)
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text(playlist.name)
-                                            .font(.cassetteCellTitle)
+                                            .font(.CellTitle)
                                             .lineLimit(1)
                                         Text("\(playlist.tracksCount) track\(playlist.tracksCount == 1 ? "" : "s")\(playlist.isComplete ? "" : " (incomplete)")")
-                                            .font(.cassetteCaption)
+                                            .font(.Caption)
                                             .foregroundStyle(.secondary)
                                     }
                                     Spacer(minLength: 0)
                                 }
-                                .padding(.vertical, CassetteSpacing.xs)
+                                .padding(.vertical, DiapasonSpacing.xs)
                             }
                         }
                     }

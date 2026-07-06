@@ -7,7 +7,7 @@ import SwiftUI
 
 enum AwardIcon {
     case sf(String)
-    case cassette
+    case diapason
 }
 
 struct WrappedAwardMedal: View {
@@ -134,8 +134,8 @@ struct WrappedAwardMedal: View {
     @ViewBuilder
     private var iconView: some View {
         switch icon {
-        case .cassette:
-            CassetteTapeIcon()
+        case .diapason:
+            DiapasonIcon()
                 .fill(.white, style: FillStyle(eoFill: true))
                 .frame(width: 38, height: 25)
                 .shadow(color: .white.opacity(0.3), radius: 4)
@@ -159,15 +159,15 @@ private var previewBackground: Color {
 #Preview {
     let palette = WrappedYearPalette.colors(for: 2026)
     ScrollView(.horizontal, showsIndicators: false) {
-        HStack(spacing: CassetteSpacing.l) {
-            WrappedAwardMedal(icon: .cassette,            value: "45",  palette: palette, isFocused: true)
+        HStack(spacing: DiapasonSpacing.l) {
+            WrappedAwardMedal(icon: .diapason,            value: "45",  palette: palette, isFocused: true)
             WrappedAwardMedal(icon: .sf("flame.fill"),    value: "7",   palette: palette, isFocused: false)
             WrappedAwardMedal(icon: .sf("music.note"),    value: "127", palette: palette, isFocused: false)
             WrappedAwardMedal(icon: .sf("person.2.fill"), value: "42",  palette: palette, isFocused: false)
             WrappedAwardMedal(icon: .sf("guitars.fill"),  value: "Pop", palette: palette, isFocused: false)
         }
-        .padding(.horizontal, CassetteSpacing.l)
-        .padding(.vertical, CassetteSpacing.xl)
+        .padding(.horizontal, DiapasonSpacing.l)
+        .padding(.vertical, DiapasonSpacing.xl)
     }
     .background(previewBackground)
 }

@@ -17,9 +17,9 @@ struct WrappedTopArtistsSection: View {
     @State private var coverImages: [String: PlatformImage] = [:]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
             Text("Top Artists")
-                .font(.cassetteSectionTitle)
+                .font(.SectionTitle)
             if artists.isEmpty {
                 emptyLabel("No artist data for this period.")
             } else {
@@ -35,14 +35,14 @@ struct WrappedTopArtistsSection: View {
         let allArtists = Array(artists.prefix(10))
         if !allArtists.isEmpty {
             ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(alignment: .top, spacing: CassetteSpacing.m) {
+                LazyHStack(alignment: .top, spacing: DiapasonSpacing.m) {
                     ForEach(allArtists.indices, id: \.self) { index in
                         artistCard(allArtists[index], isFirst: index == 0)
                     }
                 }
-                .padding(.horizontal, CassetteSpacing.l)
+                .padding(.horizontal, DiapasonSpacing.l)
             }
-            .padding(.horizontal, -CassetteSpacing.l)
+            .padding(.horizontal, -DiapasonSpacing.l)
         }
     }
 
@@ -53,27 +53,27 @@ struct WrappedTopArtistsSection: View {
                 artistToNavigate = try? await container?.libraryService.artist(id: artist.artistId)
             }
         } label: {
-            VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
                 ZStack(alignment: .topLeading) {
                     CoverArtCard(
                         id: artist.artistId,
                         size: cardWidth,
                         tier: .hero,
-                        cornerRadius: CassetteCornerRadius.large,
+                        cornerRadius: DiapasonCornerRadius.large,
                         initialImage: coverImages[artist.artistId]
                     )
                     dominantColors[artist.artistId, default: .clear]
                         .opacity(0.15)
                         .frame(width: cardWidth, height: cardWidth)
-                        .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.large, style: .continuous))
+                        .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.large, style: .continuous))
                     rankBadge(artist.rank)
-                        .padding(CassetteSpacing.xs)
+                        .padding(DiapasonSpacing.xs)
                 }
                 Text(artist.name)
-                    .font(.cassetteCellTitle)
+                    .font(.CellTitle)
                     .lineLimit(1)
                 Text(artist.totalSecondsListened.wrappedCompactLabel())
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(.secondary)
             }
             .frame(width: cardWidth)
@@ -86,14 +86,14 @@ struct WrappedTopArtistsSection: View {
         case 1: return WrappedYearPalette.medalGold
         case 2: return WrappedYearPalette.medalSilver
         case 3: return WrappedYearPalette.medalBronze
-        default: return CassetteColors.accent
+        default: return DiapasonColors.accent
         }
     }
 
     private func rankBadge(_ rank: Int) -> some View {
         let isMedal = rank <= 3
         return Text("#\(rank)")
-            .font(.cassetteCaption2)
+            .font(.Caption2)
             .fontWeight(.bold)
             .foregroundStyle(isMedal ? Color.black : Color.primary)
             .padding(.horizontal, 6)
@@ -109,7 +109,7 @@ struct WrappedTopArtistsSection: View {
 
     private func emptyLabel(_ text: String) -> some View {
         Text(text)
-            .font(.cassetteCaption)
+            .font(.Caption)
             .foregroundStyle(.secondary)
     }
 

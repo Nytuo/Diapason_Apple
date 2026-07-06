@@ -25,7 +25,7 @@ struct DiscoverView: View {
 
     var body: some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: CassetteSpacing.l) {
+            LazyVStack(alignment: .leading, spacing: DiapasonSpacing.l) {
                 if let vm {
                     if vm.isErrorState {
                         errorBanner(vm: vm)
@@ -44,9 +44,9 @@ struct DiscoverView: View {
                     internetRadioSection
                 }
             }
-            .padding(.vertical, CassetteSpacing.m)
+            .padding(.vertical, DiapasonSpacing.m)
         }
-        .cassetteContentWidth()
+        .diapasonContentWidth()
         .navigationTitle("Discover")
         .task {
             guard let container else { return }
@@ -78,7 +78,7 @@ struct DiscoverView: View {
                 release: release,
                 providers: container?.externalProvidersStore.load() ?? []
             )
-            .cassetteZoomTransition(
+            .diapasonZoomTransition(
                 sourceID: release.id ?? "\(release.artistName)-\(release.title)",
                 in: freshReleaseZoomNamespace
             )
@@ -190,14 +190,14 @@ struct DiscoverView: View {
             Button {
                 Task { await triggerSmartShuffle() }
             } label: {
-                HStack(spacing: CassetteSpacing.s) {
+                HStack(spacing: DiapasonSpacing.s) {
                     Image(systemName: "shuffle.circle.fill")
                         .font(.title2)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Rediscover Your Library")
-                            .font(.cassetteCellTitle)
+                            .font(.CellTitle)
                         Text("A random mix from your library")
-                            .font(.cassetteCaption)
+                            .font(.Caption)
                             .foregroundStyle(.secondary)
                     }
                     Spacer(minLength: 0)
@@ -205,14 +205,14 @@ struct DiscoverView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
-                .padding(CassetteSpacing.m)
+                .padding(DiapasonSpacing.m)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.cassetteAccent.opacity(0.1))
-                .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.standard, style: .continuous))
+                .background(Color.accent.opacity(0.1))
+                .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard, style: .continuous))
                 .foregroundStyle(.primary)
             }
             .buttonStyle(.plain)
-            .padding(.horizontal, CassetteSpacing.m)
+            .padding(.horizontal, DiapasonSpacing.m)
         }
     }
 
@@ -221,15 +221,15 @@ struct DiscoverView: View {
             NavigationLink {
                 SearchYouTubeView()
             } label: {
-                HStack(spacing: CassetteSpacing.s) {
+                HStack(spacing: DiapasonSpacing.s) {
                     Image(systemName: "play.rectangle.fill")
                         .font(.title2)
                         .foregroundStyle(.red)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Search YouTube")
-                            .font(.cassetteCellTitle)
+                            .font(.CellTitle)
                         Text("Play any song by name")
-                            .font(.cassetteCaption)
+                            .font(.Caption)
                             .foregroundStyle(.secondary)
                     }
                     Spacer(minLength: 0)
@@ -237,14 +237,14 @@ struct DiscoverView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
-                .padding(CassetteSpacing.m)
+                .padding(DiapasonSpacing.m)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(Color.red.opacity(0.1))
-                .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.standard, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard, style: .continuous))
                 .foregroundStyle(.primary)
             }
             .buttonStyle(.plain)
-            .padding(.horizontal, CassetteSpacing.m)
+            .padding(.horizontal, DiapasonSpacing.m)
         }
     }
 
@@ -258,7 +258,7 @@ struct DiscoverView: View {
     }
 
     private func smartShuffleErrorMessage(from error: Error) -> String {
-        if case CassetteError.smartShuffleEmpty = error {
+        if case DiapasonError.smartShuffleEmpty = error {
             return "Smart Shuffle unavailable — try playing some tracks first or download more music for offline use."
         }
         return "Smart Shuffle failed. Please try again."
@@ -266,24 +266,24 @@ struct DiscoverView: View {
 
     #if !os(tvOS)
     private var wrappedSection: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
             HStack {
                 Text("Wrapped")
-                    .font(.cassetteSectionTitle)
+                    .font(.SectionTitle)
                 Spacer(minLength: 0)
                 NavigationLink {
                     WrappedYearlyListView()
                 } label: {
                     Text("See all")
-                        .font(.cassetteCaption)
-                        .foregroundStyle(Color.cassetteAccent)
+                        .font(.Caption)
+                        .foregroundStyle(Color.accent)
                 }
                 .buttonStyle(.plain)
             }
-            .padding(.horizontal, CassetteSpacing.m)
+            .padding(.horizontal, DiapasonSpacing.m)
 
             ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: CassetteSpacing.s) {
+                LazyHStack(spacing: DiapasonSpacing.s) {
                     ForEach(yearlyPlaylists) { playlist in
                         WrappedYearlyCard(playlist: playlist)
                     }
@@ -294,7 +294,7 @@ struct DiscoverView: View {
                         WrappedRecapMonthCard(period: .month(year: item.year, month: item.month))
                     }
                 }
-                .padding(.horizontal, CassetteSpacing.m)
+                .padding(.horizontal, DiapasonSpacing.m)
             }
         }
     }
@@ -315,53 +315,53 @@ struct DiscoverView: View {
     }
 
     private var internetRadioSection: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
             HStack {
                 Text("Internet Radio")
-                    .font(.cassetteSectionTitle)
+                    .font(.SectionTitle)
                 Spacer(minLength: 0)
                 NavigationLink {
                     RadioListView()
                 } label: {
                     Text("See all")
-                        .font(.cassetteCaption)
-                        .foregroundStyle(Color.cassetteAccent)
+                        .font(.Caption)
+                        .foregroundStyle(Color.accent)
                 }
                 .buttonStyle(.plain)
             }
-            .padding(.horizontal, CassetteSpacing.m)
+            .padding(.horizontal, DiapasonSpacing.m)
 
             if radioStations.isEmpty {
                 NavigationLink {
                     RadioListView()
                 } label: {
-                    HStack(spacing: CassetteSpacing.s) {
+                    HStack(spacing: DiapasonSpacing.s) {
                         Image(systemName: "antenna.radiowaves.left.and.right")
                             .font(.title2)
-                            .foregroundStyle(Color.cassetteAccent)
+                            .foregroundStyle(Color.accent)
                         Text("Browse Stations")
-                            .font(.cassetteCellTitle)
+                            .font(.CellTitle)
                             .foregroundStyle(.primary)
                         Spacer(minLength: 0)
                         Image(systemName: "chevron.right")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
-                    .padding(CassetteSpacing.m)
+                    .padding(DiapasonSpacing.m)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.cassetteAccent.opacity(0.08))
-                    .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.standard, style: .continuous))
+                    .background(Color.accent.opacity(0.08))
+                    .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard, style: .continuous))
                 }
                 .buttonStyle(.plain)
-                .padding(.horizontal, CassetteSpacing.m)
+                .padding(.horizontal, DiapasonSpacing.m)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(spacing: CassetteSpacing.s) {
+                    LazyHStack(spacing: DiapasonSpacing.s) {
                         ForEach(radioStations, id: \.id) { station in
                             RadioCard(station: station)
                         }
                     }
-                    .padding(.horizontal, CassetteSpacing.m)
+                    .padding(.horizontal, DiapasonSpacing.m)
                 }
             }
         }
@@ -370,17 +370,17 @@ struct DiscoverView: View {
     // MARK: - Helpers
 
     private func section<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
             Text(title)
-                .font(.cassetteSectionTitle)
-                .padding(.horizontal, CassetteSpacing.m)
+                .font(.SectionTitle)
+                .padding(.horizontal, DiapasonSpacing.m)
             content()
         }
     }
 
     private func horizontalAlbumScroll(albums: [AlbumID3], namespace: Namespace.ID) -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: CassetteSpacing.s) {
+            LazyHStack(spacing: DiapasonSpacing.s) {
                 ForEach(albums, id: \.id) { album in
                     NavigationLink {
                         #if os(macOS)
@@ -395,7 +395,7 @@ struct DiscoverView: View {
                         #endif
                     } label: {
                         AlbumCard(album: album)
-                            .cassetteMatchedTransitionSource(id: album.id, in: namespace)
+                            .diapasonMatchedTransitionSource(id: album.id, in: namespace)
                             .task(id: album.id) {
                                 await artworkImageCache.load(coverArtId: album.coverArt ?? album.id)
                             }
@@ -403,21 +403,21 @@ struct DiscoverView: View {
                     .buttonStyle(.plain)
                 }
             }
-            .padding(.horizontal, CassetteSpacing.m)
+            .padding(.horizontal, DiapasonSpacing.m)
         }
     }
 
     private func errorBanner(vm: DiscoverViewModel) -> some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.s) {
-            HStack(spacing: CassetteSpacing.s) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
+            HStack(spacing: DiapasonSpacing.s) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .foregroundStyle(.yellow) // warning state — not brand accent
                 Text("Unable to load Discover")
-                    .font(.cassetteCellTitle)
+                    .font(.CellTitle)
             }
             if let message = vm.loadError?.localizedDescription {
                 Text(message)
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(3)
             }
@@ -425,46 +425,46 @@ struct DiscoverView: View {
                 Task { await vm.load(forceRefresh: true) }
             } label: {
                 Text("Retry")
-                    .font(.cassetteCellTitle)
-                    .padding(.horizontal, CassetteSpacing.m)
-                    .padding(.vertical, CassetteSpacing.s)
-                    .background(Color.cassetteAccent)
+                    .font(.CellTitle)
+                    .padding(.horizontal, DiapasonSpacing.m)
+                    .padding(.vertical, DiapasonSpacing.s)
+                    .background(Color.accent)
                     .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.standard, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard, style: .continuous))
             }
             .buttonStyle(.plain)
         }
-        .padding(CassetteSpacing.m)
+        .padding(DiapasonSpacing.m)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color.yellow.opacity(0.12)) // warning state — not brand accent
-        .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.standard, style: .continuous))
-        .padding(.horizontal, CassetteSpacing.m)
+        .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard, style: .continuous))
+        .padding(.horizontal, DiapasonSpacing.m)
     }
 
     private func skeletonScroll() -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: CassetteSpacing.s) {
+            LazyHStack(spacing: DiapasonSpacing.s) {
                 ForEach(0..<6, id: \.self) { _ in
-                    VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
-                        SkeletonBlock(width: 140, height: 140, cornerRadius: CassetteCornerRadius.standard)
+                    VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
+                        SkeletonBlock(width: 140, height: 140, cornerRadius: DiapasonCornerRadius.standard)
                         SkeletonBlock(width: 110, height: 12)
                         SkeletonBlock(width: 80, height: 10)
                     }
                     .frame(width: 140)
                 }
             }
-            .padding(.horizontal, CassetteSpacing.m)
+            .padding(.horizontal, DiapasonSpacing.m)
         }
         .allowsHitTesting(false)
     }
 
     private func emptyStateMessage(_ text: String) -> some View {
         Text(text)
-            .font(.cassetteCaption)
+            .font(.Caption)
             .foregroundStyle(.secondary)
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, CassetteSpacing.l)
-            .padding(.horizontal, CassetteSpacing.m)
+            .padding(.vertical, DiapasonSpacing.l)
+            .padding(.horizontal, DiapasonSpacing.m)
     }
 }

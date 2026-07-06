@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-extension CassetteColors {
+extension DiapasonColors {
     // Light (#9F86FA): WCAG relative luminance ≈ 0.314
     // Dark  (#4C28D4): WCAG relative luminance ≈ 0.078
     private static let accentFgLight = Color(hex: "#9F86FA")

@@ -12,7 +12,7 @@ import BackgroundTasks
 #endif
 
 @main
-struct CassetteApp: App {
+struct DiapasonApp: App {
     @State private var container: AppContainer?
     @Environment(\.scenePhase) private var scenePhase
     #if os(tvOS)
@@ -33,12 +33,12 @@ struct CassetteApp: App {
     init() {
         #if os(iOS)
         BGTaskScheduler.shared.register(
-            forTaskWithIdentifier: "app.cassette.wrapped.monthly-update",
+            forTaskWithIdentifier: "app.diapason.wrapped.monthly-update",
             using: nil
         ) { task in
             guard let processingTask = task as? BGProcessingTask,
-                  let service = CassetteApp._bgTaskService,
-                  let serverState = CassetteApp._bgTaskServerState else {
+                  let service = DiapasonApp._bgTaskService,
+                  let serverState = DiapasonApp._bgTaskServerState else {
                 task.setTaskCompleted(success: false)
                 return
             }
@@ -51,12 +51,12 @@ struct CassetteApp: App {
                 let result = await service.runYearlyPlaylistSyncIfNeeded(serverId: serverId, calendar: .current)
                 Logger.wrapped.info("BGTask result: \(String(describing: result), privacy: .public)")
                 processingTask.setTaskCompleted(success: true)
-                CassetteApp.scheduleWrappedUpdate()
+                DiapasonApp.scheduleWrappedUpdate()
             }
             processingTask.expirationHandler = {
                 workTask.cancel()
                 Logger.wrapped.warning("BGTask expired — rescheduling for tomorrow")
-                CassetteApp.scheduleWrappedUpdate()
+                DiapasonApp.scheduleWrappedUpdate()
             }
         }
         #endif
@@ -64,7 +64,7 @@ struct CassetteApp: App {
 
     #if os(iOS)
     static func scheduleWrappedUpdate() {
-        let request = BGProcessingTaskRequest(identifier: "app.cassette.wrapped.monthly-update")
+        let request = BGProcessingTaskRequest(identifier: "app.diapason.wrapped.monthly-update")
         request.requiresNetworkConnectivity = true
         request.earliestBeginDate = Date().addingTimeInterval(24 * 3600)
         try? BGTaskScheduler.shared.submit(request)
@@ -86,7 +86,7 @@ struct CassetteApp: App {
                     ProgressView()
                 }
             }
-            .tint(CassetteColors.accent)
+            .tint(DiapasonColors.accent)
             #if os(iOS)
             .environmentObject(watchService)
             .onChange(of: container?.playerState.currentTrack?.id) { _, _ in watchService.pushState() }
@@ -140,9 +140,9 @@ struct CassetteApp: App {
                 Task { await runWrappedUpdate(container: newContainer) }
                 Task { await newContainer.widgetSyncService.fullSync() }
                 #if os(iOS)
-                CassetteApp._bgTaskService = newContainer.wrappedPlaylistService
-                CassetteApp._bgTaskServerState = newContainer.serverState
-                CassetteApp.scheduleWrappedUpdate()
+                DiapasonApp._bgTaskService = newContainer.wrappedPlaylistService
+                DiapasonApp._bgTaskServerState = newContainer.serverState
+                DiapasonApp.scheduleWrappedUpdate()
                 watchService.start(
                     playerState: newContainer.playerState,
                     playerService: newContainer.playerService,
@@ -196,37 +196,6 @@ struct CassetteApp: App {
             Task { await c.sessionService.save(playerState: snapshot) }
             Logger.session.info("App backgrounded — session flushed")
         }
-        #if os(macOS)
-        .windowStyle(.hiddenTitleBar)
-        .windowResizability(.contentMinSize)
-        .restorationBehavior(.disabled)
-        .commands {
-            CassetteCommands()
-        }
-        #endif
-
-        #if os(macOS)
-        CassetteSettingsScene(container: container)
-
-        Window("Mini Player", id: "mini-player") {
-            Group {
-                if let container {
-                    MiniPlayerWindowView()
-                        .environment(\.appContainer, container)
-                        .environment(container.dominantColorExtractor)
-                        .environment(container.artworkImageCache)
-                        .modelContainer(container.modelContainer)
-                } else {
-                    MiniPlayerWindowView()
-                }
-            }
-        }
-        .windowStyle(.plain)
-        .windowResizability(.contentSize)
-        .defaultSize(width: 320, height: 136)
-        .defaultPosition(.topTrailing)
-        .restorationBehavior(.disabled)
-        #endif
     }
 
     // MARK: - Cover art garbage collection

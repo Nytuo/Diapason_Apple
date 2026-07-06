@@ -14,12 +14,12 @@ struct ListenBrainzPlaylistsSection: View {
     var body: some View {
         Group {
             if !playlists.isEmpty {
-                VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+                VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
                     Text("From ListenBrainz")
-                        .font(.cassetteSectionTitle)
-                        .padding(.horizontal, CassetteSpacing.l)
+                        .font(.SectionTitle)
+                        .padding(.horizontal, DiapasonSpacing.l)
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: CassetteSpacing.m) {
+                        HStack(spacing: DiapasonSpacing.m) {
                             ForEach(playlists) { pl in
                                 NavigationLink {
                                     LBPlaylistDetailView(summary: pl)
@@ -29,7 +29,7 @@ struct ListenBrainzPlaylistsSection: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                        .padding(.horizontal, CassetteSpacing.l)
+                        .padding(.horizontal, DiapasonSpacing.l)
                     }
                 }
             }
@@ -46,19 +46,19 @@ struct ListenBrainzPlaylistsSection: View {
 private struct LBPlaylistCard: View {
     let summary: LBPlaylistSummary
     var body: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
-            RoundedRectangle(cornerRadius: CassetteCornerRadius.large, style: .continuous)
-                .fill(LinearGradient(colors: [Color.cassetteAccent, Color.cassetteAccent.opacity(0.55)],
+        VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
+            RoundedRectangle(cornerRadius: DiapasonCornerRadius.large, style: .continuous)
+                .fill(LinearGradient(colors: [Color.accent, Color.accent.opacity(0.55)],
                                      startPoint: .topLeading, endPoint: .bottomTrailing))
                 .frame(width: 150, height: 150)
                 .overlay(Image(systemName: "music.note.list").font(.system(size: 40)).foregroundStyle(.white))
             Text(summary.title)
-                .font(.cassetteCellTitle)
-                .foregroundStyle(CassetteColors.textPrimary)
+                .font(.CellTitle)
+                .foregroundStyle(DiapasonColors.textPrimary)
                 .lineLimit(1)
             Text("ListenBrainz")
-                .font(.cassetteCaption)
-                .foregroundStyle(CassetteColors.textSecondary)
+                .font(.Caption)
+                .foregroundStyle(DiapasonColors.textSecondary)
         }
         .frame(width: 150)
     }
@@ -86,18 +86,18 @@ struct LBPlaylistDetailView: View {
                             play(startIndex: 0)
                         } label: {
                             Label("Play \(items.count) tracks", systemImage: "play.fill")
-                                .foregroundStyle(Color.cassetteAccent)
+                                .foregroundStyle(Color.accentColor)
                         }
                         if fromYouTube > 0 {
                             Text("\(fromYouTube) track\(fromYouTube == 1 ? "" : "s") streamed from YouTube (not in your library)")
-                                .font(.cassetteCaption).foregroundStyle(.secondary)
+                                .font(.Caption).foregroundStyle(.secondary)
                         }
                     }
                     ForEach(Array(items.enumerated()), id: \.element.id) { index, song in
                         Button { play(startIndex: index) } label: {
-                            HStack(spacing: CassetteSpacing.m) {
+                            HStack(spacing: DiapasonSpacing.m) {
                                 if isYouTube(song) {
-                                    RoundedRectangle(cornerRadius: CassetteCornerRadius.standard)
+                                    RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard)
                                         .fill(Color.red.opacity(0.15))
                                         .frame(width: 44, height: 44)
                                         .overlay(Image(systemName: "play.rectangle.fill").foregroundStyle(.red))
@@ -105,8 +105,8 @@ struct LBPlaylistDetailView: View {
                                     CoverArtCard(id: song.coverArtId ?? song.id, size: 44)
                                 }
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(song.title).font(.cassetteCellTitle).foregroundStyle(CassetteColors.textPrimary).lineLimit(1)
-                                    if let a = song.artist { Text(a).font(.cassetteCaption).foregroundStyle(CassetteColors.textSecondary).lineLimit(1) }
+                                    Text(song.title).font(.CellTitle).foregroundStyle(DiapasonColors.textPrimary).lineLimit(1)
+                                    if let a = song.artist { Text(a).font(.Caption).foregroundStyle(DiapasonColors.textSecondary).lineLimit(1) }
                                 }
                                 Spacer(minLength: 0)
                                 if isYouTube(song) {

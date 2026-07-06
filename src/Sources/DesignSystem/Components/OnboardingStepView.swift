@@ -26,7 +26,7 @@ struct OnboardingStepView<Content: View>: View {
     var body: some View {
         VStack(spacing: 0) {
             headerView
-                .background(CassetteColors.backgroundPrimary)
+                .background(DiapasonColors.backgroundPrimary)
             content()
                 .safeAreaInset(edge: .bottom) {
                     bottomActions
@@ -37,43 +37,43 @@ struct OnboardingStepView<Content: View>: View {
     // MARK: - Header
 
     private var headerView: some View {
-        VStack(spacing: CassetteSpacing.m) {
+        VStack(spacing: DiapasonSpacing.m) {
             ZStack {
                 Circle()
-                    .fill(CassetteColors.accentBackground)
+                    .fill(DiapasonColors.accentBackground)
                     .frame(width: 60, height: 60)
                 Image(systemName: icon)
                     .font(.system(size: 26, weight: .semibold))
-                    .foregroundStyle(CassetteColors.accent)
+                    .foregroundStyle(DiapasonColors.accent)
             }
 
-            VStack(spacing: CassetteSpacing.xs) {
+            VStack(spacing: DiapasonSpacing.xs) {
                 Text(title)
                     .font(.system(.title3, design: .rounded, weight: .bold))
-                    .foregroundStyle(CassetteColors.textPrimary)
+                    .foregroundStyle(DiapasonColors.textPrimary)
                     .multilineTextAlignment(.center)
 
                 Text(subtitle)
                     .font(.subheadline)
-                    .foregroundStyle(CassetteColors.textSecondary)
+                    .foregroundStyle(DiapasonColors.textSecondary)
                     .multilineTextAlignment(.center)
                     .lineSpacing(2)
             }
-            .padding(.horizontal, CassetteSpacing.xxxl)
+            .padding(.horizontal, DiapasonSpacing.xxxl)
 
             progressDots
         }
-        .padding(.top, CassetteSpacing.xxl)
-        .padding(.bottom, CassetteSpacing.l)
+        .padding(.top, DiapasonSpacing.xxl)
+        .padding(.bottom, DiapasonSpacing.l)
     }
 
     // MARK: - Progress dots
 
     private var progressDots: some View {
-        HStack(spacing: CassetteSpacing.s) {
+        HStack(spacing: DiapasonSpacing.s) {
             ForEach(0..<totalSteps, id: \.self) { i in
                 Capsule()
-                    .fill(i == stepIndex ? CassetteColors.accent : Color.secondary.opacity(0.3))
+                    .fill(i == stepIndex ? DiapasonColors.accent : Color.secondary.opacity(0.3))
                     .frame(width: i == stepIndex ? 20 : 6, height: 6)
                     .animation(.easeInOut(duration: 0.25), value: stepIndex)
             }
@@ -83,7 +83,7 @@ struct OnboardingStepView<Content: View>: View {
     // MARK: - Bottom actions
 
     private var bottomActions: some View {
-        VStack(spacing: CassetteSpacing.m) {
+        VStack(spacing: DiapasonSpacing.m) {
             Button(action: onContinue) {
                 Text(continueLabel)
                     .font(.system(.body, design: .default, weight: .semibold))
@@ -91,15 +91,15 @@ struct OnboardingStepView<Content: View>: View {
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
-            .tint(CassetteColors.accent)
+            .tint(DiapasonColors.accent)
 
             Button("Skip", action: onSkip)
                 .font(.subheadline)
-                .foregroundStyle(CassetteColors.textSecondary)
+                .foregroundStyle(DiapasonColors.textSecondary)
         }
-        .padding(.horizontal, CassetteSpacing.xxxl)
-        .padding(.top, CassetteSpacing.l)
-        .padding(.bottom, CassetteSpacing.xxl)
+        .padding(.horizontal, DiapasonSpacing.xxxl)
+        .padding(.top, DiapasonSpacing.l)
+        .padding(.bottom, DiapasonSpacing.xxl)
         .background(.regularMaterial)
     }
 }

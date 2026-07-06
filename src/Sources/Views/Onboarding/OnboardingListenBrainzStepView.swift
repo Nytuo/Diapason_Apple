@@ -16,7 +16,7 @@ struct OnboardingListenBrainzStepView: View {
 
     var body: some View {
         ZStack {
-            CassetteColors.backgroundPrimary.ignoresSafeArea()
+            DiapasonColors.backgroundPrimary.ignoresSafeArea()
 
             VStack(spacing: 0) {
                 ScrollView(showsIndicators: false) {
@@ -29,11 +29,11 @@ struct OnboardingListenBrainzStepView: View {
                                     .transition(.opacity.animation(.easeInOut(duration: 0.25)))
                             } else {
                                 ProgressView()
-                                    .padding(.top, CassetteSpacing.xxxxl)
+                                    .padding(.top, DiapasonSpacing.xxxxl)
                                     .transition(.opacity.animation(.easeInOut(duration: 0.25)))
                             }
                         }
-                        .padding(.horizontal, CassetteSpacing.l)
+                        .padding(.horizontal, DiapasonSpacing.l)
                         .opacity(appeared ? 1 : 0)
                         .offset(y: appeared ? 0 : 24)
                         .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.2), value: appeared)
@@ -69,17 +69,17 @@ struct OnboardingListenBrainzStepView: View {
     // MARK: - Header
 
     private var stepHeader: some View {
-        VStack(spacing: CassetteSpacing.l) {
+        VStack(spacing: DiapasonSpacing.l) {
             MergingCirclesHero()
-                .padding(.top, CassetteSpacing.xxl)
+                .padding(.top, DiapasonSpacing.xxl)
                 .opacity(appeared ? 1 : 0)
                 .scaleEffect(appeared ? 1 : 0.7)
                 .animation(.spring(duration: 0.6, bounce: 0.4), value: appeared)
 
-            VStack(spacing: CassetteSpacing.xs) {
+            VStack(spacing: DiapasonSpacing.xs) {
                 Text("Track what you listen to")
                     .font(.system(.title2, design: .rounded, weight: .bold))
-                    .foregroundStyle(CassetteColors.textPrimary)
+                    .foregroundStyle(DiapasonColors.textPrimary)
                     .multilineTextAlignment(.center)
                     .opacity(appeared ? 1 : 0)
                     .offset(y: appeared ? 0 : 24)
@@ -87,27 +87,27 @@ struct OnboardingListenBrainzStepView: View {
 
                 Text("Connect your ListenBrainz account to log your plays and discover your listening stats.")
                     .font(.system(.subheadline, design: .rounded))
-                    .foregroundStyle(CassetteColors.textSecondary)
+                    .foregroundStyle(DiapasonColors.textSecondary)
                     .multilineTextAlignment(.center)
                     .lineSpacing(2)
                     .opacity(appeared ? 1 : 0)
                     .offset(y: appeared ? 0 : 24)
                     .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.1), value: appeared)
             }
-            .padding(.horizontal, CassetteSpacing.xxxl)
+            .padding(.horizontal, DiapasonSpacing.xxxl)
 
             stepDots(current: 1, total: 3)
                 .opacity(appeared ? 1 : 0)
                 .animation(.spring(duration: 0.5, bounce: 0.3).delay(0.15), value: appeared)
         }
-        .padding(.bottom, CassetteSpacing.xxl)
+        .padding(.bottom, DiapasonSpacing.xxl)
     }
 
     private func stepDots(current: Int, total: Int) -> some View {
-        HStack(spacing: CassetteSpacing.s) {
+        HStack(spacing: DiapasonSpacing.s) {
             ForEach(0..<total, id: \.self) { i in
                 Capsule()
-                    .fill(i == current ? CassetteColors.accent : Color.secondary.opacity(0.3))
+                    .fill(i == current ? DiapasonColors.accent : Color.secondary.opacity(0.3))
                     .frame(width: i == current ? 20 : 6, height: 6)
             }
         }
@@ -126,11 +126,11 @@ struct OnboardingListenBrainzStepView: View {
 
     private func notConnectedCard(vm: ListenBrainzSettingsViewModel) -> some View {
         @Bindable var vm = vm
-        return VStack(spacing: CassetteSpacing.m) {
-            VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+        return VStack(spacing: DiapasonSpacing.m) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
                 Text("ListenBrainz username")
                     .font(.system(.caption, design: .rounded, weight: .medium))
-                    .foregroundStyle(CassetteColors.textSecondary)
+                    .foregroundStyle(DiapasonColors.textSecondary)
 
                 TextField("your-username", text: $vm.usernameInput)
                     .font(.system(.callout, design: .rounded))
@@ -149,16 +149,16 @@ struct OnboardingListenBrainzStepView: View {
                         .foregroundStyle(.red)
                 }
             }
-            .padding(CassetteSpacing.l)
+            .padding(DiapasonSpacing.l)
             .background(
-                RoundedRectangle(cornerRadius: CassetteCornerRadius.large)
-                    .fill(CassetteColors.backgroundSecondary)
+                RoundedRectangle(cornerRadius: DiapasonCornerRadius.large)
+                    .fill(DiapasonColors.backgroundSecondary)
             )
 
             Button {
                 Task { await vm.connect() }
             } label: {
-                HStack(spacing: CassetteSpacing.s) {
+                HStack(spacing: DiapasonSpacing.s) {
                     if vm.isProcessing { ProgressView().scaleEffect(0.8) }
                     Text("Connect")
                         .font(.system(.callout, design: .rounded, weight: .semibold))
@@ -166,7 +166,7 @@ struct OnboardingListenBrainzStepView: View {
                 .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
-            .tint(CassetteColors.accent)
+            .tint(DiapasonColors.accent)
             .controlSize(.large)
             .disabled(vm.usernameInput.isEmpty || vm.usernameInputValidationError != nil || vm.isProcessing)
 
@@ -181,18 +181,18 @@ struct OnboardingListenBrainzStepView: View {
     }
 
     private func connectedCard(vm: ListenBrainzSettingsViewModel, username: String) -> some View {
-        VStack(spacing: CassetteSpacing.m) {
+        VStack(spacing: DiapasonSpacing.m) {
             HStack {
-                VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+                VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
                     Text("Connected as")
                         .font(.system(.caption, design: .rounded))
-                        .foregroundStyle(CassetteColors.textSecondary)
+                        .foregroundStyle(DiapasonColors.textSecondary)
                     Text(username)
                         .font(.system(.callout, design: .rounded, weight: .semibold))
-                        .foregroundStyle(CassetteColors.textPrimary)
+                        .foregroundStyle(DiapasonColors.textPrimary)
                 }
                 Spacer()
-                HStack(spacing: CassetteSpacing.xs) {
+                HStack(spacing: DiapasonSpacing.xs) {
                     Circle()
                         .fill(.green)
                         .frame(width: 8, height: 8)
@@ -201,10 +201,10 @@ struct OnboardingListenBrainzStepView: View {
                         .foregroundStyle(.green)
                 }
             }
-            .padding(CassetteSpacing.l)
+            .padding(DiapasonSpacing.l)
             .background(
-                RoundedRectangle(cornerRadius: CassetteCornerRadius.large)
-                    .fill(CassetteColors.backgroundSecondary)
+                RoundedRectangle(cornerRadius: DiapasonCornerRadius.large)
+                    .fill(DiapasonColors.backgroundSecondary)
             )
 
             Button(role: .destructive) {
@@ -222,7 +222,7 @@ struct OnboardingListenBrainzStepView: View {
     // MARK: - Bottom bar
 
     private var bottomBar: some View {
-        VStack(spacing: CassetteSpacing.m) {
+        VStack(spacing: DiapasonSpacing.m) {
             Button(action: onContinue) {
                 Text(vm?.snapshot.isEnabled == true ? "Continue" : "Set Up Later")
                     .font(.system(.body, design: .rounded, weight: .semibold))
@@ -230,15 +230,15 @@ struct OnboardingListenBrainzStepView: View {
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
-            .tint(CassetteColors.accent)
+            .tint(DiapasonColors.accent)
 
             Button("Skip", action: onSkip)
                 .font(.subheadline)
-                .foregroundStyle(CassetteColors.textSecondary)
+                .foregroundStyle(DiapasonColors.textSecondary)
         }
-        .padding(.horizontal, CassetteSpacing.xxxl)
-        .padding(.top, CassetteSpacing.l)
-        .padding(.bottom, CassetteSpacing.xxl)
+        .padding(.horizontal, DiapasonSpacing.xxxl)
+        .padding(.top, DiapasonSpacing.l)
+        .padding(.bottom, DiapasonSpacing.xxl)
         .background(.regularMaterial)
     }
 }
@@ -280,7 +280,7 @@ private struct MergingCirclesHero: View {
                 .animation(.easeInOut(duration: 1.6).repeatForever(autoreverses: true), value: merged)
 
             Circle()
-                .fill(CassetteColors.accent.opacity(merged ? 0.35 : 0))
+                .fill(DiapasonColors.accent.opacity(merged ? 0.35 : 0))
                 .frame(width: 36, height: 36)
                 .blur(radius: 10)
                 .animation(.easeInOut(duration: 1.6).repeatForever(autoreverses: true), value: merged)

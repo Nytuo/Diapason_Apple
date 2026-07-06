@@ -20,17 +20,17 @@ struct WrappedYearlyListView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: CassetteSpacing.l) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.l) {
                 if isLoading {
                     ProgressView()
                         .frame(maxWidth: .infinity)
-                        .padding(.top, CassetteSpacing.xxxxl)
+                        .padding(.top, DiapasonSpacing.xxxxl)
                 } else if playlists.isEmpty && hasCurrentYearPlaylist {
                     emptyState
                 } else {
                     LazyVGrid(
-                        columns: [GridItem(.adaptive(minimum: 140, maximum: 200), spacing: CassetteSpacing.s)],
-                        spacing: CassetteSpacing.s
+                        columns: [GridItem(.adaptive(minimum: 140, maximum: 200), spacing: DiapasonSpacing.s)],
+                        spacing: DiapasonSpacing.s
                     ) {
                         if !hasCurrentYearPlaylist {
                             WrappedRecapMonthCard(period: .year(currentYear))
@@ -43,16 +43,16 @@ struct WrappedYearlyListView: View {
                     NavigationLink {
                         WrappedView()
                     } label: {
-                        HStack(spacing: CassetteSpacing.s) {
+                        HStack(spacing: DiapasonSpacing.s) {
                             Image(systemName: "chart.bar.fill")
                                 .font(.title2)
-                                .foregroundStyle(Color.cassetteAccent)
+                                .foregroundStyle(Color.accent)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("View Listening Stats")
-                                    .font(.cassetteCellTitle)
+                                    .font(.CellTitle)
                                     .foregroundStyle(.primary)
                                 Text("Monthly and annual breakdowns")
-                                    .font(.cassetteCaption)
+                                    .font(.Caption)
                                     .foregroundStyle(.secondary)
                             }
                             Spacer(minLength: 0)
@@ -60,16 +60,16 @@ struct WrappedYearlyListView: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
-                        .padding(CassetteSpacing.m)
-                        .background(Color.cassetteAccent.opacity(0.08))
-                        .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.standard, style: .continuous))
+                        .padding(DiapasonSpacing.m)
+                        .background(Color.accent.opacity(0.08))
+                        .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard, style: .continuous))
                     }
                     .buttonStyle(.plain)
                 }
             }
-            .padding(CassetteSpacing.l)
+            .padding(DiapasonSpacing.l)
         }
-        .cassetteContentWidth()
+        .diapasonContentWidth()
         .navigationTitle("Wrapped")
         .task {
             guard let container,
@@ -83,18 +83,18 @@ struct WrappedYearlyListView: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: CassetteSpacing.s) {
+        VStack(spacing: DiapasonSpacing.s) {
             Image(systemName: "waveform")
                 .font(.largeTitle)
-                .foregroundStyle(Color.cassetteAccent.opacity(0.5))
+                .foregroundStyle(Color.accent.opacity(0.5))
             Text("No Wrapped playlists yet.")
-                .font(.cassetteCellTitle)
+                .font(.CellTitle)
             Text("Your Wrapped \(currentYear) will be available on December 28.")
-                .font(.cassetteCaption)
+                .font(.Caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, CassetteSpacing.xxxxl)
+        .padding(.top, DiapasonSpacing.xxxxl)
     }
 }

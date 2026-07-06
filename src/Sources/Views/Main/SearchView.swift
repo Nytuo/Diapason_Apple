@@ -236,7 +236,7 @@ struct SearchView: View {
         .sheet(item: $songToAddToPlaylist) { song in
             AddToPlaylistSheet(song: song)
         }
-        .cassetteContentWidth()
+        .diapasonContentWidth()
     }
 
     // MARK: - Active search state
@@ -250,7 +250,7 @@ struct SearchView: View {
                 Spacer()
             }
             .listRowSeparatorCompat(.hidden)
-            .padding(.vertical, CassetteSpacing.xl)
+            .padding(.vertical, DiapasonSpacing.xl)
         } else if let error = vm.searchError {
             EmptyStateView(
                 systemImage: "exclamationmark.triangle",
@@ -426,14 +426,14 @@ struct SearchView: View {
                     } header: {
                         HStack {
                             Text("Recent")
-                                .font(.cassetteSectionTitle)
+                                .font(.SectionTitle)
                                 .foregroundStyle(.primary)
                             Spacer()
                             Button("Clear") {
                                 Task { await container?.searchHistoryService.clear(serverId: serverId) }
                             }
-                            .font(.cassetteBody)
-                            .foregroundStyle(Color.cassetteAccent)
+                            .font(.Body)
+                            .foregroundStyle(Color.accent)
                         }
                         .textCase(nil)
                     }

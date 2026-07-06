@@ -49,7 +49,7 @@ struct CassetteTapeIcon: Shape {
 #Preview {
     HStack(spacing: 24) {
         CassetteTapeIcon()
-            .fill(CassetteColors.accent, style: FillStyle(eoFill: true))
+            .fill(DiapasonColors.accent, style: FillStyle(eoFill: true))
             .frame(width: 80, height: 52)
 
         CassetteTapeIcon()

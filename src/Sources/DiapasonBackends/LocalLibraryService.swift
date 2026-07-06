@@ -39,7 +39,7 @@ actor LocalLibraryService: LibraryServiceProtocol {
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         return dir
     }
-    private nonisolated var dbURL: URL { baseDir.appendingPathComponent("cassette-local.json") }
+    private nonisolated var dbURL: URL { baseDir.appendingPathComponent("diapason-local.json") }
 
     private func loadIfNeeded() {
         guard !loaded else { return }

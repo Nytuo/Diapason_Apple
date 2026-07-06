@@ -59,8 +59,8 @@ final class CrossfadeSettings {
     static let minDuration: Double = 0
     static let maxDuration: Double = 12
 
-    private static let durationKey = "cassette.crossfade.duration"
-    private static let disableForGaplessKey = "cassette.crossfade.disableForGapless"
+    private static let durationKey = "diapason.crossfade.duration"
+    private static let disableForGaplessKey = "diapason.crossfade.disableForGapless"
 
     // MARK: - Derived
 

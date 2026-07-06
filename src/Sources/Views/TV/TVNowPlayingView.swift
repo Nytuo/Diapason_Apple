@@ -159,7 +159,7 @@ struct TVNowPlayingView: View {
                 .background(
                     Circle().fill(isFocused ? Color.white : Color.white.opacity(0.14))
                 )
-                .foregroundStyle(isFocused ? .black : (isActive ? Color.cassetteAccent : .white))
+                .foregroundStyle(isFocused ? .black : (isActive ? Color.accent : .white))
                 .scaleEffect(isFocused ? 1.14 : 1.0)
         }
         .buttonStyle(.plain)
@@ -336,7 +336,7 @@ private struct TVConnectSheet: View {
                                 }
                                 Spacer()
                                 if controller.manager.connectedDevice == device {
-                                    Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.cassetteAccent)
+                                    Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.accent)
                                 }
                             }
                         }

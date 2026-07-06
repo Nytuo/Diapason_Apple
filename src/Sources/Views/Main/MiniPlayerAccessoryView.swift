@@ -61,25 +61,25 @@ struct MiniPlayerAccessoryView: View {
     }
 
     private func inlineBar(coverArtId: String, title: String, artist: String?, audioFormat: String?, isPlaying: Bool, isAvailable: Bool, isLiveStream: Bool) -> some View {
-        HStack(spacing: CassetteSpacing.m) {
+        HStack(spacing: DiapasonSpacing.m) {
             CoverArtCard(id: coverArtId, size: 36)
                 .opacity(isAvailable ? 1.0 : 0.5)
             VStack(alignment: .leading, spacing: 1) {
                 Text(title)
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .fontWeight(.semibold)
                     .foregroundStyle(typoColor)
                     .lineLimit(1)
                 if !isAvailable {
                     Text("Reconnect to resume")
-                        .font(.cassetteCaption)
+                        .font(.Caption)
                         .foregroundStyle(typoSecondaryColor)
                         .lineLimit(1)
                 } else {
-                    HStack(spacing: CassetteSpacing.xs) {
+                    HStack(spacing: DiapasonSpacing.xs) {
                         if let artist {
                             Text(artist)
-                                .font(.cassetteCaption)
+                                .font(.Caption)
                                 .foregroundStyle(typoSecondaryColor)
                                 .lineLimit(1)
                         }
@@ -93,32 +93,32 @@ struct MiniPlayerAccessoryView: View {
             Spacer(minLength: 0)
             playPauseButton(isPlaying: isPlaying, isAvailable: isAvailable)
         }
-        .padding(.horizontal, CassetteSpacing.m)
-        .padding(.vertical, CassetteSpacing.s)
+        .padding(.horizontal, DiapasonSpacing.m)
+        .padding(.vertical, DiapasonSpacing.s)
     }
 
     private func expandedBar(playerState: PlayerState, coverArtId: String, title: String, artist: String?, audioFormat: String?, isPlaying: Bool, isAvailable: Bool, isLiveStream: Bool) -> some View {
         let progress = playerState.duration > 0 ? playerState.position / playerState.duration : 0.0
         return VStack(spacing: 0) {
-            HStack(alignment: .center, spacing: CassetteSpacing.m) {
+            HStack(alignment: .center, spacing: DiapasonSpacing.m) {
                 CoverArtCard(id: coverArtId, size: 36)
                     .opacity(isAvailable ? 1.0 : 0.5)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
-                        .font(.cassetteCellTitle)
+                        .font(.CellTitle)
                         .foregroundStyle(typoColor)
                         .lineLimit(1)
                     if !isAvailable {
                         Text("Reconnect to resume")
-                            .font(.cassetteCaption)
+                            .font(.Caption)
                             .foregroundStyle(typoSecondaryColor)
                             .lineLimit(1)
                     } else {
-                        HStack(spacing: CassetteSpacing.xs) {
+                        HStack(spacing: DiapasonSpacing.xs) {
                             if let artist {
                                 Text(artist)
-                                    .font(.cassetteCaption)
+                                    .font(.Caption)
                                     .foregroundStyle(typoSecondaryColor)
                                     .lineLimit(1)
                             }
@@ -132,7 +132,7 @@ struct MiniPlayerAccessoryView: View {
 
                 Spacer(minLength: 0)
 
-                HStack(spacing: CassetteSpacing.s) {
+                HStack(spacing: DiapasonSpacing.s) {
                     playPauseButton(isPlaying: isPlaying, isAvailable: isAvailable)
                     if isAvailable && !isLiveStream {
                         Button {
@@ -149,11 +149,11 @@ struct MiniPlayerAccessoryView: View {
                 }
                 .frame(height: 36)
             }
-            .padding(.horizontal, CassetteSpacing.l)
-            .padding(.vertical, CassetteSpacing.m)
+            .padding(.horizontal, DiapasonSpacing.l)
+            .padding(.vertical, DiapasonSpacing.m)
 
             if isLiveStream {
-                HStack(spacing: CassetteSpacing.xs) {
+                HStack(spacing: DiapasonSpacing.xs) {
                     Circle().fill(Color.red).frame(width: 6, height: 6)
                     Text("LIVE")
                         .font(.caption2)
@@ -161,13 +161,13 @@ struct MiniPlayerAccessoryView: View {
                         .foregroundStyle(.red)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, CassetteSpacing.l)
+                .padding(.horizontal, DiapasonSpacing.l)
                 .frame(height: 3)
                 .accessibilityHidden(true)
             } else {
                 GeometryReader { geo in
                     Capsule()
-                        .fill(isAvailable ? Color.cassetteAccent : Color.secondary.opacity(0.3))
+                        .fill(isAvailable ? Color.accent : Color.secondary.opacity(0.3))
                         .frame(width: geo.size.width * CGFloat(progress), height: 3)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }

@@ -22,7 +22,7 @@ struct SimilarArtistCell: View {
     }
 
     private var cellContent: some View {
-        VStack(spacing: CassetteSpacing.xs) {
+        VStack(spacing: DiapasonSpacing.xs) {
             if recommendation.inLibrary, let coverArt = recommendation.coverArt {
                 CoverArtView(id: coverArt, size: 128, placeholderSystemImage: "person.fill")
                     .frame(width: 64, height: 64)
@@ -36,7 +36,7 @@ struct SimilarArtistCell: View {
             }
 
             Text(recommendation.name)
-                .font(.cassetteCaption)
+                .font(.Caption)
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)

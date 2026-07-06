@@ -43,13 +43,13 @@ struct WrappedView: View {
 
     var body: some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: CassetteSpacing.xl) {
+            LazyVStack(alignment: .leading, spacing: DiapasonSpacing.xl) {
                 WrappedPeriodPicker(selectedPeriod: $selectedPeriod, availablePeriods: availablePeriods)
 
                 if isLoading {
                     ProgressView()
                         .frame(maxWidth: .infinity)
-                        .padding(.top, CassetteSpacing.xxxxl)
+                        .padding(.top, DiapasonSpacing.xxxxl)
                 } else if loadFailed {
                     EmptyStateView(
                         systemImage: "exclamationmark.triangle",
@@ -81,9 +81,9 @@ struct WrappedView: View {
                     emptyState
                 }
             }
-            .padding(.horizontal, CassetteSpacing.l)
-            .padding(.top, CassetteSpacing.l)
-            .padding(.bottom, CassetteSpacing.xl)
+            .padding(.horizontal, DiapasonSpacing.l)
+            .padding(.top, DiapasonSpacing.l)
+            .padding(.bottom, DiapasonSpacing.xl)
         }
         .refreshable { await loadData() }
         .navigationTitle("")
@@ -102,19 +102,19 @@ struct WrappedView: View {
     // MARK: - Empty state
 
     private var emptyState: some View {
-        VStack(spacing: CassetteSpacing.s) {
+        VStack(spacing: DiapasonSpacing.s) {
             Image(systemName: "waveform")
                 .font(.largeTitle)
-                .foregroundStyle(Color.cassetteAccent.opacity(0.5))
+                .foregroundStyle(Color.accent.opacity(0.5))
             Text("No listens for this period.")
-                .font(.cassetteCellTitle)
+                .font(.CellTitle)
             Text("Listen up — we'll keep track of your activity.")
-                .font(.cassetteCaption)
+                .font(.Caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, CassetteSpacing.xxxxl)
+        .padding(.top, DiapasonSpacing.xxxxl)
     }
 
     // MARK: - Data loading

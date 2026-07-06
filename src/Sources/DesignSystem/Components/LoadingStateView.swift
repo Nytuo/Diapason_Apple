@@ -9,19 +9,19 @@ struct LoadingStateView: View {
     var message: String? = nil
 
     var body: some View {
-        VStack(spacing: CassetteSpacing.m) {
+        VStack(spacing: DiapasonSpacing.m) {
             ProgressView()
                 .controlSize(.large)
-                .tint(Color.cassetteAccent)
+                .tint(Color.accent)
 
             if let message {
                 Text(message)
-                    .font(.cassetteBody)
+                    .font(.Body)
                     .foregroundStyle(.secondary)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(CassetteSpacing.xl)
+        .padding(DiapasonSpacing.xl)
     }
 }
 
@@ -29,8 +29,8 @@ struct LoadingStateView: View {
 
 struct SkeletonAlbumCard: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
-            RoundedRectangle(cornerRadius: CassetteCornerRadius.standard)
+        VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
+            RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard)
                 .fill(Color.primary.opacity(0.08))
                 .aspectRatio(1, contentMode: .fit)
 
@@ -50,12 +50,12 @@ struct SkeletonAlbumCard: View {
 
 struct SkeletonSongRow: View {
     var body: some View {
-        HStack(spacing: CassetteSpacing.m) {
-            RoundedRectangle(cornerRadius: CassetteCornerRadius.xs)
+        HStack(spacing: DiapasonSpacing.m) {
+            RoundedRectangle(cornerRadius: DiapasonCornerRadius.xs)
                 .fill(Color.primary.opacity(0.08))
                 .frame(width: 44, height: 44)
 
-            VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
                 RoundedRectangle(cornerRadius: 4)
                     .fill(Color.primary.opacity(0.08))
                     .frame(height: 13)
@@ -69,7 +69,7 @@ struct SkeletonSongRow: View {
 
             Spacer(minLength: 0)
         }
-        .padding(.vertical, CassetteSpacing.xs)
+        .padding(.vertical, DiapasonSpacing.xs)
         .shimmer()
     }
 }

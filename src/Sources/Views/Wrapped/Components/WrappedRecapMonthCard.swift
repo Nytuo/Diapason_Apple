@@ -54,7 +54,7 @@ struct WrappedRecapMonthCard: View {
             MeshGradientBackground(palette: WrappedYearPalette.colors(for: year), animated: !reduceMotion)
                 .frame(width: 140, height: 160)
                 .overlay { cardOverlay }
-                .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.large, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.large, style: .continuous))
                 .drawingGroup()
         }
         .buttonStyle(.plain)
@@ -74,6 +74,6 @@ struct WrappedRecapMonthCard: View {
                 .lineLimit(1)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(CassetteSpacing.s)
+        .padding(DiapasonSpacing.s)
     }
 }

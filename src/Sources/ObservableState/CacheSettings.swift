@@ -68,9 +68,9 @@ final class CacheSettings {
     static let defaultFormat: CacheFormat = .matchStream
     static let defaultCacheOverCellular: Bool = false
 
-    private static let maxTracksKey = "cassette.cache.maxTracks"
-    private static let cacheFormatKey = "cassette.cache.format"
-    private static let cacheOverCellularKey = "cassette.cache.cellular"
+    private static let maxTracksKey = "diapason.cache.maxTracks"
+    private static let cacheFormatKey = "diapason.cache.format"
+    private static let cacheOverCellularKey = "diapason.cache.cellular"
 
     // MARK: - Init
 

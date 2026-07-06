@@ -18,7 +18,7 @@ struct WrappedIntroSlide: View {
             VStack(spacing: 0) {
                 Spacer()
 
-                VStack(spacing: CassetteSpacing.xs) {
+                VStack(spacing: DiapasonSpacing.xs) {
                     Text("YOUR")
                         .font(.system(size: 16, weight: .heavy, design: .rounded))
                         .tracking(4)
@@ -43,9 +43,9 @@ struct WrappedIntroSlide: View {
                 Text("Your year in music.")
                     .font(.system(size: 18, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.75))
-                    .padding(.bottom, CassetteSpacing.xxxxl)
+                    .padding(.bottom, DiapasonSpacing.xxxxl)
             }
-            .padding(.horizontal, CassetteSpacing.xl)
+            .padding(.horizontal, DiapasonSpacing.xl)
             .wrappedSlideEntrance()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

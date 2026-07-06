@@ -24,17 +24,17 @@ struct AllSongsView: View {
                         Button {
                             play(at: index)
                         } label: {
-                            HStack(spacing: CassetteSpacing.m) {
+                            HStack(spacing: DiapasonSpacing.m) {
                                 CoverArtCard(id: song.coverArt ?? song.albumId ?? song.id, size: 44)
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(song.title)
-                                        .font(.cassetteCellTitle)
-                                        .foregroundStyle(CassetteColors.textPrimary)
+                                        .font(.CellTitle)
+                                        .foregroundStyle(DiapasonColors.textPrimary)
                                         .lineLimit(1)
                                     if let artist = song.artist {
                                         Text(artist)
-                                            .font(.cassetteCaption)
-                                            .foregroundStyle(CassetteColors.textSecondary)
+                                            .font(.Caption)
+                                            .foregroundStyle(DiapasonColors.textSecondary)
                                             .lineLimit(1)
                                     }
                                 }
@@ -43,14 +43,14 @@ struct AllSongsView: View {
                             .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
-                        .listRowBackground(CassetteColors.backgroundPrimary)
+                        .listRowBackground(DiapasonColors.backgroundPrimary)
                     }
                 }
                 .listStyle(.plain)
             }
         }
         .navigationTitle("Songs")
-        .background(CassetteColors.backgroundPrimary.ignoresSafeArea())
+        .background(DiapasonColors.backgroundPrimary.ignoresSafeArea())
         .task { await load() }
     }
 

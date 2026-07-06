@@ -329,7 +329,7 @@ actor NowPlayingService: NowPlayingServiceProtocol {
         guard let docs = FileManager.default.urls(
             for: .documentDirectory, in: .userDomainMask
         ).first else { return }
-        let file = docs.appendingPathComponent("cassette_debug.log")
+        let file = docs.appendingPathComponent("diapason_debug.log")
         let line = "\(Date()): \(message)\n"
         guard let data = line.data(using: .utf8) else { return }
         if FileManager.default.fileExists(atPath: file.path) {

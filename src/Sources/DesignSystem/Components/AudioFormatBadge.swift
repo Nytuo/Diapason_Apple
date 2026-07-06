@@ -7,7 +7,7 @@ import SwiftUI
 
 struct AudioFormatBadge: View {
     let format: String
-    var color: Color = Color.cassetteAccent
+    var color: Color = Color.accent
 
     var body: some View {
         Image(systemName: "waveform")

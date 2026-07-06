@@ -8,7 +8,7 @@ import SwiftUI
 struct NowPlayingBarsIndicator: View {
     let isPlaying: Bool
 
-    @Environment(\.cassettePlayingAccent) private var playingAccent
+    @Environment(\.diapasonPlayingAccent) private var playingAccent
     private let delays: [Double] = [0.0, 0.15, 0.30]
     @State private var heights: [CGFloat] = [4, 8, 4]
 

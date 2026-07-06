@@ -5,17 +5,4 @@
 
 import SwiftUI
 
-#if os(macOS)
-extension ToolbarContent {
-    /// Guards `.sharedBackgroundVisibility` behind macOS 26.0 availability.
-    /// Falls back to a no-op on earlier macOS versions.
-    @ToolbarContentBuilder
-    func cassetteSharedBackgroundVisibility(_ visibility: Visibility) -> some ToolbarContent {
-        if #available(macOS 26.0, *) {
-            self.sharedBackgroundVisibility(visibility)
-        } else {
-            self
-        }
-    }
-}
-#endif
+

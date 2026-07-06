@@ -10,7 +10,7 @@ import Foundation
 func postNavigateToAlbum(track: DisplayableSong) {
     guard let albumId = track.albumId else { return }
     NotificationCenter.default.post(
-        name: .cassetteNavigateToAlbum,
+        name: .NavigateToAlbum,
         object: nil,
         userInfo: [
             "albumId":   albumId,
@@ -27,7 +27,7 @@ func postNavigateToArtist(track: DisplayableSong) {
 
 func postNavigateToArtist(artistId: String, artistName: String, coverArtId: String?) {
     NotificationCenter.default.post(
-        name: .cassetteNavigateToArtist,
+        name: .NavigateToArtist,
         object: nil,
         userInfo: [
             "artistId":   artistId,
@@ -38,16 +38,16 @@ func postNavigateToArtist(artistId: String, artistName: String, coverArtId: Stri
 }
 
 extension Notification.Name {
-    static let cassetteTogglePlayPause = Notification.Name("cassette.togglePlayPause")
-    static let cassetteSkipNext = Notification.Name("cassette.skipNext")
-    static let cassetteSkipPrevious = Notification.Name("cassette.skipPrevious")
-    static let cassetteFocusSearch = Notification.Name("cassette.focusSearch")
-    static let cassetteToggleShuffle = Notification.Name("cassette.toggleShuffle")
-    static let cassetteToggleRepeat = Notification.Name("cassette.toggleRepeat")
-    static let cassetteToggleQueue = Notification.Name("cassette.toggleQueue")
-    static let cassetteOpenFullPlayer = Notification.Name("cassette.openFullPlayer")
-    static let cassetteOpenFullPlayerLyrics = Notification.Name("cassette.openFullPlayerLyrics")
-    static let cassetteSelectAlbums = Notification.Name("cassette.selectAlbums")
-    static let cassetteNavigateToAlbum  = Notification.Name("cassetteNavigateToAlbum")
-    static let cassetteNavigateToArtist = Notification.Name("cassetteNavigateToArtist")
+    static let TogglePlayPause = Notification.Name("diapason.togglePlayPause")
+    static let SkipNext = Notification.Name("diapason.skipNext")
+    static let SkipPrevious = Notification.Name("diapason.skipPrevious")
+    static let FocusSearch = Notification.Name("diapason.focusSearch")
+    static let ToggleShuffle = Notification.Name("diapason.toggleShuffle")
+    static let ToggleRepeat = Notification.Name("diapason.toggleRepeat")
+    static let ToggleQueue = Notification.Name("diapason.toggleQueue")
+    static let OpenFullPlayer = Notification.Name("diapason.openFullPlayer")
+    static let OpenFullPlayerLyrics = Notification.Name("diapason.openFullPlayerLyrics")
+    static let SelectAlbums = Notification.Name("diapason.selectAlbums")
+    static let NavigateToAlbum  = Notification.Name("diapasonNavigateToAlbum")
+    static let NavigateToArtist = Notification.Name("diapasonNavigateToArtist")
 }

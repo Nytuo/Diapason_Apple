@@ -19,7 +19,7 @@ struct ArtistListView: View {
                 LoadingStateView()
             }
         }
-        .cassetteContentWidth()
+        .diapasonContentWidth()
         .navigationTitle("Artists")
         .task(id: container?.serverState.isOnline) {
             guard let svc = container?.libraryService else { return }
@@ -157,24 +157,24 @@ private struct OfflineBrowseContent: View {
                 Section("Downloaded Artists") {
                     ForEach(artistSummaries) { artist in
                         NavigationLink(value: HomeDestination.offlineArtist(artist)) {
-                            HStack(spacing: CassetteSpacing.m) {
+                            HStack(spacing: DiapasonSpacing.m) {
                                 Image(systemName: "music.mic")
                                     .font(.title2)
                                     .foregroundStyle(.secondary)
                                     .frame(width: 44, height: 44)
-                                    .background(CassetteColors.accentBackground)
-                                    .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.s))
+                                    .background(DiapasonColors.accentBackground)
+                                    .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.s))
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(artist.name)
-                                        .font(.cassetteCellTitle)
+                                        .font(.CellTitle)
                                         .lineLimit(1)
                                     Text("\(artist.albums.count) album\(artist.albums.count == 1 ? "" : "s")")
-                                        .font(.cassetteCaption)
+                                        .font(.Caption)
                                         .foregroundStyle(.secondary)
                                 }
                                 Spacer(minLength: 0)
                             }
-                            .padding(.vertical, CassetteSpacing.xs)
+                            .padding(.vertical, DiapasonSpacing.xs)
                         }
                     }
                 }
@@ -204,6 +204,6 @@ struct OfflineArtistAlbumsView: View {
         .listStyle(.plain)
         .navigationTitle(artist.name)
         .navigationBarTitleDisplayModeInline()
-        .cassetteContentWidth()
+        .diapasonContentWidth()
     }
 }

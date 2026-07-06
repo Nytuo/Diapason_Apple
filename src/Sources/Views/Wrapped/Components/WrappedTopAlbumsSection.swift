@@ -8,27 +8,20 @@ import SwiftUI
 struct WrappedTopAlbumsSection: View {
     let albums: [TopAlbumEntry]
 
-    #if os(macOS)
+    
     private let columns = [
-        GridItem(.flexible(), spacing: CassetteSpacing.m),
-        GridItem(.flexible(), spacing: CassetteSpacing.m),
-        GridItem(.flexible(), spacing: CassetteSpacing.m)
+        GridItem(.flexible(), spacing: DiapasonSpacing.m),
+        GridItem(.flexible(), spacing: DiapasonSpacing.m)
     ]
-    #else
-    private let columns = [
-        GridItem(.flexible(), spacing: CassetteSpacing.m),
-        GridItem(.flexible(), spacing: CassetteSpacing.m)
-    ]
-    #endif
 
     var body: some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.s) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.s) {
             Text("Top Albums")
-                .font(.cassetteSectionTitle)
+                .font(.SectionTitle)
             if albums.isEmpty {
                 emptyLabel("No album data for this period.")
             } else {
-                LazyVGrid(columns: columns, spacing: CassetteSpacing.m) {
+                LazyVGrid(columns: columns, spacing: DiapasonSpacing.m) {
                     ForEach(albums.prefix(6)) { album in
                         NavigationLink {
                             #if os(macOS)
@@ -47,23 +40,23 @@ struct WrappedTopAlbumsSection: View {
     }
 
     private func albumCard(_ album: TopAlbumEntry) -> some View {
-        VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+        VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
             ZStack(alignment: .topLeading) {
                 Color.clear
                     .aspectRatio(1, contentMode: .fit)
                     .overlay {
                         CoverArtView(id: album.albumId, size: 220, tier: .hero)
                     }
-                    .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.standard, style: .continuous))
-                    .cassetteCoverStyle(cornerRadius: CassetteCornerRadius.standard)
+                    .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.standard, style: .continuous))
+                    .diapasonCoverStyle(cornerRadius: DiapasonCornerRadius.standard)
                 rankBadge(album.rank)
-                    .padding(CassetteSpacing.xs)
+                    .padding(DiapasonSpacing.xs)
             }
             Text(album.title)
-                .font(.cassetteCellTitle)
+                .font(.CellTitle)
                 .lineLimit(1)
             Text(album.artistName)
-                .font(.cassetteCaption)
+                .font(.Caption)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
         }
@@ -74,14 +67,14 @@ struct WrappedTopAlbumsSection: View {
         case 1: return WrappedYearPalette.medalGold
         case 2: return WrappedYearPalette.medalSilver
         case 3: return WrappedYearPalette.medalBronze
-        default: return CassetteColors.accent
+        default: return DiapasonColors.accent
         }
     }
 
     private func rankBadge(_ rank: Int) -> some View {
         let isMedal = rank <= 3
         return Text("#\(rank)")
-            .font(.cassetteCaption2)
+            .font(.Caption2)
             .fontWeight(.bold)
             .foregroundStyle(isMedal ? Color.black : Color.primary)
             .padding(.horizontal, 6)
@@ -97,7 +90,7 @@ struct WrappedTopAlbumsSection: View {
 
     private func emptyLabel(_ text: String) -> some View {
         Text(text)
-            .font(.cassetteCaption)
+            .font(.Caption)
             .foregroundStyle(.secondary)
     }
 }

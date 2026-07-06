@@ -10,14 +10,14 @@ actor ListenBrainzService {
     // Reuses the shared KeychainService actor (service group = "app.cassette.server-credentials").
     // The key "listenbrainz-username" is namespaced to prevent collision with server credentials.
     private static let usernameKeychainKey = "listenbrainz-username"
-    private static let isEnabledDefaultsKey = "app.cassette.listenbrainz.isEnabled"
+    private static let isEnabledDefaultsKey = "app.diapason.listenbrainz.isEnabled"
 
     // MARK: - Scrobbling Keychain / UserDefaults keys
 
-    private static let scrobblingTokenKeychainKey    = "app.cassette.listenbrainz.token"
-    private static let scrobblingUsernameKeychainKey = "app.cassette.listenbrainz.username"
-    private static let scrobblingEnabledDefaultsKey  = "app.cassette.listenbrainz.scrobbling.isEnabled"
-    private static let scrobblingServerURLDefaultsKey = "app.cassette.listenbrainz.scrobbling.serverRootURL"
+    private static let scrobblingTokenKeychainKey    = "app.diapason.listenbrainz.token"
+    private static let scrobblingUsernameKeychainKey = "app.diapason.listenbrainz.username"
+    private static let scrobblingEnabledDefaultsKey  = "app.diapason.listenbrainz.scrobbling.isEnabled"
+    private static let scrobblingServerURLDefaultsKey = "app.diapason.listenbrainz.scrobbling.serverRootURL"
     static let defaultScrobblingServerURL = "https://api.listenbrainz.org"
 
     private let client: ListenBrainzClient
@@ -73,13 +73,13 @@ actor ListenBrainzService {
                 appropriateFor: nil,
                 create: true
             )
-            let dir = appSupport.appendingPathComponent("app.cassette", isDirectory: true)
+            let dir = appSupport.appendingPathComponent("app.diapason", isDirectory: true)
             try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
             return dir.appendingPathComponent("listenbrainz-queue.json")
         } catch {
             Logger.listenBrainz.error("Failed to resolve Application Support path: \(error, privacy: .public)")
             return URL(fileURLWithPath: NSTemporaryDirectory())
-                .appendingPathComponent("app.cassette.listenbrainz-queue.json")
+                .appendingPathComponent("app.diapason.listenbrainz-queue.json")
         }
     }
 

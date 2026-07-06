@@ -63,10 +63,10 @@ struct FullPlayerView: View {
 
         VStack(spacing: 0) {
             topBar
-                .padding(.top, CassetteSpacing.s)
+                .padding(.top, DiapasonSpacing.s)
 
             VStack(spacing: 0) {
-                Spacer(minLength: CassetteSpacing.l)
+                Spacer(minLength: DiapasonSpacing.l)
 
                 ZStack {
                     if showLyrics, let lyricsVM = lyricsViewModel {
@@ -93,7 +93,7 @@ struct FullPlayerView: View {
                             .overlay {
                                 CoverArtView(id: coverArtId, size: 600)
                             }
-                            .clipShape(RoundedRectangle(cornerRadius: CassetteCornerRadius.large))
+                            .clipShape(RoundedRectangle(cornerRadius: DiapasonCornerRadius.large))
                             .shadow(color: .black.opacity(0.3), radius: 30, y: 10)
                             .scaleEffect(isPlaying ? 1.0 : 0.92)
                             .animation(.spring(response: 0.5, dampingFraction: 0.7), value: isPlaying)
@@ -107,7 +107,7 @@ struct FullPlayerView: View {
                 .frame(maxWidth: .infinity)
                 .animation(.smooth(duration: 0.3), value: showLyrics)
 
-                Spacer(minLength: CassetteSpacing.m)
+                Spacer(minLength: DiapasonSpacing.m)
 
                 TrackInfoSection(
                     playerState: playerState,
@@ -116,7 +116,7 @@ struct FullPlayerView: View {
                     secondaryContentColor: vm.secondaryContentColor,
                     glassTint: vm.glassTint
                 )
-                .padding(.horizontal, CassetteSpacing.l)
+                .padding(.horizontal, DiapasonSpacing.l)
 
                 if !playerState.isLiveStream {
                     ScrubberView(
@@ -125,8 +125,8 @@ struct FullPlayerView: View {
                         contentColor: vm.contentColor,
                         secondaryContentColor: vm.secondaryContentColor
                     )
-                    .padding(.horizontal, CassetteSpacing.l)
-                    .padding(.top, CassetteSpacing.m)
+                    .padding(.horizontal, DiapasonSpacing.l)
+                    .padding(.top, DiapasonSpacing.m)
                     .disabled(!playerState.isPlaybackAvailable)
                     .opacity(playerState.isPlaybackAvailable ? 1.0 : 0.4)
                 }
@@ -138,13 +138,13 @@ struct FullPlayerView: View {
                     contentColor: vm.contentColor,
                     secondaryContentColor: vm.secondaryContentColor
                 )
-                .padding(.top, CassetteSpacing.s)
+                .padding(.top, DiapasonSpacing.s)
 
                 VolumeSection(contentColor: vm.contentColor, secondaryContentColor: vm.secondaryContentColor)
-                    .padding(.horizontal, CassetteSpacing.l)
-                    .padding(.top, CassetteSpacing.s)
+                    .padding(.horizontal, DiapasonSpacing.l)
+                    .padding(.top, DiapasonSpacing.s)
 
-                Spacer(minLength: CassetteSpacing.xs)
+                Spacer(minLength: DiapasonSpacing.xs)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
@@ -153,16 +153,16 @@ struct FullPlayerView: View {
                 showQueue: $showQueue,
                 isLiveStream: playerState.isLiveStream,
                 secondaryContentColor: vm.secondaryContentColor,
-                accentColor: CassetteColors.accentForeground(on: vm.dominantColor),
+                accentColor: DiapasonColors.accentForeground(on: vm.dominantColor),
                 playerState: playerState
             )
-            .padding(.top, CassetteSpacing.s)
+            .padding(.top, DiapasonSpacing.s)
 
-            Spacer(minLength: CassetteSpacing.l)
+            Spacer(minLength: DiapasonSpacing.l)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .cassetteContentWidth()
-        .environment(\.cassettePlayingAccent, CassetteColors.accentForeground(on: vm.dominantColor))
+        .diapasonContentWidth()
+        .environment(\.diapasonPlayingAccent, DiapasonColors.accentForeground(on: vm.dominantColor))
         .background {
             ZStack {
                 Color.black
@@ -222,8 +222,8 @@ private struct TrackInfoSection: View {
     private var isOnline: Bool { container?.serverState.isOnline == true }
 
     var body: some View {
-        HStack(alignment: .top, spacing: CassetteSpacing.m) {
-            VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+        HStack(alignment: .top, spacing: DiapasonSpacing.m) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
                 Text(playerState.isLiveStream ? (playerState.currentRadio?.name ?? "") : (playerState.currentTrack?.title ?? ""))
                     .font(.title2)
                     .fontWeight(.bold)
@@ -242,8 +242,8 @@ private struct TrackInfoSection: View {
                         .foregroundStyle(secondaryContentColor)
                         .lineLimit(1)
                 } else {
-                    VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
-                        HStack(spacing: CassetteSpacing.xs) {
+                    VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
+                        HStack(spacing: DiapasonSpacing.xs) {
                             if let artist = playerState.currentTrack?.artist {
                                 Button {
                                     goToArtist()
@@ -268,7 +268,7 @@ private struct TrackInfoSection: View {
             .contentShape(Rectangle())
             .trackSkipSwipe(playerState: playerState)
 
-            HStack(spacing: CassetteSpacing.s) {
+            HStack(spacing: DiapasonSpacing.s) {
                 if !playerState.isLiveStream {
                     Button {
                         HapticFeedback.light.trigger()
@@ -285,7 +285,7 @@ private struct TrackInfoSection: View {
                         Image(systemName: isFavorite ? "heart.fill" : "heart")
                             .font(.title3)
                             .foregroundStyle(contentColor)
-                            .cassetteGlassButton(size: 44, tint: glassTint)
+                            .GlassButton(size: 44, tint: glassTint)
                     }
                     .buttonStyle(.borderless)
                     .disabled(!isOnline)
@@ -319,7 +319,7 @@ private struct TrackInfoSection: View {
                     Image(systemName: "ellipsis")
                         .font(.title3)
                         .foregroundStyle(contentColor)
-                        .cassetteGlassButton(size: 44, tint: glassTint)
+                        .GlassButton(size: 44, tint: glassTint)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel("More options")
@@ -372,7 +372,7 @@ private struct TrackInfoSection: View {
     }
 
     private func smartShuffleErrorMessage(from error: Error) -> String {
-        if case CassetteError.smartShuffleEmpty = error {
+        if case DiapasonError.smartShuffleEmpty = error {
             return "Smart Shuffle unavailable — try playing some tracks first or download more music for offline use."
         }
         return "Smart Shuffle failed. Please try again."
@@ -410,7 +410,7 @@ private struct ScrubberView: View {
     }
 
     var body: some View {
-        VStack(spacing: CassetteSpacing.xs) {
+        VStack(spacing: DiapasonSpacing.xs) {
             ProgressSlider(
                 value: positionBinding,
                 total: effectiveDuration,
@@ -436,12 +436,12 @@ private struct ScrubberView: View {
 
             HStack {
                 Text(Duration.seconds(shownPosition).formatted(.time(pattern: .minuteSecond)))
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(secondaryContentColor)
                     .monospacedDigit()
                 Spacer()
                 Text(Duration.seconds(max(effectiveDuration - shownPosition, 0)).formatted(.time(pattern: .minuteSecond)))
-                    .font(.cassetteCaption)
+                    .font(.Caption)
                     .foregroundStyle(secondaryContentColor)
                     .monospacedDigit()
             }
@@ -534,7 +534,7 @@ private struct PlaybackControlsView: View {
     let secondaryContentColor: Color
 
     var body: some View {
-        HStack(spacing: CassetteSpacing.xxxxl) {
+        HStack(spacing: DiapasonSpacing.xxxxl) {
             if !playerState.isLiveStream {
                 Button {
                     HapticFeedback.light.trigger()
@@ -595,7 +595,7 @@ private struct BottomToolbar: View {
     let playerState: PlayerState
 
     var body: some View {
-        HStack(spacing: CassetteSpacing.xxxxl) {
+        HStack(spacing: DiapasonSpacing.xxxxl) {
             if !isLiveStream {
                 Button {
                     withAnimation(.smooth(duration: 0.3)) { showLyrics.toggle() }
@@ -621,7 +621,7 @@ private struct BottomToolbar: View {
                             if let badge = playerState.queueModeBadge {
                                 Image(systemName: badge)
                                     .font(.system(size: 10, weight: .bold))
-                                    .foregroundStyle(Color.cassetteAccent)
+                                    .foregroundStyle(Color.accent)
                                     .padding(2)
                                     .background(.background, in: Circle())
                                     .overlay(Circle().stroke(.background.opacity(0.5), lineWidth: 0.5))
@@ -645,7 +645,7 @@ private struct AirPlayRouteButton: UIViewRepresentable {
 
     func makeUIView(context: Context) -> AVRoutePickerView {
         let view = AVRoutePickerView()
-        view.activeTintColor = UIColor(Color.cassetteAccent)
+        view.activeTintColor = UIColor(Color.accentColor)
         view.tintColor = UIColor(tintColor)
         view.backgroundColor = .clear
         return view
@@ -675,7 +675,7 @@ private struct VolumeSection: View {
 
     var body: some View {
         #if os(iOS)
-        HStack(spacing: CassetteSpacing.m) {
+        HStack(spacing: DiapasonSpacing.m) {
             Image(systemName: "speaker.fill")
                 .font(.caption)
                 .foregroundStyle(secondaryContentColor)

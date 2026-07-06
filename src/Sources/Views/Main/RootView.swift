@@ -20,16 +20,16 @@ struct RootView: View {
             } else if serverState.activeServer != nil && onboardingComplete {
                 #if os(macOS)
                 RootViewMacOS()
-                    .accentColor(.cassetteAccent)
+                    .accentColor(.accentColor)
                 #elseif os(tvOS)
                 TVMainView()
-                    .accentColor(.cassetteAccent)
+                    .accentColor(.accentColor)
                 #else
                 if InterfaceMode(rawValue: interfaceModeRaw) == .ipod {
                     iPodShellView()
                 } else {
                     MainTabView()
-                        .accentColor(.cassetteAccent)
+                        .accentColor(.accent)
                 }
                 #endif
             } else {

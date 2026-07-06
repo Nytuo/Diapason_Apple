@@ -75,7 +75,7 @@ actor ExternalArtworkCache {
             dir = cacheDirectory
         } else {
             let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-            dir = caches.appendingPathComponent("app.cassette/external-covers", isDirectory: true)
+            dir = caches.appendingPathComponent("app.diapason/external-covers", isDirectory: true)
         }
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         self.cacheDirectory = dir

@@ -10,7 +10,7 @@ import OSLog
 struct QueueView: View {
     @Environment(\.appContainer) private var container
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.cassettePlayingAccent) private var playingAccent
+    @Environment(\.diapasonPlayingAccent) private var playingAccent
 
     var body: some View {
         #if os(macOS)
@@ -128,7 +128,7 @@ struct QueueView: View {
 
     @ViewBuilder
     private func queueControlsHeader(_ playerState: PlayerState) -> some View {
-        HStack(spacing: CassetteSpacing.xxxxl) {
+        HStack(spacing: DiapasonSpacing.xxxxl) {
             Button {
                 HapticFeedback.light.trigger()
                 Task { await container?.playerService.toggleShuffle() }
@@ -167,7 +167,7 @@ struct QueueView: View {
             .accessibilityValue(playerState.isAutoExtendEnabled ? "Enabled" : "Disabled")
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, CassetteSpacing.m)
+        .padding(.vertical, DiapasonSpacing.m)
     }
 }
 
@@ -177,7 +177,7 @@ private struct QueueRow: View {
 
     @Environment(\.appContainer) private var container
     @Environment(ArtworkImageCache.self) private var artworkImageCache
-    @Environment(\.cassettePlayingAccent) private var playingAccent
+    @Environment(\.diapasonPlayingAccent) private var playingAccent
     @State private var showAddToPlaylist = false
     @Query private var favoriteMatches: [FavoriteRecord]
 
@@ -193,19 +193,19 @@ private struct QueueRow: View {
     private var isFavorite: Bool { !favoriteMatches.isEmpty }
 
     var body: some View {
-        HStack(spacing: CassetteSpacing.m) {
+        HStack(spacing: DiapasonSpacing.m) {
             CoverArtView(id: song.coverArtId ?? song.id, size: 88)
                 .frame(width: 44, height: 44)
-                .cassetteCoverStyle(cornerRadius: CassetteCornerRadius.xs)
+                .diapasonCoverStyle(cornerRadius: DiapasonCornerRadius.xs)
 
-            VStack(alignment: .leading, spacing: CassetteSpacing.xs) {
+            VStack(alignment: .leading, spacing: DiapasonSpacing.xs) {
                 Text(song.title)
-                    .font(.cassetteCellTitle)
+                    .font(.CellTitle)
                     .foregroundStyle(isCurrent ? playingAccent : Color.primary)
                     .lineLimit(1)
                 if let artist = song.artist {
                     Text(artist)
-                        .font(.cassetteCaption)
+                        .font(.Caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
@@ -217,7 +217,7 @@ private struct QueueRow: View {
                 NowPlayingBarsIndicator(isPlaying: isPlaying)
             }
         }
-        .padding(.vertical, CassetteSpacing.xs)
+        .padding(.vertical, DiapasonSpacing.xs)
         .contextMenu {
             Button {
                 Task {

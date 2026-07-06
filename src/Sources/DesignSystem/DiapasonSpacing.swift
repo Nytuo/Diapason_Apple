@@ -7,7 +7,7 @@ import SwiftUI
 
 // MARK: - Spacing scale (4pt grid)
 
-enum CassetteSpacing {
+enum DiapasonSpacing {
     static let xs: CGFloat    = 4
     static let s: CGFloat     = 8
     static let m: CGFloat     = 12
@@ -24,7 +24,7 @@ enum CassetteSpacing {
 
 // MARK: - Corner radius scale
 
-enum CassetteCornerRadius {
+enum DiapasonCornerRadius {
     static let xs: CGFloat       = 4
     static let s: CGFloat        = 6
     static let standard: CGFloat = 8    // all cover arts, most cards
@@ -38,53 +38,31 @@ enum CassetteCornerRadius {
 /// Cassette shadow values. In dark mode, shadows are invisible against black backgrounds;
 /// use `CassetteCoverModifier` (via `.cassetteCoverStyle()`) which switches to a thin
 /// border in dark mode automatically.
-enum CassetteShadow {
+enum DiapasonShadow {
     static let coverRadius: CGFloat  = 8
     static let coverY: CGFloat       = 4
     static let coverOpacity: Double  = 0.15
 }
 
-// MARK: - macOS Layout
-
-#if os(macOS)
-enum CassetteMacOSLayout {
-    static let heroCoverArtSize: CGFloat = 280
-    /// heroHeight = heroCoverArtSize + 32 (top) + 32 (bottom padding)
-    static let heroHeight: CGFloat = 344
-    static let playerBarReservedHeight: CGFloat = 120
-}
-#endif
 
 // MARK: - View modifier: content width
 
 struct ContentWidthModifier: ViewModifier {
     @ViewBuilder
     func body(content: Content) -> some View {
-        #if os(macOS)
         content
-            .containerRelativeFrame(.horizontal, alignment: .center) { total, _ in
-                switch total {
-                case ..<900:  return min(total, 560)
-                case ..<1200: return min(total, 680)
-                case ..<1600: return min(total, 800)
-                default:      return min(total, 960)
-                }
-            }
-        #else
-        content
-        #endif
     }
 }
 
 extension View {
-    func cassetteContentWidth() -> some View {
+    func diapasonContentWidth() -> some View {
         modifier(ContentWidthModifier())
     }
 }
 
 // MARK: - View modifier: cover art style
 
-struct CassetteCoverModifier: ViewModifier {
+struct DiapasonCoverModifier: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
     let cornerRadius: CGFloat
 
@@ -99,7 +77,7 @@ struct CassetteCoverModifier: ViewModifier {
             .overlay {
                 if colorScheme == .dark {
                     RoundedRectangle(cornerRadius: cornerRadius)
-                        .stroke(Color.cassetteCoverBorder, lineWidth: 1)
+                        .stroke(Color.diapasonCoverBorder, lineWidth: 1)
                 }
             }
     }
@@ -107,7 +85,7 @@ struct CassetteCoverModifier: ViewModifier {
 
 extension View {
     /// Clips to a rounded rectangle, adds shadow in light mode and a thin border in dark mode.
-    func cassetteCoverStyle(cornerRadius: CGFloat = CassetteCornerRadius.standard) -> some View {
-        modifier(CassetteCoverModifier(cornerRadius: cornerRadius))
+    func diapasonCoverStyle(cornerRadius: CGFloat = DiapasonCornerRadius.standard) -> some View {
+        modifier(DiapasonCoverModifier(cornerRadius: cornerRadius))
     }
 }

@@ -10,7 +10,7 @@ struct PlayButton: View {
     let action: () -> Void
     var label: String = "Play"
     var isDisabled: Bool = false
-    var accentColor: Color = CassetteColors.accent
+    var accentColor: Color = DiapasonColors.accent
 
     var body: some View {
         Button {
@@ -18,10 +18,10 @@ struct PlayButton: View {
             action()
         } label: {
             Label(label, systemImage: "play.fill")
-                .font(.cassetteCellTitle)
-                .foregroundStyle(Color.cassetteAccentText)
+                .font(.CellTitle)
+                .foregroundStyle(Color.diapasonAccentText)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, CassetteSpacing.m)
+                .padding(.vertical, DiapasonSpacing.m)
                 .background(isDisabled ? accentColor.opacity(0.4) : accentColor)
                 .clipShape(Capsule())
         }
@@ -30,7 +30,7 @@ struct PlayButton: View {
 }
 
 #Preview {
-    VStack(spacing: CassetteSpacing.l) {
+    VStack(spacing: DiapasonSpacing.l) {
         PlayButton(action: {})
         PlayButton(action: {}, label: "Shuffle", isDisabled: true)
     }
