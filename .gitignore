@@ -27,3 +27,5 @@ crates/tauri-plugin-native-audio/ios/.build/
 src/Diapason.xcodeproj/project.xcworkspace/xcuserdata/arnaud.xcuserdatad/UserInterfaceState.xcuserstate
 
 *.xcuserstate
+
+src/build/

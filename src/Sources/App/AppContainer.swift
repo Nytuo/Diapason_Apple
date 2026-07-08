@@ -13,8 +13,6 @@ import SwiftData
 /// All stored service references are protocol existentials — fully mockable in tests.
 @MainActor
 final class AppContainer {
-    // Observable state objects — created here so they exist on the MainActor
-    // before actors are initialized (actors receive them via init injection).
     let playerState = PlayerState()
     let serverState = ServerState()
     let cacheSettings = CacheSettings()
@@ -23,7 +21,6 @@ final class AppContainer {
     let keychainService: any KeychainServiceProtocol
     let serverService: any ServerServiceProtocol
     let libraryService: any LibraryServiceProtocol
-    /// Diapason: the on-device library adapter, exposed so the import UI can add files.
     let localLibrary: LocalLibraryService
     let cacheService: any CacheServiceProtocol
     let downloadService: any DownloadServiceProtocol
@@ -131,6 +128,14 @@ final class AppContainer {
         pin.setWidgetSyncService(widgetSync)
 
         NowPlayingBridge.performTogglePlayPause = { [weak player] in await player?.togglePlayPause() }
+        NowPlayingBridge.performPlaySearch = { [weak player, weak library] query in
+            guard let player, let library else { return nil }
+            // Library first (song → album → artist), YouTube only as a last resort.
+            guard let (tracks, outcome) = await VoicePlayback.resolve(query: query, library: library),
+                  !tracks.isEmpty else { return nil }
+            try? await player.play(tracks: tracks, startIndex: 0)
+            return outcome
+        }
         Task { [playlist] in await playlist.retryMissingPlaylistDownloads() }
 
         let subsonicProvider = SubsonicRecommendationProvider(libraryService: library)

@@ -74,6 +74,16 @@ final class YouTubeDownloadManager: ObservableObject {
                                  coverId: song.coverArtId, relativePath: filename)
                 self.records[songId] = rec
                 self.save()
+                if UploaderClient.shared.isReady {
+                    let destURL = dest
+                    Task.detached {
+                        await UploaderClient.shared.upload(
+                            songTitle: song.title, artist: song.artist ?? "",
+                            album: song.albumName ?? "", trackNumber: song.trackNumber,
+                            fileURL: destURL, ext: "m4a"
+                        )
+                    }
+                }
             } catch {}
         }
     }

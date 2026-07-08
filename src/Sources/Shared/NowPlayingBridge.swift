@@ -5,8 +5,14 @@
 
 import Foundation
 
-/// Closure wired by AppContainer.init so PlayPauseIntent can invoke the player
-/// without importing AppContainer into the widget extension compile scope.
+nonisolated struct VoicePlaybackOutcome: Sendable {
+    enum Source: Sendable { case library, youtube }
+    let title: String
+    let source: Source
+}
+
 nonisolated enum NowPlayingBridge {
     nonisolated(unsafe) static var performTogglePlayPause: (@Sendable () async -> Void)?
+
+    nonisolated(unsafe) static var performPlaySearch: (@Sendable (String) async -> VoicePlaybackOutcome?)?
 }

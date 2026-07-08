@@ -31,6 +31,7 @@ struct DiscoverView: View {
                         errorBanner(vm: vm)
                     } else {
                         freshReleasesSection(vm: vm)
+                        CuratedStationsSection()
                         ListenBrainzPlaylistsSection()
                         recentlyPlayedSection(vm: vm)
                         mostPlayedSection(vm: vm)

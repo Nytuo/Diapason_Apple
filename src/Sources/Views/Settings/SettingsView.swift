@@ -50,6 +50,7 @@ struct SettingsView: View {
             CacheSectionView()
             ReplayGainSettingsSection()
             CrossfadeSettingsSection()
+            ServerUploadSectionView()
             DiapasonServerSection()
             integrationsSection()
             #if !os(tvOS)
