@@ -1,178 +1,296 @@
-// Diapason Watch — library list + on-device player UI.
+// Diapason Watch — the watch UI.
 // Copyright (C) 2026 Arnaud BEUX
 // Licensed under the GNU General Public License v3.0.
 // See LICENSE file in the project root for full license information.
 
 import SwiftUI
-#if canImport(UIKit)
-import UIKit
-#endif
 
+/// Three things the watch is for, in the order you would want them on a run:
+///
+///  - **Offline** — what is actually on the watch. No phone, no signal, no server.
+///  - **Library** — everything the phone told us about. Streams straight from the
+///    music server, so it needs a network but *not* the phone.
+///  - **Remote** — drive the phone, when the phone is around.
 struct WatchRootView: View {
+    var body: some View {
+        TabView {
+            OfflineView()
+            LibraryView()
+            RemoteView()
+        }
+        .tabViewStyle(.verticalPage)
+    }
+}
+
+// MARK: - Offline
+
+struct OfflineView: View {
     @EnvironmentObject private var store: WatchLibraryStore
     @EnvironmentObject private var player: WatchAudioPlayer
 
     var body: some View {
         NavigationStack {
-            Group {
-                if store.tracks.isEmpty {
-                    emptyState
+            List {
+                if store.downloaded.isEmpty {
+                    Text("Nothing downloaded yet.\n\nDownload tracks from Library and they play here with no phone and no signal.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
                 } else {
-                    libraryList
+                    ForEach(store.downloaded) { track in
+                        Button {
+                            player.play(store.downloaded, startAt: store.downloaded.firstIndex(of: track) ?? 0)
+                        } label: {
+                            TrackRow(track: track)
+                        }
+                        .swipeActions {
+                            Button(role: .destructive) {
+                                store.removeDownload(track)
+                            } label: {
+                                Label("Remove", systemImage: "trash")
+                            }
+                        }
+                    }
+                }
+
+                if player.currentTrack != nil {
+                    NavigationLink("Now Playing") { NowPlayingView() }
                 }
             }
-            .navigationTitle("Diapason")
-            .toolbar {
-                if player.currentTrack != nil {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        NavigationLink {
-                            WatchPlayerView()
-                        } label: {
-                            Image(systemName: "waveform")
+            .navigationTitle("Offline")
+        }
+    }
+}
+
+// MARK: - Library
+
+struct LibraryView: View {
+    @EnvironmentObject private var store: WatchLibraryStore
+    @EnvironmentObject private var player: WatchAudioPlayer
+    @EnvironmentObject private var connect: WatchConnect
+
+    @State private var isSyncing = false
+    @State private var syncProblem: String?
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section {
+                    Button {
+                        Task { await sync() }
+                    } label: {
+                        HStack {
+                            Label(isSyncing ? "Syncing…" : "Sync from phone",
+                                  systemImage: "arrow.triangle.2.circlepath")
+                            Spacer()
+                            if isSyncing { ProgressView() }
+                        }
+                    }
+                    .disabled(isSyncing)
+
+                    // A sync that quietly does nothing is indistinguishable from a
+                    // phone with an empty library, so say which it was.
+                    if let syncProblem {
+                        Text(syncProblem)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    } else if let lastSync = store.lastSync {
+                        Text("Synced \(lastSync.formatted(.relative(presentation: .named)))")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                if store.tracks.isEmpty {
+                    Text("No tracks yet. Sync from the phone to bring your library over — after that, playing and downloading go straight to your music server.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+
+                ForEach(store.tracks) { track in
+                    Button {
+                        player.play(store.tracks, startAt: store.tracks.firstIndex(of: track) ?? 0)
+                    } label: {
+                        TrackRow(track: track, isDownloading: store.downloading.contains(track.id))
+                    }
+                    .swipeActions {
+                        if track.isDownloaded {
+                            Button(role: .destructive) {
+                                store.removeDownload(track)
+                            } label: {
+                                Label("Remove", systemImage: "trash")
+                            }
+                        } else {
+                            Button {
+                                Task { await store.download(track) }
+                            } label: {
+                                Label("Download", systemImage: "arrow.down.circle")
+                            }
                         }
                     }
                 }
             }
+            .navigationTitle("Library")
         }
     }
 
-    private var emptyState: some View {
-        VStack(spacing: 10) {
-            Image(systemName: "arrow.down.circle")
-                .font(.title)
-                .foregroundStyle(.secondary)
-            Text("No Downloads")
-                .font(.headline)
-            Text("Send downloads from the Diapason app on your iPhone: Settings ▸ Apple Watch.")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .padding()
-    }
+    /// The phone is needed for *this* and nothing else. Once the catalogue is on
+    /// the watch, playing and downloading go straight to the music server.
+    ///
+    /// Every failure here is expected rather than exceptional — the phone is off,
+    /// on another network, or simply not running Diapason — so each one leaves
+    /// what is already on the watch alone and explains itself. Whatever has been
+    /// downloaded keeps playing regardless; that is the point of Offline.
+    private func sync() async {
+        isSyncing = true
+        syncProblem = nil
+        defer { isSyncing = false }
 
-    private var libraryList: some View {
-        List {
-            ForEach(store.tracks) { track in
-                NavigationLink {
-                    WatchPlayerView()
-                        .onAppear { play(track) }
-                } label: {
-                    WatchTrackRow(track: track, isCurrent: player.currentTrack?.id == track.id)
-                }
-            }
-            .onDelete { offsets in
-                offsets.map { store.tracks[$0] }.forEach(store.remove)
-            }
+        if connect.peers.isEmpty {
+            connect.startDiscovery()
+            try? await Task.sleep(nanoseconds: 3_000_000_000)
         }
-    }
 
-    private func play(_ track: WatchTrack) {
-        guard player.currentTrack?.id != track.id,
-              let index = store.tracks.firstIndex(of: track) else { return }
-        player.play(store.tracks, startAt: index)
+        guard let peer = connect.connectedPeer ?? connect.peers.first else {
+            syncProblem = store.downloaded.isEmpty
+                ? "No Diapason app found. Open Diapason on your phone, on this Wi-Fi."
+                : "No Diapason app found. Downloaded tracks still play in Offline."
+            return
+        }
+
+        let fetched = await connect.fetchLibrary(from: peer)
+        guard !fetched.isEmpty else {
+            syncProblem = "\(peer.name) sent no tracks. Its library may still be loading."
+            return
+        }
+
+        store.merge(fetched)
     }
 }
 
-private struct WatchTrackRow: View {
-    @EnvironmentObject private var store: WatchLibraryStore
-    let track: WatchTrack
-    let isCurrent: Bool
+// MARK: - Remote
+
+struct RemoteView: View {
+    @EnvironmentObject private var connect: WatchConnect
 
     var body: some View {
-        HStack(spacing: 8) {
-            cover
-                .frame(width: 34, height: 34)
-                .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-            VStack(alignment: .leading, spacing: 1) {
-                Text(track.title)
-                    .font(.body)
-                    .lineLimit(1)
-                    .foregroundStyle(isCurrent ? Color.accentColor : .primary)
-                if !track.artist.isEmpty {
-                    Text(track.artist).font(.caption2).foregroundStyle(.secondary).lineLimit(1)
+        NavigationStack {
+            if let peer = connect.connectedPeer {
+                VStack(spacing: 8) {
+                    Text(connect.remoteStatus?.song?.title ?? "Nothing playing")
+                        .font(.headline)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.center)
+
+                    if let artist = connect.remoteStatus?.song?.artist, !artist.isEmpty {
+                        Text(artist)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+
+                    HStack(spacing: 16) {
+                        Button { connect.sendCommand("previous") } label: {
+                            Image(systemName: "backward.end.fill")
+                        }
+                        Button {
+                            connect.sendCommand(connect.remoteStatus?.isPlaying == true ? "pause" : "play")
+                        } label: {
+                            Image(systemName: connect.remoteStatus?.isPlaying == true ? "pause.fill" : "play.fill")
+                                .font(.title2)
+                        }
+                        Button { connect.sendCommand("next") } label: {
+                            Image(systemName: "forward.end.fill")
+                        }
+                    }
+                    .buttonStyle(.plain)
+
+                    Button("Disconnect") { connect.disconnect() }
+                        .font(.caption2)
                 }
+                .navigationTitle(peer.name)
+            } else {
+                List {
+                    if connect.peers.isEmpty {
+                        Text(connect.isScanning
+                             ? "Looking for Diapason…"
+                             : "No Diapason app found on this network.")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                    ForEach(connect.peers) { peer in
+                        Button(peer.name) { connect.connect(to: peer) }
+                    }
+                    Button("Scan") { connect.startDiscovery() }
+                }
+                .navigationTitle("Remote")
+                .task { connect.startDiscovery() }
             }
-        }
-    }
-
-    @ViewBuilder
-    private var cover: some View {
-        #if canImport(UIKit)
-        if let url = store.coverURL(forCoverArtId: track.coverArtId), let image = UIImage(contentsOfFile: url.path) {
-            Image(uiImage: image).resizable().scaledToFill()
-        } else {
-            placeholder
-        }
-        #else
-        placeholder
-        #endif
-    }
-
-    private var placeholder: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 6).fill(.gray.opacity(0.3))
-            Image(systemName: "music.note").font(.caption2).foregroundStyle(.secondary)
         }
     }
 }
 
-struct WatchPlayerView: View {
-    @EnvironmentObject private var store: WatchLibraryStore
+// MARK: - Shared
+
+struct NowPlayingView: View {
     @EnvironmentObject private var player: WatchAudioPlayer
 
     var body: some View {
-        VStack(spacing: 8) {
-            cover
-                .frame(width: 68, height: 68)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        VStack(spacing: 6) {
+            Text(player.currentTrack?.title ?? "—")
+                .font(.headline)
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
 
-            VStack(spacing: 1) {
-                Text(player.currentTrack?.title ?? "Not Playing")
-                    .font(.headline).lineLimit(1).minimumScaleFactor(0.7)
-                if let artist = player.currentTrack?.artist, !artist.isEmpty {
-                    Text(artist).font(.caption2).foregroundStyle(.secondary).lineLimit(1)
+            Text(player.currentTrack?.artist ?? "")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+
+            // Offline and streaming feel identical right up until one of them
+            // fails, so say which this is.
+            Label(player.isOffline ? "On watch" : "Streaming",
+                  systemImage: player.isOffline
+                    ? "arrow.down.circle.fill"
+                    : "antenna.radiowaves.left.and.right")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+
+            if player.isBuffering {
+                ProgressView().scaleEffect(0.6)
+            }
+
+            HStack(spacing: 16) {
+                Button { player.previous() } label: { Image(systemName: "backward.end.fill") }
+                Button { player.togglePlayPause() } label: {
+                    Image(systemName: player.isPlaying ? "pause.fill" : "play.fill").font(.title2)
                 }
+                Button { player.next() } label: { Image(systemName: "forward.end.fill") }
             }
-
-            ProgressView(value: player.duration > 0 ? min(player.position / player.duration, 1) : 0)
-                .tint(Color.accentColor)
-
-            HStack(spacing: 14) {
-                button("backward.fill", 18) { player.previous() }
-                button(player.isPlaying ? "pause.fill" : "play.fill", 26, prominent: true) { player.togglePlayPause() }
-                button("forward.fill", 18) { player.next() }
-            }
+            .buttonStyle(.plain)
         }
-        .padding(.horizontal, 6)
         .navigationTitle("Now Playing")
     }
+}
 
-    @ViewBuilder
-    private var cover: some View {
-        #if canImport(UIKit)
-        if let id = player.currentTrack?.coverArtId,
-           let url = store.coverURL(forCoverArtId: id),
-           let image = UIImage(contentsOfFile: url.path) {
-            Image(uiImage: image).resizable().scaledToFill()
-        } else {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12).fill(.gray.opacity(0.3))
-                Image(systemName: "music.note").foregroundStyle(.secondary)
+struct TrackRow: View {
+    let track: WatchTrack
+    var isDownloading = false
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(track.title).font(.body).lineLimit(1)
+                Text(track.artist).font(.caption2).foregroundStyle(.secondary).lineLimit(1)
+            }
+            Spacer(minLength: 4)
+
+            if isDownloading {
+                ProgressView().scaleEffect(0.5)
+            } else if track.isDownloaded {
+                Image(systemName: "arrow.down.circle.fill")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
             }
         }
-        #else
-        RoundedRectangle(cornerRadius: 12).fill(.gray.opacity(0.3))
-        #endif
-    }
-
-    private func button(_ symbol: String, _ size: CGFloat, prominent: Bool = false, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Image(systemName: symbol)
-                .font(.system(size: size, weight: .semibold))
-                .frame(width: prominent ? 50 : 40, height: prominent ? 50 : 40)
-                .background(Circle().fill(.white.opacity(prominent ? 0.28 : 0.16)))
-        }
-        .buttonStyle(.plain)
     }
 }

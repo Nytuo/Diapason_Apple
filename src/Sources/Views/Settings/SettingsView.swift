@@ -36,17 +36,11 @@ struct SettingsView: View {
 
     private func form(downloadsVM: DownloadsViewModel) -> some View {
         Form {
-            #if !os(tvOS)
-            // Blocked on tvOS: iPod click-wheel mode, LAN Connect remote,
-            // on-device local file import.
-            InterfaceSettingsSection()
+            // Connect is how this TV and the Diapason phone/desktop apps reach
+            // each other, so it is no longer hidden here. iPod mode and local
+            // file import were phone features and have gone with the phone app.
             ConnectSettingsSection()
-            LocalImportSectionView()
-            #endif
             DownloadsSectionView(vm: downloadsVM)
-            #if os(iOS)
-            WatchSyncSectionView()
-            #endif
             CacheSectionView()
             ReplayGainSettingsSection()
             CrossfadeSettingsSection()

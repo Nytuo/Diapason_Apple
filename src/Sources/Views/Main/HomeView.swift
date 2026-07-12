@@ -33,7 +33,6 @@ struct HomeView: View {
     @Environment(DominantColorExtractor.self) private var colorExtractor
     @Environment(ArtworkImageCache.self) private var artworkImageCache
     @State private var viewModel: HomeViewModel?
-    @State private var showEditPinned = false
     @State private var navigateToSettings = false
     @State private var navigateToAllAlbums = false
     // Local mutable copy for smooth drag-to-reorder; synced from @Query on count changes.
@@ -128,11 +127,6 @@ struct HomeView: View {
             #if !os(macOS)
             ToolbarItem(placement: .automatic) {
                 Menu {
-                    if !allPinnedItems.isEmpty {
-                        Button { showEditPinned = true } label: {
-                            Label("Edit Pinned", systemImage: "pin")
-                        }
-                    }
                     Button { navigateToSettings = true } label: {
                         Label("Settings", systemImage: "gear")
                     }
@@ -145,9 +139,6 @@ struct HomeView: View {
             }
             #endif
         }
-        #if !os(tvOS)
-        .sheet(isPresented: $showEditPinned) { EditPinnedView() }
-        #endif
         .navigationDestination(isPresented: $navigateToSettings) { SettingsView() }
         #if os(macOS)
         .navigationDestination(isPresented: $navigateToAllAlbums) { AlbumsListView() }

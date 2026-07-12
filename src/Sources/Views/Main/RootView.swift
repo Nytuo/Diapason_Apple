@@ -5,12 +5,15 @@
 
 import SwiftUI
 
+/// The root of the Apple TV app.
+///
+/// The iPhone/iPad and macOS interfaces used to branch from here. They are gone:
+/// phones and desktops are served by the Flutter app now, and this project keeps
+/// only what Flutter cannot target — Apple TV, and the Watch app. The two
+/// ecosystems talk over Diapason Connect.
 struct RootView: View {
     @Environment(\.appContainer) private var container
     @AppStorage("onboardingComplete") private var onboardingComplete = false
-    #if !os(tvOS)
-    @AppStorage("interfaceMode") private var interfaceModeRaw = InterfaceMode.modern.rawValue
-    #endif
 
     var body: some View {
         if let serverState = container?.serverState {
@@ -18,20 +21,8 @@ struct RootView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if serverState.activeServer != nil && onboardingComplete {
-                #if os(macOS)
-                RootViewMacOS()
-                    .accentColor(.accentColor)
-                #elseif os(tvOS)
                 TVMainView()
                     .accentColor(.accentColor)
-                #else
-                if InterfaceMode(rawValue: interfaceModeRaw) == .ipod {
-                    iPodShellView()
-                } else {
-                    MainTabView()
-                        .accentColor(.accent)
-                }
-                #endif
             } else {
                 OnboardingView()
             }

@@ -2,7 +2,6 @@ name: Diapason
 options:
   bundleIdPrefix: fr.nytuo
   deploymentTarget:
-    iOS: "26.0"
     tvOS: "26.0"
     watchOS: "26.0"
 packages:
@@ -15,52 +14,12 @@ packages:
   YouTubeKit:
     url: https://github.com/alexeichhorn/YouTubeKit
     from: "0.2.4"
+
+# The iPhone/iPad app is gone. Phones and desktops are served by the Flutter app
+# (diapason_flutter); this project keeps only what Flutter cannot target — Apple
+# TV, and the Watch app. The two ecosystems talk over Diapason Connect
+# (_diapason-connect._tcp), which is why the TV declares it below.
 targets:
-  Diapason:
-    type: application
-    platform: iOS
-    deploymentTarget: "26.0"
-    sources:
-      - path: Sources
-        excludes:
-          - "Views/Platform/macOS/**"
-          - "Info.plist"
-          - "Info-tvOS.plist"
-    dependencies:
-      - package: SwiftSonic
-      - package: AudioStreaming
-      - package: YouTubeKit
-      # Embeds the watch app inside the iPhone app so WatchConnectivity recognises
-      # it as the installed companion (isWatchAppInstalled). Requires the watchOS
-      # platform to be installed in Xcode to build the iOS target.
-      - target: DiapasonWatch
-        embed: true
-    settings:
-      base:
-        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS: "YES"
-        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: "YES"
-        INFOPLIST_KEY_CFBundleDisplayName: Diapason
-        SWIFT_VERSION: "5.0"
-        TARGETED_DEVICE_FAMILY: "1,2"
-        ENABLE_PREVIEWS: "YES"
-    info:
-      path: Sources/Info.plist
-      properties:
-        UIBackgroundModes: [audio, processing]
-        BGTaskSchedulerPermittedIdentifiers:
-          - app.cassette.wrapped.monthly-update
-        NSAppTransportSecurity:
-          NSAllowsArbitraryLoads: true
-        NSLocalNetworkUsageDescription: "Diapason needs to find your Subsonic and Plex servers on your local network."
-        NSBonjourServices:
-          - "_subsonic._tcp"
-          - "_plexmediasvr._tcp"
-          - "_diapason._tcp"
-        UILaunchScreen:
-          UIColorName: LaunchBackground
-          UIImageName: LaunchScreen
-          UIImageRespectsSafeAreaInsets: true
   DiapasonTV:
     type: application
     platform: tvOS
@@ -68,17 +27,7 @@ targets:
     sources:
       - path: Sources
         excludes:
-          - "Views/Platform/macOS/**"
-          - "Info.plist"
           - "Info-tvOS.plist"
-          - "DiapasonBackends/iPod/**"
-          - "DiapasonBackends/LocalImportSectionView.swift"
-          - "Views/Wrapped/**"
-          - "Views/Main/MainTabView.swift"
-          - "Views/Main/MiniPlayerAccessoryView.swift"
-          - "Views/Main/FullPlayerView.swift"
-          - "Views/Main/QueueView.swift"
-          - "Views/Main/EditPinnedView.swift"
       - path: TVSupport
     dependencies:
       - package: SwiftSonic
@@ -99,6 +48,18 @@ targets:
         UIBackgroundModes: [audio]
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: true
+        # Without these, Connect discovery silently finds nothing on tvOS while
+        # everything else looks fine.
+        NSLocalNetworkUsageDescription: "Diapason finds your music servers, and other Diapason devices, on your local network."
+        NSBonjourServices:
+          - "_subsonic._tcp"
+          - "_plexmediasvr._tcp"
+          - "_diapason._tcp"
+          - "_diapason-connect._tcp"
+
+  # A standalone watch app. It no longer installs as the companion of an iOS app
+  # — there isn't one — and reaches the Flutter phone over Diapason Connect
+  # instead of WatchConnectivity, which can only ever talk to its own container.
   DiapasonWatch:
     type: application
     platform: watchOS
@@ -107,7 +68,7 @@ targets:
       - path: WatchApp
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: fr.nytuo.Diapason.watchkitapp
+        PRODUCT_BUNDLE_IDENTIFIER: fr.nytuo.diapason.watchkitapp
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         SWIFT_VERSION: "5.0"
@@ -117,14 +78,19 @@ targets:
       properties:
         CFBundleDisplayName: Diapason
         WKApplication: true
-        WKCompanionAppBundleIdentifier: fr.nytuo.Diapason
+        # Standalone: no WKCompanionAppBundleIdentifier, because there is no
+        # companion to point at.
+        WKRunsIndependentlyOfCompanionApp: true
+        # The watch talks to the phone over the LAN and streams from the music
+        # server. Without these, Bonjour finds nothing and every request fails
+        # while the UI looks perfectly healthy.
+        NSLocalNetworkUsageDescription: "Diapason finds the Diapason app on your network to sync your music."
+        NSBonjourServices:
+          - "_diapason-connect._tcp"
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+
 schemes:
-  Diapason:
-    build:
-      targets:
-        Diapason: all
-    run:
-      config: Debug
   DiapasonTV:
     build:
       targets:

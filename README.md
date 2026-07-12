@@ -5,8 +5,8 @@
 </h1>
 
 <div align="center">
-<h2>Diapason for Apple devices</h2>
-Diapason native music player for Subsonic, Plex, and local libraries
+<h2>Diapason for Apple TV</h2>
+The native Apple TV music player for Subsonic, Plex, and local libraries
 <br />
 <br />
 <a href="https://github.com/Nytuo/Diapason_iOS/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
@@ -42,14 +42,39 @@ Diapason native music player for Subsonic, Plex, and local libraries
 
 ## About
 
-Diapason for Apple devices is a fully native SwiftUI music client for iOS, iPadOS, tvOS and watchOS. It connects to your Subsonic / Navidrome or Plex server, or browses your on-device local files, and delivers an Apple Music-style experience with a glassmorphic full-screen player, karaoke-style synced lyrics, and deep OS integration for lock-screen controls and background audio.
+Diapason for Apple TV is a native SwiftUI music client for tvOS. It connects to your
+Subsonic / Navidrome or Plex server and delivers a lean-back listening experience on
+the big screen.
 
-It is part of the [Diapason](https://github.com/Nytuo/Diapason) ecosystem and speaks the **Diapason Connect** protocol, letting you control the desktop app from your phone or use your phone as a playback receiver.
+It is part of the [Diapason](https://github.com/Nytuo) ecosystem and speaks the
+**Diapason Connect** protocol, so the Flutter app on your phone or desktop can drive it
+— or hand it a queue — over the local network.
 
-Diapason for iOS is a fork of [Cassette](https://github.com/mathieudubart/Cassette), a Subsonic/OpenSubsonic music client, originally licensed under the **Mozilla Public License 2.0**. It has been repackaged and substantially modified to add new features, including YouTube-backed discovery & downloads, Last.fm scrobbling, ListenBrainz playlists, multiple backend support (Subsonic, Plex, and local files), an iPodOS-style click-wheel mode, and Diapason Connect for integration with the wider Diapason ecosystem. The native macOS target present in the original project has been removed; this fork targets iOS/iPadOS/tvOS/watchOS only.
-Added tvOS and watchOS support;
+**The iPhone and iPad app has been removed.** Phones, tablets and desktops are served by
+[diapason_flutter](https://github.com/Nytuo/diapason_flutter), which covers Jellyfin,
+Plex, Subsonic/Navidrome and local files in one app. This repository now keeps only what
+Flutter cannot target: Apple TV, and the watchOS app.
 
-All original Cassette source files retain their MPL 2.0 header. New and modified files added as part of this fork are licensed under the **GNU General Public License v3.0** — see [License](#license) below.
+**The Apple Watch app is standalone.** It no longer installs as the companion of an
+iPhone app — there isn't one — and it no longer uses WatchConnectivity, which can only
+ever reach the iOS app that embeds it. It speaks Diapason Connect over the network
+instead, like every other Diapason device.
+
+It does three things:
+
+- **Offline** — tracks downloaded onto the watch. No phone, no signal, no server.
+- **Library** — everything the phone told it about, streamed straight from your music
+  server. Needs a network, but *not* the phone.
+- **Remote** — drive the phone app, when the phone is around.
+
+The phone is needed only to *sync the catalogue*. Stream URLs point at your music
+server, not at the phone, so once synced the watch works on its own.
+
+Diapason for Apple TV is a fork of [Cassette](https://github.com/mathieudubart/Cassette),
+a Subsonic/OpenSubsonic music client, originally licensed under the **Mozilla Public
+License 2.0**. All original Cassette source files retain their MPL 2.0 header. New and
+modified files added as part of this fork are licensed under the **GNU General Public
+License v3.0** — see [License](#license) below.
 
 ## Features
 

@@ -100,7 +100,7 @@ class ConnectManager: ObservableObject {
     private func advertiseMDNS(port: Int) {
         bonjourService?.stop()
         let txtDict: [String: Data] = ["token": serverToken.data(using: .utf8)!]
-        let svc = NetService(domain: "", type: "_diapason-connect._tcp.", name: "Diapason iOS", port: Int32(port))
+        let svc = NetService(domain: "", type: "_diapason-connect._tcp.", name: "Diapason TV", port: Int32(port))
         svc.setTXTRecord(NetService.data(fromTXTRecord: txtDict))
         svc.publish()
         bonjourService = svc
@@ -261,7 +261,7 @@ class ConnectManager: ObservableObject {
             var req = URLRequest(url: url)
             req.httpMethod = "POST"
             req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            req.httpBody = try? JSONSerialization.data(withJSONObject: ["name": "Diapason iOS", "url": myURL])
+            req.httpBody = try? JSONSerialization.data(withJSONObject: ["name": "Diapason TV", "url": myURL])
             _ = try? await URLSession.shared.data(for: req)
         }
     }
